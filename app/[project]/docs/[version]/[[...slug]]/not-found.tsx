@@ -16,7 +16,7 @@ export default function NotFound() {
   const slug = pathname?.replace(/^\/[^/]+\/docs\/[^/]+\/?/, "") || "";
 
   return (
-    <DocsWrapper toc={[]} metadata={{}}>
+    <DocsWrapper toc={[]} metadata={{ title: "Page Not Found", filePath: "" }}>
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
         <h1 className="text-6xl font-bold text-gray-300 mb-4">404</h1>
         <h2 className="text-2xl font-semibold mb-4">Page Not Found</h2>

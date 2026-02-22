@@ -1,6 +1,6 @@
 "use client";
 
-import type { Heading } from "nextra";
+import type { $NextraMetadata, Heading } from "nextra";
 import { useMDXComponents } from "nextra-theme-docs";
 import type { ReactNode } from "react";
 import { useEffect, useRef } from "react";
@@ -11,7 +11,7 @@ import { useVersion } from "@/lib/version-context";
 interface DocsWrapperProps {
   toc: Heading[];
   children: ReactNode;
-  metadata: Record<string, unknown>;
+  metadata: $NextraMetadata;
   sourceCode?: string;
   bottomContent?: ReactNode;
 }
@@ -202,7 +202,7 @@ export function DocsWrapper({
     <DefaultWrapper
       toc={toc}
       metadata={metadata}
-      sourceCode={sourceCode}
+      sourceCode={sourceCode ?? ""}
       bottomContent={bottomContent}
     >
       {children}
