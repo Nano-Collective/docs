@@ -1,0 +1,106 @@
+name: Build and Deploy to Cloudflare Pages
+
+on:
+    discussion:
+        types: [created, edited]
+    push:
+        branches:
+            - main
+    workflow_dispatch:
+    schedule:
+        # Run daily at 00:00 UTC to update growth stats
+        - cron: "0 0 * * *"
+
+concurrency:
+    group: ${{ github.actor }}-push
+    cancel-in-progress: true
+
+jobs:
+    notify-discord:
+        runs-on: ubuntu-latest
+        if: github.event_name == 'discussion' && github.event.action == 'created'
+        steps:
+            - name: Extract discussion labels
+              id: labels
+              run: |
+                  if [ "${{ github.event.discussion.labels }}" != "" ]; then
+                    LABELS=$(echo '${{ toJson(github.event.discussion.labels) }}' | jq -r 'map("🏷️ " + .name) | join(" ")')
+                    echo "labels=$LABELS" >> $GITHUB_OUTPUT
+                  else
+                    echo "labels=" >> $GITHUB_OUTPUT
+                  fi
+
+            - name: Send Discord notification
+              env:
+                  DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+                  DISCUSSION_TITLE: ${{ github.event.discussion.title }}
+                  DISCUSSION_AUTHOR: ${{ github.event.discussion.user.login }}
+                  DISCUSSION_CATEGORY: ${{ github.event.discussion.category.name }}
+                  DISCUSSION_URL: ${{ github.event.discussion.html_url }}
+                  DISCUSSION_LABELS: ${{ steps.labels.outputs.labels || 'None' }}
+              run: |
+                  TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%S.000Z)
+                  jq -n \
+                    --arg title "💬 New Discussion: $DISCUSSION_TITLE" \
+                    --arg author "$DISCUSSION_AUTHOR" \
+                    --arg category "$DISCUSSION_CATEGORY" \
+                    --arg labels "$DISCUSSION_LABELS" \
+                    --arg url "$DISCUSSION_URL" \
+                    --arg timestamp "$TIMESTAMP" \
+                    '{
+                      "embeds": [{
+                        "title": $title,
+                        "color": 3447003,
+                        "fields": [
+                          {"name": "Author", "value": $author, "inline": false},
+                          {"name": "Category", "value": $category, "inline": false},
+                          {"name": "Labels", "value": $labels, "inline": false}
+                        ],
+                        "footer": {"text": "GitHub Discussions"},
+                        "timestamp": $timestamp,
+                        "url": $url
+                      }]
+                    }' | curl -H "Content-Type: application/json" -d @- "$DISCORD_WEBHOOK_URL"
+
+    build:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node-version: [22]
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  lfs: true
+
+            - name: Set up PNPM
+              uses: pnpm/action-setup@v2
+              with:
+                  version: 10.11.0
+
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: "pnpm"
+
+            - name: Install dependencies
+              run: pnpm install --no-frozen-lockfile
+
+            - name: Run linting
+              run: pnpm run lint
+
+            - name: Generate build
+              run: pnpm run build
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Publish to Cloudflare Pages
+              uses: cloudflare/pages-action@v1
+              with:
+                  apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+                  accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+                  projectName: docs
+                  directory: ./dist
+                  branch: main # override
