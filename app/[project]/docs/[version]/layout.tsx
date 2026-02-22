@@ -7,6 +7,7 @@ import { VersionProvider } from "@/lib/version-context";
 import { getVersions, resolveVersion } from "@/lib/versions";
 import "nextra-theme-docs/style.css";
 import Link from "next/link";
+import { ProjectSearch } from "@/components/ProjectSearch";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -62,6 +63,7 @@ export default async function DocsLayout({ children, params }: LayoutProps) {
           pageMap={pageMap}
           docsRepositoryBase={`https://github.com/${project.repo.owner}/${project.repo.name}/tree/${resolvedVersion}`}
           footer={footer}
+          search={<ProjectSearch />}
           sidebar={{
             defaultOpen: true,
             toggleButton: true,

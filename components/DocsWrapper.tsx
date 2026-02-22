@@ -7,6 +7,7 @@ import { useEffect, useRef } from "react";
 import { useProject } from "@/lib/project-context";
 import { getAllProjects } from "@/lib/projects";
 import { useVersion } from "@/lib/version-context";
+import { PagefindMetadata } from "./PagefindMetadata";
 
 interface DocsWrapperProps {
   toc: Heading[];
@@ -198,6 +199,8 @@ export function DocsWrapper({
     sidebar.insertBefore(projectContainer, sidebar.firstChild);
   }, [versions, currentVersion, currentProject, allProjects]);
 
+  const isLatestVersion = versions.length > 0 && versions[0] === currentVersion;
+
   return (
     <DefaultWrapper
       toc={toc}
@@ -205,6 +208,12 @@ export function DocsWrapper({
       sourceCode={sourceCode ?? ""}
       bottomContent={bottomContent}
     >
+      <PagefindMetadata
+        project={currentProject.id}
+        projectName={currentProject.name}
+        version={currentVersion}
+        isLatestVersion={isLatestVersion}
+      />
       {children}
     </DefaultWrapper>
   );
