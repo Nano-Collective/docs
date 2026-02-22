@@ -1,66 +1,63 @@
 "use client";
 
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useCallback } from "react";
 
 interface VersionSelectorProps {
-	versions: string[];
-	currentVersion: string;
+  versions: string[];
+  currentVersion: string;
 }
 
 export function VersionSelector({
-	versions,
-	currentVersion,
+  versions,
+  currentVersion,
 }: VersionSelectorProps) {
-	const router = useRouter();
-	const pathname = usePathname();
+  const router = useRouter();
+  const pathname = usePathname();
 
-	const handleVersionChange = useCallback(
-		(event: React.ChangeEvent<HTMLSelectElement>) => {
-			const newVersion = event.target.value;
-			if (newVersion === currentVersion) return;
+  const handleVersionChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      const newVersion = event.target.value;
+      if (newVersion === currentVersion) return;
 
-			// Replace version segment in current path
-			// /{project}/docs/{version}/{slug} -> /{project}/docs/{newVersion}/{slug}
-			const newPath = pathname.replace(
-				/\/[^\/]+\/docs\/[^\/]+/,
-				(match) => {
-					const pathParts = match.split('/').filter(Boolean);
-					const project = pathParts[0]; // First segment is project
-					return `/${project}/docs/${newVersion}`;
-				}
-			);
+      // Replace version segment in current path
+      // /{project}/docs/{version}/{slug} -> /{project}/docs/{newVersion}/{slug}
+      const newPath = pathname.replace(/\/[^/]+\/docs\/[^/]+/, (match) => {
+        const pathParts = match.split("/").filter(Boolean);
+        const project = pathParts[0]; // First segment is project
+        return `/${project}/docs/${newVersion}`;
+      });
 
-			router.push(newPath);
-		},
-		[currentVersion, pathname, router]
-	);
+      router.push(newPath);
+    },
+    [currentVersion, pathname, router],
+  );
 
-	// Display current version with "latest" badge if it's the latest
-	const isLatest = currentVersion === versions[0];
-	const displayVersion = isLatest
-		? `${currentVersion} (latest)`
-		: currentVersion;
+  // Display current version with "latest" badge if it's the latest
+  const isLatest = currentVersion === versions[0];
+  const _displayVersion = isLatest
+    ? `${currentVersion} (latest)`
+    : currentVersion;
 
-	return (
-		<div className="nextra-version-selector">
-			<label htmlFor="version-select" className="sr-only">
-				Select documentation version
-			</label>
-			<select
-				id="version-select"
-				value={currentVersion}
-				onChange={handleVersionChange}
-				className="nextra-select"
-				aria-label="Select documentation version"
-			>
-				{versions.map((version, index) => (
-					<option key={version} value={version}>
-						{index === 0 ? `${version} (latest)` : version}
-					</option>
-				))}
-			</select>
-			<style jsx>{`
+  return (
+    <div className="nextra-version-selector">
+      <label htmlFor="version-select" className="sr-only">
+        Select documentation version
+      </label>
+      <select
+        id="version-select"
+        value={currentVersion}
+        onChange={handleVersionChange}
+        className="nextra-select"
+        aria-label="Select documentation version"
+      >
+        {versions.map((version, index) => (
+          <option key={version} value={version}>
+            {index === 0 ? `${version} (latest)` : version}
+          </option>
+        ))}
+      </select>
+      <style jsx>{`
 				.nextra-version-selector {
 					padding: 0.5rem 1rem;
 					border-bottom: 1px solid var(--nextra-border-color, #e5e7eb);
@@ -114,6 +111,6 @@ export function VersionSelector({
 					border-width: 0;
 				}
 			`}</style>
-		</div>
-	);
+    </div>
+  );
 }

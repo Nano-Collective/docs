@@ -1,44 +1,44 @@
-import { Footer, Layout, Navbar, ThemeSwitch } from "nextra-theme-docs";
-import type { PageMapItem } from "nextra";
 import Link from "next/link";
+import type { PageMapItem } from "nextra";
+import { Footer, Layout, Navbar, ThemeSwitch } from "nextra-theme-docs";
 
 interface MainLayoutProps {
-	children: React.ReactNode;
+  children: React.ReactNode;
 }
 
 export function MainLayout({ children }: MainLayoutProps) {
-	const navbar = (
-		<Navbar
-			logoLink={false}
-			logo={
-				<Link href="/" className="hover:underline">
-					<b>Nano Docs</b>
-				</Link>
-			}
-		>
-			<ThemeSwitch />
-		</Navbar>
-	);
+  const navbar = (
+    <Navbar
+      logoLink={false}
+      logo={
+        <Link href="/" className="hover:underline">
+          <b>Nano Docs</b>
+        </Link>
+      }
+    >
+      <ThemeSwitch />
+    </Navbar>
+  );
 
-	const footer = <Footer>{new Date().getFullYear()} © Nano Collective.</Footer>;
+  const footer = <Footer>{new Date().getFullYear()} © Nano Collective.</Footer>;
 
-	// Minimal pageMap required by Nextra Layout
-	const pageMap: PageMapItem[] = [
-		{
-			name: "index",
-			route: "/",
-			frontMatter: { title: "Home" },
-		} as PageMapItem,
-	];
+  // Minimal pageMap required by Nextra Layout
+  const pageMap: PageMapItem[] = [
+    {
+      name: "index",
+      route: "/",
+      frontMatter: { title: "Home" },
+    } as PageMapItem,
+  ];
 
-	return (
-		<Layout
-			navbar={navbar}
-			pageMap={pageMap}
-			footer={footer}
-			sidebar={{ defaultOpen: false, toggleButton: false }}
-		>
-			{children}
-		</Layout>
-	);
+  return (
+    <Layout
+      navbar={navbar}
+      pageMap={pageMap}
+      footer={footer}
+      sidebar={{ defaultOpen: false, toggleButton: false }}
+    >
+      {children}
+    </Layout>
+  );
 }
