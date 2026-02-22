@@ -1,7 +1,15 @@
 import type { NextConfig } from "next";
+import nextra from "nextra";
+
+const withNextra = nextra({
+	defaultShowCopyCode: true,
+});
 
 const nextConfig: NextConfig = {
-  /* config options here */
+	output: "export",
+	images: {
+		unoptimized: true,
+	},
 };
 
-export default nextConfig;
+export default withNextra(nextConfig);
