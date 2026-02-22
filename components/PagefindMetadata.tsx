@@ -8,7 +8,7 @@ interface Props {
 export function PagefindMetadata({
   project,
   projectName,
-  version,
+  version: _version,
   isLatestVersion,
 }: Props) {
   // If not latest version, exclude from search entirely
