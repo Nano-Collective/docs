@@ -4,6 +4,7 @@ import { compileMdx } from "nextra/compile";
 import { evaluate } from "nextra/evaluate";
 import { fetchFileContent, getAllDocsFiles } from "@/lib/github";
 import { findDocFile, getDocPathsForVersion } from "@/lib/page-map-builder";
+import { remarkResolveRelativeLinks } from "@/lib/remark-resolve-relative-links";
 import { getAllProjects, getProject } from "@/lib/projects";
 import { extractTitle } from "@/lib/remote-content";
 import { getVersions, resolveVersion } from "@/lib/versions";
@@ -237,10 +238,16 @@ export default async function DocPage({ params }: PageProps) {
 
   let compiledSource: Awaited<ReturnType<typeof compileMdx>>;
   try {
+    const basePath = `/${projectId}/docs/${version}`;
     compiledSource = await compileMdx(processedMdx, {
       filePath,
       defaultShowCopyCode: true,
       codeHighlight: true,
+      mdxOptions: {
+        remarkPlugins: [
+          [remarkResolveRelativeLinks, { basePath, filePath }],
+        ],
+      },
     });
   } catch (error) {
     console.error(`\n${"=".repeat(60)}`);
