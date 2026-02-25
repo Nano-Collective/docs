@@ -3,10 +3,18 @@
 import type { $NextraMetadata, Heading } from "nextra";
 import { useMDXComponents } from "nextra-theme-docs";
 import type { ReactNode } from "react";
-import { useEffect, useRef } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { useProject } from "@/lib/project-context";
 import { getAllProjects } from "@/lib/projects";
 import { useVersion } from "@/lib/version-context";
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from "@/components/ui/combobox";
 import { PagefindMetadata } from "./PagefindMetadata";
 
 interface DocsWrapperProps {
@@ -15,6 +23,79 @@ interface DocsWrapperProps {
   metadata: $NextraMetadata;
   sourceCode?: string;
   bottomContent?: ReactNode;
+}
+
+function SidebarSelector({
+  label,
+  value,
+  displayValue,
+  onValueChange,
+  disabled,
+  items,
+}: {
+  label: string;
+  value: string;
+  displayValue: string;
+  onValueChange: (value: string) => void;
+  disabled?: boolean;
+  items: { value: string; label: string }[];
+}) {
+  const [inputValue, setInputValue] = useState(displayValue);
+
+  // Sync when displayValue changes externally (e.g. navigation)
+  useEffect(() => {
+    setInputValue(displayValue);
+  }, [displayValue]);
+
+  const handleOpenChange = useCallback(
+    (open: boolean) => {
+      if (open) setInputValue("");
+    },
+    []
+  );
+
+  const handleValueChange = useCallback(
+    (val: unknown) => {
+      if (!val) return;
+      const selected = items.find((item) => item.value === val);
+      if (selected) setInputValue(selected.label);
+      onValueChange(val as string);
+    },
+    [items, onValueChange]
+  );
+
+  const filteredItems = items.filter(
+    (item) => !inputValue || item.label.toLowerCase().includes(inputValue.toLowerCase())
+  );
+
+  return (
+    <div
+      style={{ padding: "0.75rem 1rem", borderBottom: "1px solid var(--border)", flexShrink: 0 }}
+    >
+      <p style={{ fontSize: "0.75rem", fontWeight: 500, color: "var(--muted-foreground)", marginBottom: "0.25rem" }}>
+        {label}
+      </p>
+      <Combobox
+        value={value}
+        onValueChange={handleValueChange}
+        onOpenChange={handleOpenChange}
+        inputValue={inputValue}
+        onInputValueChange={(val) => setInputValue(val)}
+        disabled={disabled}
+      >
+        <ComboboxInput placeholder={`Search ${label}...`} />
+        <ComboboxContent>
+          <ComboboxList>
+            {filteredItems.map((item) => (
+              <ComboboxItem key={item.value} value={item.value}>
+                {item.label}
+              </ComboboxItem>
+            ))}
+          </ComboboxList>
+        </ComboboxContent>
+      </Combobox>
+    </div>
+  );
 }
 
 export function DocsWrapper({
@@ -29,192 +110,81 @@ export function DocsWrapper({
   const allProjects = getAllProjects();
   const components = useMDXComponents({});
   const DefaultWrapper = components.wrapper;
-  const injectedRef = useRef(false);
 
-  // Inject project and version selectors into sidebar using useEffect
+  const [projectContainer, setProjectContainer] = useState<HTMLElement | null>(null);
+  const [versionContainer, setVersionContainer] = useState<HTMLElement | null>(null);
+
   useEffect(() => {
-    if (versions.length === 0 || injectedRef.current) return;
+    if (versions.length === 0) return;
 
-    // Find the sidebar - it has class "nextra-sidebar"
     const sidebar = document.querySelector("aside.nextra-sidebar");
-    if (!sidebar) {
-      console.log("Sidebar not found");
-      return;
-    }
+    if (!sidebar || sidebar.querySelector(".version-selector-container")) return;
 
-    // Check if we already added the selectors
-    if (
-      sidebar.querySelector(".version-selector-container") ||
-      sidebar.querySelector(".project-selector-container")
-    ) {
-      return;
-    }
+    const projDiv = document.createElement("div");
+    projDiv.className = "project-selector-container";
+    const verDiv = document.createElement("div");
+    verDiv.className = "version-selector-container";
 
-    injectedRef.current = true;
+    sidebar.insertBefore(verDiv, sidebar.firstChild);
+    sidebar.insertBefore(projDiv, sidebar.firstChild);
 
-    // ============================================
-    // CREATE PROJECT SELECTOR
-    // ============================================
-    const projectContainer = document.createElement("div");
-    projectContainer.className = "project-selector-container";
-    projectContainer.style.cssText = `
-			padding: 0.75rem 1rem;
-			border-bottom: 1px solid #e5e7eb;
-			flex-shrink: 0;
-		`;
+    setProjectContainer(projDiv);
+    setVersionContainer(verDiv);
+  }, [versions]);
 
-    // Create project label
-    const projectLabel = document.createElement("label");
-    projectLabel.textContent = "Project";
-    projectLabel.style.cssText = `
-			display: block;
-			font-size: 0.75rem;
-			font-weight: 500;
-			color: #6b7280;
-			margin-bottom: 0.25rem;
-		`;
-
-    // Create project select element
-    const projectSelect = document.createElement("select");
-    projectSelect.setAttribute("aria-label", "Select project");
-    projectSelect.style.cssText = `
-			width: 100%;
-			padding: 0.5rem 2rem 0.5rem 0.75rem;
-			font-size: 0.875rem;
-			border-radius: 0.375rem;
-			border: 1px solid #e5e7eb;
-			background-color: transparent;
-			color: inherit;
-			cursor: pointer;
-			appearance: none;
-			background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-			background-position: right 0.5rem center;
-			background-repeat: no-repeat;
-			background-size: 1.5em 1.5em;
-		`;
-
-    // Add project options
-    allProjects.forEach((project) => {
-      const option = document.createElement("option");
-      option.value = project.id;
-      option.textContent = project.name;
-      if (project.id === currentProject.id) {
-        option.selected = true;
-      }
-      projectSelect.appendChild(option);
-    });
-
-    // Disable if only one project
-    if (allProjects.length === 1) {
-      projectSelect.disabled = true;
-      projectSelect.style.cursor = "not-allowed";
-      projectSelect.style.opacity = "0.6";
-    }
-
-    // Handle project change - always go to latest version
-    projectSelect.addEventListener("change", (e) => {
-      const newProjectId = (e.target as HTMLSelectElement).value;
-      // When switching projects, always go to latest version
-      // This avoids 404s when version/slug doesn't exist in new project
-      window.location.href = `/${newProjectId}/docs/latest`;
-    });
-
-    projectContainer.appendChild(projectLabel);
-    projectContainer.appendChild(projectSelect);
-
-    // ============================================
-    // CREATE VERSION SELECTOR
-    // ============================================
-    const versionContainer = document.createElement("div");
-    versionContainer.className = "version-selector-container";
-    versionContainer.style.cssText = `
-			padding: 0.75rem 1rem;
-			border-bottom: 1px solid #e5e7eb;
-			flex-shrink: 0;
-		`;
-
-    // Create version label
-    const versionLabel = document.createElement("label");
-    versionLabel.textContent = "Version";
-    versionLabel.style.cssText = `
-			display: block;
-			font-size: 0.75rem;
-			font-weight: 500;
-			color: #6b7280;
-			margin-bottom: 0.25rem;
-		`;
-
-    // Create version select element
-    const versionSelect = document.createElement("select");
-    versionSelect.setAttribute("aria-label", "Select documentation version");
-    versionSelect.style.cssText = `
-			width: 100%;
-			padding: 0.5rem 2rem 0.5rem 0.75rem;
-			font-size: 0.875rem;
-			border-radius: 0.375rem;
-			border: 1px solid #e5e7eb;
-			background-color: transparent;
-			color: inherit;
-			cursor: pointer;
-			appearance: none;
-			background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-			background-position: right 0.5rem center;
-			background-repeat: no-repeat;
-			background-size: 1.5em 1.5em;
-		`;
-
-    // Add version options
-    versions.forEach((version, index) => {
-      const option = document.createElement("option");
-      option.value = version;
-      option.textContent = index === 0 ? `${version} (latest)` : version;
-      if (version === currentVersion) {
-        option.selected = true;
-      }
-      versionSelect.appendChild(option);
-    });
-
-    // Handle version change
-    versionSelect.addEventListener("change", (e) => {
-      const newVersion = (e.target as HTMLSelectElement).value;
-      const currentPath = window.location.pathname;
-      // Replace version segment in path: /{project}/docs/{version}/{slug}
-      const newPath = currentPath.replace(/\/[^/]+\/docs\/[^/]+/, (match) => {
-        const pathParts = match.split("/").filter(Boolean);
-        const project = pathParts[0]; // First segment is project
+  const handleVersionChange = (newVersion: string) => {
+    const newPath = window.location.pathname.replace(
+      /\/[^/]+\/docs\/[^/]+/,
+      (match) => {
+        const project = match.split("/").filter(Boolean)[0];
         return `/${project}/docs/${newVersion}`;
-      });
-      window.location.href = newPath;
-    });
-
-    versionContainer.appendChild(versionLabel);
-    versionContainer.appendChild(versionSelect);
-
-    // ============================================
-    // INSERT BOTH SELECTORS (project first, then version)
-    // ============================================
-    // Insert version selector first
-    sidebar.insertBefore(versionContainer, sidebar.firstChild);
-    // Insert project selector first (pushes version selector down)
-    sidebar.insertBefore(projectContainer, sidebar.firstChild);
-  }, [versions, currentVersion, currentProject, allProjects]);
+      }
+    );
+    window.location.href = newPath;
+  };
 
   const isLatestVersion = versions.length > 0 && versions[0] === currentVersion;
+  const versionDisplay = isLatestVersion ? `${currentVersion} (latest)` : currentVersion;
 
   return (
-    <DefaultWrapper
-      toc={toc}
-      metadata={metadata}
-      sourceCode={sourceCode ?? ""}
-      bottomContent={bottomContent}
-    >
-      <PagefindMetadata
-        project={currentProject.id}
-        projectName={currentProject.name}
-        version={currentVersion}
-        isLatestVersion={isLatestVersion}
-      />
-      {children}
-    </DefaultWrapper>
+    <>
+      {projectContainer &&
+        createPortal(
+          <SidebarSelector
+            label="Project"
+            value={currentProject.id}
+            displayValue={currentProject.name}
+            onValueChange={(id) => { window.location.href = `/${id}/docs/latest`; }}
+            disabled={allProjects.length === 1}
+            items={allProjects.map((p) => ({ value: p.id, label: p.name }))}
+          />,
+          projectContainer
+        )}
+      {versionContainer &&
+        createPortal(
+          <SidebarSelector
+            label="Version"
+            value={currentVersion}
+            displayValue={versionDisplay}
+            onValueChange={handleVersionChange}
+            items={versions.map((v, i) => ({ value: v, label: i === 0 ? `${v} (latest)` : v }))}
+          />,
+          versionContainer
+        )}
+      <DefaultWrapper
+        toc={toc}
+        metadata={metadata}
+        sourceCode={sourceCode ?? ""}
+        bottomContent={bottomContent}
+      >
+        <PagefindMetadata
+          project={currentProject.id}
+          projectName={currentProject.name}
+          version={currentVersion}
+          isLatestVersion={isLatestVersion}
+        />
+        {children}
+      </DefaultWrapper>
+    </>
   );
 }
