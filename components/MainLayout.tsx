@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { PageMapItem } from "nextra";
 import { Footer, Layout, Navbar, ThemeSwitch } from "nextra-theme-docs";
 import { ProjectSearch } from "./ProjectSearch";
+import { TooltipProvider } from "./ui/tooltip";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -40,7 +41,9 @@ export function MainLayout({ children }: MainLayoutProps) {
       search={<ProjectSearch />}
       sidebar={{ defaultOpen: false, toggleButton: false }}
     >
-      {children}
+      <TooltipProvider>
+        {children}
+      </TooltipProvider>
     </Layout>
   );
 }

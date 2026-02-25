@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+
 import { Card } from "@/components/ui/card";
 import { getAllProjects } from "@/lib/projects";
+import { Button } from "../ui/button";
 
 export function ProjectCardsSection() {
   const projects = getAllProjects();
