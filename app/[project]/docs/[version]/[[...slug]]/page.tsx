@@ -4,8 +4,8 @@ import { compileMdx } from "nextra/compile";
 import { evaluate } from "nextra/evaluate";
 import { fetchFileContent, getAllDocsFiles } from "@/lib/github";
 import { findDocFile, getDocPathsForVersion } from "@/lib/page-map-builder";
-import { remarkResolveRelativeLinks } from "@/lib/remark-resolve-relative-links";
 import { getAllProjects, getProject } from "@/lib/projects";
+import { remarkResolveRelativeLinks } from "@/lib/remark-resolve-relative-links";
 import { extractTitle } from "@/lib/remote-content";
 import { getVersions, resolveVersion } from "@/lib/versions";
 import { useMDXComponents } from "../../../../../mdx-components";
@@ -244,9 +244,7 @@ export default async function DocPage({ params }: PageProps) {
       defaultShowCopyCode: true,
       codeHighlight: true,
       mdxOptions: {
-        remarkPlugins: [
-          [remarkResolveRelativeLinks, { basePath, filePath }],
-        ],
+        remarkPlugins: [[remarkResolveRelativeLinks, { basePath, filePath }]],
       },
     });
   } catch (error) {

@@ -3,11 +3,8 @@
 import type { $NextraMetadata, Heading } from "nextra";
 import { useMDXComponents } from "nextra-theme-docs";
 import type { ReactNode } from "react";
-import { useEffect, useState, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { useProject } from "@/lib/project-context";
-import { getAllProjects } from "@/lib/projects";
-import { useVersion } from "@/lib/version-context";
 import {
   Combobox,
   ComboboxContent,
@@ -15,6 +12,9 @@ import {
   ComboboxItem,
   ComboboxList,
 } from "@/components/ui/combobox";
+import { useProject } from "@/lib/project-context";
+import { getAllProjects } from "@/lib/projects";
+import { useVersion } from "@/lib/version-context";
 import { PagefindMetadata } from "./PagefindMetadata";
 
 interface DocsWrapperProps {
@@ -47,12 +47,9 @@ function SidebarSelector({
     setInputValue(displayValue);
   }, [displayValue]);
 
-  const handleOpenChange = useCallback(
-    (open: boolean) => {
-      if (open) setInputValue("");
-    },
-    []
-  );
+  const handleOpenChange = useCallback((open: boolean) => {
+    if (open) setInputValue("");
+  }, []);
 
   const handleValueChange = useCallback(
     (val: unknown) => {
@@ -61,18 +58,31 @@ function SidebarSelector({
       if (selected) setInputValue(selected.label);
       onValueChange(val as string);
     },
-    [items, onValueChange]
+    [items, onValueChange],
   );
 
   const filteredItems = items.filter(
-    (item) => !inputValue || item.label.toLowerCase().includes(inputValue.toLowerCase())
+    (item) =>
+      !inputValue ||
+      item.label.toLowerCase().includes(inputValue.toLowerCase()),
   );
 
   return (
     <div
-      style={{ padding: "0.75rem 1rem", borderBottom: "1px solid var(--border)", flexShrink: 0 }}
+      style={{
+        padding: "0.75rem 1rem",
+        borderBottom: "1px solid var(--border)",
+        flexShrink: 0,
+      }}
     >
-      <p style={{ fontSize: "0.75rem", fontWeight: 500, color: "var(--muted-foreground)", marginBottom: "0.25rem" }}>
+      <p
+        style={{
+          fontSize: "0.75rem",
+          fontWeight: 500,
+          color: "var(--muted-foreground)",
+          marginBottom: "0.25rem",
+        }}
+      >
         {label}
       </p>
       <Combobox
@@ -111,14 +121,19 @@ export function DocsWrapper({
   const components = useMDXComponents({});
   const DefaultWrapper = components.wrapper;
 
-  const [projectContainer, setProjectContainer] = useState<HTMLElement | null>(null);
-  const [versionContainer, setVersionContainer] = useState<HTMLElement | null>(null);
+  const [projectContainer, setProjectContainer] = useState<HTMLElement | null>(
+    null,
+  );
+  const [versionContainer, setVersionContainer] = useState<HTMLElement | null>(
+    null,
+  );
 
   useEffect(() => {
     if (versions.length === 0) return;
 
     const sidebar = document.querySelector("aside.nextra-sidebar");
-    if (!sidebar || sidebar.querySelector(".version-selector-container")) return;
+    if (!sidebar || sidebar.querySelector(".version-selector-container"))
+      return;
 
     const projDiv = document.createElement("div");
     projDiv.className = "project-selector-container";
@@ -138,13 +153,15 @@ export function DocsWrapper({
       (match) => {
         const project = match.split("/").filter(Boolean)[0];
         return `/${project}/docs/${newVersion}`;
-      }
+      },
     );
     window.location.href = newPath;
   };
 
   const isLatestVersion = versions.length > 0 && versions[0] === currentVersion;
-  const versionDisplay = isLatestVersion ? `${currentVersion} (latest)` : currentVersion;
+  const versionDisplay = isLatestVersion
+    ? `${currentVersion} (latest)`
+    : currentVersion;
 
   return (
     <>
@@ -154,11 +171,13 @@ export function DocsWrapper({
             label="Project"
             value={currentProject.id}
             displayValue={currentProject.name}
-            onValueChange={(id) => { window.location.href = `/${id}/docs/latest`; }}
+            onValueChange={(id) => {
+              window.location.href = `/${id}/docs/latest`;
+            }}
             disabled={allProjects.length === 1}
             items={allProjects.map((p) => ({ value: p.id, label: p.name }))}
           />,
-          projectContainer
+          projectContainer,
         )}
       {versionContainer &&
         createPortal(
@@ -167,9 +186,12 @@ export function DocsWrapper({
             value={currentVersion}
             displayValue={versionDisplay}
             onValueChange={handleVersionChange}
-            items={versions.map((v, i) => ({ value: v, label: i === 0 ? `${v} (latest)` : v }))}
+            items={versions.map((v, i) => ({
+              value: v,
+              label: i === 0 ? `${v} (latest)` : v,
+            }))}
           />,
-          versionContainer
+          versionContainer,
         )}
       <DefaultWrapper
         toc={toc}

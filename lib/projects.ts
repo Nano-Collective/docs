@@ -42,7 +42,8 @@ export const PROJECTS: ProjectConfig[] = [
   {
     id: "json-up",
     name: "json-up",
-    description: "A fast, type-safe JSON migration tool with Zod schema validation.",
+    description:
+      "A fast, type-safe JSON migration tool with Zod schema validation.",
     repo: {
       owner: "Nano-Collective",
       name: "json-up",

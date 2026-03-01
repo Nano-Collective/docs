@@ -24,10 +24,10 @@ export function remarkResolveRelativeLinks({ basePath, filePath }: Options) {
   // e.g. `docs/guide/intro.md` → `guide`, `docs/index.md` → `.`
   const fileDir = path.posix.dirname(filePath.replace(/^docs\//, ""));
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (tree: any) => {
+  return (tree: MdastNode) => {
     visitLinks(tree, (node) => {
-      const url: string = node.url;
+      const url = node.url;
+      if (!url) return;
 
       // Skip external links, anchors, and already-absolute paths
       if (
@@ -53,8 +53,13 @@ export function remarkResolveRelativeLinks({ basePath, filePath }: Options) {
   };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function visitLinks(node: any, fn: (node: any) => void) {
+interface MdastNode {
+  type: string;
+  url?: string;
+  children?: MdastNode[];
+}
+
+function visitLinks(node: MdastNode, fn: (node: MdastNode) => void) {
   if (node.type === "link") {
     fn(node);
   }

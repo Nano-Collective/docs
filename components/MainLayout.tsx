@@ -41,9 +41,7 @@ export function MainLayout({ children }: MainLayoutProps) {
       search={<ProjectSearch />}
       sidebar={{ defaultOpen: false, toggleButton: false }}
     >
-      <TooltipProvider>
-        {children}
-      </TooltipProvider>
+      <TooltipProvider>{children}</TooltipProvider>
     </Layout>
   );
 }
