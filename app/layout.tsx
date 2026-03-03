@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Fira_Code, Lora, Poppins } from "next/font/google";
 import { Head } from "nextra/components";
 import "nextra-theme-docs/style.css";
@@ -24,9 +25,17 @@ const firaCode = Fira_Code({
   display: "swap",
 });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Nano Collective Docs",
   description: "Official documentation for Nano Collective projects",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "48x48" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default function RootLayout({
