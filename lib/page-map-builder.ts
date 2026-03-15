@@ -1,6 +1,6 @@
 import type { Folder, MdxFile, PageMapItem } from "nextra";
 import { fetchFileContent, getAllDocsFiles, type Repo } from "./github";
-import { parseFrontmatter, type PageFrontmatter } from "./remote-content";
+import { type PageFrontmatter, parseFrontmatter } from "./remote-content";
 
 // Cache for page maps to avoid repeated API calls during build
 // Map keyed by "projectId:version"
@@ -93,10 +93,7 @@ export async function buildPageMapForVersion(
         title: "Introduction",
         frontMatter: { title: "Introduction" },
       } as MdxFile & { title: string });
-    } else if (isIndex) {
-      // Skip index files in subdirectories (they become the folder's default)
-      continue;
-    } else if (parts.length === 1) {
+    } else if (!isIndex && parts.length === 1) {
       // Top-level file
       pageMap.push({
         name: parts[0],
@@ -104,7 +101,7 @@ export async function buildPageMapForVersion(
         title,
         frontMatter: { title, ...fm },
       } as MdxFile & { title: string });
-    } else {
+    } else if (!isIndex) {
       // Nested file - create folder structure
       const folderPath = parts.slice(0, -1).join("/");
       let folder = folders.get(folderPath);
