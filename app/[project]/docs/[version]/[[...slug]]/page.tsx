@@ -6,7 +6,7 @@ import { fetchFileContent, getAllDocsFiles } from "@/lib/github";
 import { findDocFile, getDocPathsForVersion } from "@/lib/page-map-builder";
 import { getAllProjects, getProject } from "@/lib/projects";
 import { remarkResolveRelativeLinks } from "@/lib/remark-resolve-relative-links";
-import { extractTitle } from "@/lib/remote-content";
+import { extractTitle, parseFrontmatter } from "@/lib/remote-content";
 import { getVersions, resolveVersion } from "@/lib/versions";
 import { useMDXComponents } from "../../../../../mdx-components";
 
@@ -162,10 +162,11 @@ export async function generateMetadata({
       project.repo,
     );
     const title = extractTitle(rawMdx);
+    const frontmatter = parseFrontmatter(rawMdx);
 
     return {
       title: `${title} | ${project.name} ${resolvedVersion}`,
-      description: `Documentation for ${project.name} ${resolvedVersion}`,
+      description: frontmatter.description || `Documentation for ${project.name} ${resolvedVersion}`,
     };
   } catch {
     return { title: "Not Found" };

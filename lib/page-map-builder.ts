@@ -1,5 +1,6 @@
 import type { Folder, MdxFile, PageMapItem } from "nextra";
 import { fetchFileContent, getAllDocsFiles, type Repo } from "./github";
+import { parseFrontmatter, type PageFrontmatter } from "./remote-content";
 
 // Cache for page maps to avoid repeated API calls during build
 // Map keyed by "projectId:version"
@@ -46,18 +47,43 @@ export async function buildPageMapForVersion(
     return [];
   }
 
+  // Fetch frontmatter for each file in parallel
+  const fileFrontmatter = new Map<string, PageFrontmatter>();
+  await Promise.all(
+    files.map(async (file) => {
+      try {
+        // Only fetch first ~50 lines to extract frontmatter (reduces API calls)
+        const content = await fetchFileContent(version, file, repo);
+        const partialContent = content.slice(0, 2000);
+        const fm = parseFrontmatter(partialContent);
+        fileFrontmatter.set(file, fm);
+      } catch {
+        // If we can't fetch the file, use empty frontmatter
+        fileFrontmatter.set(file, {});
+      }
+    }),
+  );
+
   // Build pageMap manually for remote content
   // Note: normalizePages expects items with 'title' property (not just frontMatter.title)
   const pageMap: PageMapItem[] = [];
   const folders = new Map<string, Folder<PageMapItem>>();
 
   for (const file of files) {
+    const fm = fileFrontmatter.get(file) || {};
+
+    // Skip hidden pages
+    if (fm.hidden) {
+      continue;
+    }
+
     // e.g., 'docs/guide/intro.md' -> 'guide/intro'
     const relativePath = file.replace(/^docs\//, "").replace(/\.(md|mdx)$/, "");
 
     const parts = relativePath.split("/");
     const isIndex = parts[parts.length - 1] === "index";
-    const title = pathToDisplayName(file);
+    // Use frontmatter title, fallback to path-based title
+    const title = fm.title || pathToDisplayName(file);
 
     if (isIndex && parts.length === 1) {
       // Root index file
@@ -68,13 +94,15 @@ export async function buildPageMapForVersion(
         frontMatter: { title: "Introduction" },
       } as MdxFile & { title: string });
     } else if (isIndex) {
+      // Skip index files in subdirectories (they become the folder's default)
+      continue;
     } else if (parts.length === 1) {
       // Top-level file
       pageMap.push({
         name: parts[0],
         route: `/${projectId}/docs/${version}/${parts[0]}`,
         title,
-        frontMatter: { title },
+        frontMatter: { title, ...fm },
       } as MdxFile & { title: string });
     } else {
       // Nested file - create folder structure
@@ -82,10 +110,15 @@ export async function buildPageMapForVersion(
       let folder = folders.get(folderPath);
 
       if (!folder) {
+        // Check if folder has frontmatter (from index file)
+        const folderIndexPath = `docs/${folderPath}/index.md`;
+        const folderFm = fileFrontmatter.get(folderIndexPath) || {};
+        const folderTitle = folderFm.title || pathToDisplayName(parts[parts.length - 2]);
+
         folder = {
           name: parts[parts.length - 2],
           route: `/${projectId}/docs/${version}/${folderPath}`,
-          title: pathToDisplayName(parts[parts.length - 2]),
+          title: folderTitle,
           children: [],
         } as Folder<PageMapItem> & { title: string };
         folders.set(folderPath, folder);
@@ -96,8 +129,29 @@ export async function buildPageMapForVersion(
         name: parts[parts.length - 1],
         route: `/${projectId}/docs/${version}/${relativePath}`,
         title,
-        frontMatter: { title },
+        frontMatter: { title, ...fm },
       } as MdxFile & { title: string });
+    }
+  }
+
+  // Sort top-level items and folder children by sidebar_order
+  const getSidebarOrder = (item: PageMapItem): number => {
+    // Only MdxFile items have frontMatter with sidebar_order
+    const fm = (item as unknown as { frontMatter?: PageFrontmatter }).frontMatter;
+    return fm?.sidebar_order ?? Infinity;
+  };
+
+  const sortByOrder = (a: PageMapItem, b: PageMapItem): number => {
+    return getSidebarOrder(a) - getSidebarOrder(b);
+  };
+
+  // Sort items at top level
+  pageMap.sort(sortByOrder);
+
+  // Sort children within each folder
+  for (const folder of folders.values()) {
+    if (folder.children) {
+      folder.children.sort(sortByOrder);
     }
   }
 
