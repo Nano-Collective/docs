@@ -23,11 +23,11 @@ interface PageProps {
  * Generates params for ALL unique slugs across ALL versions to support 404 pages
  */
 export async function generateStaticParams(): Promise<
-  Array<{ project: string; version: string; slug: string[] }>
+  Array<{ project: string; version: string; slug?: string[] }>
 > {
   try {
     const projects = getAllProjects();
-    const params: Array<{ project: string; version: string; slug: string[] }> =
+    const params: Array<{ project: string; version: string; slug?: string[] }> =
       [];
 
     for (const project of projects) {
@@ -45,11 +45,10 @@ export async function generateStaticParams(): Promise<
           `✓ Found ${paths.length} docs for ${project.name} ${version}`,
         );
 
-        // Add root page with empty slug array
+        // Add root page without slug (optional catch-all)
         params.push({
           project: project.id,
           version,
-          slug: [],
         });
 
         // Add all doc paths
@@ -76,7 +75,6 @@ export async function generateStaticParams(): Promise<
         params.push({
           project: project.id,
           version: "latest",
-          slug: [],
         });
 
         for (const slugPath of latestPaths) {

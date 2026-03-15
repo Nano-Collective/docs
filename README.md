@@ -31,45 +31,36 @@ export const PROJECTS: ProjectConfig[] = [
 ];
 ```
 
-## Publishing Documentation
+## Writing Documentation
 
-### Step 1: Add Your Project
-
-If your project isn't already configured, add it to `lib/projects.ts`.
-
-### Step 2: Create a Release
-
-Documentation is fetched from **GitHub releases**. To publish docs:
-
-1. Create a GitHub release with a tag (e.g., `v1.0.0`)
-2. Add a `docs/` folder to your repository
-3. Place your markdown files in `docs/`
-
-### Step 3: Add Documentation Files
+### Directory Structure
 
 Place `.md` or `.mdx` files in your repository's `docs/` folder:
 
 ```
 your-repo/
 ├── docs/
-│   ├── index.md           # Homepage (appears as "Introduction")
-│   ├── getting-started.md
-│   ├── installation.md
-│   └── api/
-│       ├── index.md       # Folder default page
-│       ├── overview.md
-│       └── endpoints/
-│           ├── users.md
-│           └── items.md
+│   ├── index.md              # Root page (Introduction)
+│   ├── commands.md            # Top-level page
+│   ├── getting-started/
+│   │   ├── index.md           # Folder overview page
+│   │   ├── installation.md
+│   │   └── uninstalling.md
+│   └── features/
+│       ├── index.md           # Folder overview page
+│       ├── custom-commands.md
+│       └── task-management.md
 └── src/
     └── ...
 ```
 
-The sidebar automatically displays all files, organized by folder structure. Subfolder `index.md` files become the folder's default page.
+- `index.md` in the root `docs/` folder becomes the Introduction page
+- `index.md` in a subfolder becomes that folder's overview/default page
+- The sidebar is built automatically from the folder structure
 
-## Frontmatter
+### Frontmatter
 
-You can customize page titles, descriptions, ordering, and visibility using YAML frontmatter at the top of each markdown file:
+Control page titles, descriptions, ordering, and visibility using YAML frontmatter:
 
 ```yaml
 ---
@@ -80,52 +71,82 @@ hidden: false
 ---
 ```
 
-### Available Fields
-
 | Field | Type | Description |
 |-------|------|-------------|
-| `title` | string | Custom page title (overrides auto-generated from filename) |
+| `title` | string | Custom page title (overrides auto-generated title from filename) |
 | `description` | string | Page description for SEO meta tags |
-| `sidebar_order` | number | Numeric sort order in sidebar (lower = appears first) |
-| `hidden` | boolean | Hide page from sidebar but keep accessible via direct link |
+| `sidebar_order` | number | Numeric sort order in sidebar (lower number = appears first) |
+| `hidden` | boolean | Hide page from sidebar but keep accessible via direct URL |
 
-### Examples
+### Sidebar Ordering
 
-**Custom title and description:**
+Sidebar ordering is controlled by the `sidebar_order` frontmatter field. Pages without `sidebar_order` appear last.
+
+**For regular pages**, `sidebar_order` controls the page's position among its siblings:
+
 ```yaml
+# docs/commands.md
 ---
-title: "Quick Start Guide"
-description: "Get up and running in 5 minutes"
+title: "Commands"
+sidebar_order: 6
 ---
 ```
 
-**Ordering pages:**
+**For folders**, the `sidebar_order` in the folder's `index.md` controls the folder's position in its parent. The index page itself is always displayed first within the folder:
+
 ```yaml
+# docs/getting-started/index.md
 ---
-# In getting-started.md
-title: Getting Started
-sidebar_order: 1
----
-```
-```yaml
-# In api-reference.md
----
-title: API Reference  
+title: "Getting Started"
 sidebar_order: 2
 ---
 ```
 
-**Hidden pages (for redirects or internal content):**
+This means `sidebar_order: 2` positions the "Getting Started" **folder** as the 2nd item in the root sidebar. Inside the folder, the index page (overview) is always first, and other pages are sorted by their own `sidebar_order`.
+
+**Full example:**
+
+```
+docs/
+├── index.md                    # sidebar_order: 1  → 1st in root
+├── getting-started/
+│   ├── index.md                # sidebar_order: 2  → folder is 2nd in root
+│   ├── installation.md         # sidebar_order: 2  → 2nd in folder
+│   └── uninstalling.md         # sidebar_order: 3  → 3rd in folder
+├── configuration/
+│   ├── index.md                # sidebar_order: 3  → folder is 3rd in root
+│   ├── providers.md            # sidebar_order: 2  → 2nd in folder
+│   └── preferences.md          # sidebar_order: 3  → 3rd in folder
+├── commands.md                 # sidebar_order: 5  → 5th in root
+└── community.md                # sidebar_order: 6  → 6th in root
+```
+
+**Hidden pages:**
+
 ```yaml
 ---
-title: Legacy API
+title: "Legacy API"
 hidden: true
 ---
 ```
 
-## URL Structure
+Hidden pages are excluded from the sidebar but remain accessible via direct URL.
 
-Documentation URLs follow this pattern:
+## Publishing Documentation
+
+### Step 1: Add Your Project
+
+If your project isn't already configured, add it to `lib/projects.ts`.
+
+### Step 2: Create Documentation
+
+Add a `docs/` folder to your repository with `.md` or `.mdx` files. Use frontmatter to control titles and ordering.
+
+### Step 3: Create a Release
+
+Documentation is fetched from **GitHub releases**. Create a GitHub release with a semantic version tag (e.g., `v1.0.0`). The site automatically picks up the latest patch release for each minor version.
+
+## URL Structure
 
 ```
 /[project]/docs/[version]/[path]
@@ -133,7 +154,7 @@ Documentation URLs follow this pattern:
 # Examples:
 /nanocoder/docs/v1.0.0/getting-started
 /nanocoder/docs/latest/installation
-/nanotune/docs/v1.3.1/api/overview
+/nanotune/docs/v1.3.1/configuration/providers
 ```
 
 - `[project]` - Project ID from config (e.g., `nanocoder`)
@@ -146,15 +167,17 @@ Documentation URLs follow this pattern:
 # Install dependencies
 npm install
 
+# Create .env.local with a GitHub token (required to avoid API rate limits)
+echo "GITHUB_TOKEN=ghp_your_token_here" > .env.local
+
 # Run development server
 npm run dev
 
 # Build for production
 npm run build
-
-# Start production server
-npm run start
 ```
+
+In development mode, docs are fetched from the `main` branch of each project repository. In production, docs are fetched from GitHub release tags.
 
 ## Adding a New Project
 
@@ -177,5 +200,5 @@ npm run start
 ## Requirements
 
 - Node.js 18+
-- GitHub account with access to project repositories
+- GitHub personal access token (set as `GITHUB_TOKEN` in `.env.local`)
 - GitHub releases with semantic version tags

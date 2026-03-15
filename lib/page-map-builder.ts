@@ -34,11 +34,13 @@ export async function buildPageMapForVersion(
   version: string,
   repo: Repo,
 ): Promise<PageMapItem[]> {
-  // Check cache first
   const cacheKey = `${projectId}:${version}`;
-  const cached = pageMapCache.get(cacheKey);
-  if (cached) {
-    return cached;
+  // Skip cache in dev so changes are picked up on refresh
+  if (process.env.NODE_ENV !== "development") {
+    const cached = pageMapCache.get(cacheKey);
+    if (cached) {
+      return cached;
+    }
   }
 
   // Fetch all doc files from GitHub
@@ -105,8 +107,8 @@ export async function buildPageMapForVersion(
       root.unshift({
         name: "index",
         route: `/${projectId}/docs/${version}`,
-        title: "Introduction",
-        frontMatter: { title: "Introduction" },
+        title: title || "Introduction",
+        frontMatter: { title: title || "Introduction", ...fm },
       } as MdxFile & { title: string });
       continue;
     }
@@ -165,7 +167,13 @@ export async function buildPageMapForVersion(
           route: route || "",
           title: folderTitle,
           children: [],
-        } as Folder<PageMapItem> & { title: string };
+          frontMatter: folderFm
+            ? { title: folderTitle, ...folderFm }
+            : { title: folderTitle },
+        } as Folder<PageMapItem> & {
+          title: string;
+          frontMatter: PageFrontmatter;
+        };
 
         currentLevel.push(folder);
       }
@@ -184,6 +192,9 @@ export async function buildPageMapForVersion(
   }
 
   // Sort items at each level by sidebar_order
+  // For folders, sidebar_order comes from the folder's index.md and controls
+  // the folder's position in its parent. Index pages are always first within
+  // their folder.
   const sortByOrder = (items: PageMapItem[]): void => {
     const getOrder = (item: PageMapItem): number => {
       const fm = (item as unknown as { frontMatter?: PageFrontmatter })
@@ -191,7 +202,15 @@ export async function buildPageMapForVersion(
       return fm?.sidebar_order ?? Infinity;
     };
 
-    items.sort((a, b) => getOrder(a) - getOrder(b));
+    const isIndex = (item: PageMapItem): boolean =>
+      "name" in item && item.name === "index";
+
+    items.sort((a, b) => {
+      // Index pages always come first within a folder
+      if (isIndex(a)) return -1;
+      if (isIndex(b)) return 1;
+      return getOrder(a) - getOrder(b);
+    });
 
     // Recursively sort children in folders
     for (const item of items) {

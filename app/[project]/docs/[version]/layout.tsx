@@ -67,6 +67,8 @@ export default async function DocsLayout({ children, params }: LayoutProps) {
           sidebar={{
             defaultOpen: true,
             toggleButton: true,
+            autoCollapse: true,
+            defaultMenuCollapseLevel: 1,
           }}
         >
           {children}

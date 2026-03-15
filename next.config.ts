@@ -6,7 +6,7 @@ const withNextra = nextra({
 });
 
 const nextConfig: NextConfig = {
-  output: "export",
+  ...(process.env.NODE_ENV === "production" && { output: "export" }),
   images: {
     unoptimized: true,
   },
