@@ -113,7 +113,8 @@ export async function buildPageMapForVersion(
         // Check if folder has frontmatter (from index file)
         const folderIndexPath = `docs/${folderPath}/index.md`;
         const folderFm = fileFrontmatter.get(folderIndexPath) || {};
-        const folderTitle = folderFm.title || pathToDisplayName(parts[parts.length - 2]);
+        const folderTitle =
+          folderFm.title || pathToDisplayName(parts[parts.length - 2]);
 
         folder = {
           name: parts[parts.length - 2],
@@ -137,7 +138,8 @@ export async function buildPageMapForVersion(
   // Sort top-level items and folder children by sidebar_order
   const getSidebarOrder = (item: PageMapItem): number => {
     // Only MdxFile items have frontMatter with sidebar_order
-    const fm = (item as unknown as { frontMatter?: PageFrontmatter }).frontMatter;
+    const fm = (item as unknown as { frontMatter?: PageFrontmatter })
+      .frontMatter;
     return fm?.sidebar_order ?? Infinity;
   };
 

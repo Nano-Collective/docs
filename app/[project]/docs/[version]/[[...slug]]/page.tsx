@@ -166,7 +166,9 @@ export async function generateMetadata({
 
     return {
       title: `${title} | ${project.name} ${resolvedVersion}`,
-      description: frontmatter.description || `Documentation for ${project.name} ${resolvedVersion}`,
+      description:
+        frontmatter.description ||
+        `Documentation for ${project.name} ${resolvedVersion}`,
     };
   } catch {
     return { title: "Not Found" };
