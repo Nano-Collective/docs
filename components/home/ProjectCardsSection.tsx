@@ -9,7 +9,7 @@ function ProjectCard({
   index,
   variant = "default",
 }: {
-  project: (ReturnType<typeof getApps>)[number];
+  project: ReturnType<typeof getApps>[number];
   index: number;
   variant?: "default" | "compact";
 }) {
