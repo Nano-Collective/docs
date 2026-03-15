@@ -579,3 +579,36 @@ pre {
 code {
   font-family: var(--font-mono);
 }
+
+/* Mobile improvements */
+@media (max-width: 767px) {
+  /* Touch-friendly sidebar links (min 44px targets) */
+  .nextra-sidebar a,
+  .nextra-mobile-nav a {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Hide "Copy page" button on mobile */
+  article > div[class*="float-end"] {
+    display: none;
+  }
+
+  /* Prevent header breadcrumb overflow */
+  nav.nextra-nav-container .nextra-nav-container-blur {
+    overflow: hidden;
+  }
+
+  /* Responsive tables */
+  .prose :where(table):not(:where([class~="not-prose"] *)) {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Ensure code blocks don't overflow */
+  .prose :where(pre):not(:where([class~="not-prose"] *)) {
+    max-width: calc(100vw - 2rem);
+  }
+}

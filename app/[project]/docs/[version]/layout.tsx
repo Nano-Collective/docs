@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
-import { Footer, Layout, Navbar, ThemeSwitch } from "nextra-theme-docs";
+import { Layout, Navbar, ThemeSwitch } from "nextra-theme-docs";
+import CustomFooter from "@/components/home/Footer";
 import { buildPageMapForVersion } from "@/lib/page-map-builder";
 import { ProjectProvider } from "@/lib/project-context";
 import { getProject } from "@/lib/projects";
@@ -38,12 +39,12 @@ export default async function DocsLayout({ children, params }: LayoutProps) {
     <Navbar
       logoLink={false}
       logo={
-        <div className="flex items-center gap-2">
-          <Link href="/" className="hover:underline">
+        <div className="flex items-center gap-2 min-w-0">
+          <Link href="/" className="hover:underline shrink-0">
             <b>Nano Docs</b>
           </Link>
-          <span className="text-sm opacity-25">●</span>
-          <Link href={`/${project.id}`} className="hover:underline">
+          <span className="text-sm opacity-25 shrink-0">●</span>
+          <Link href={`/${project.id}`} className="hover:underline truncate">
             <b>{project.name}</b>
           </Link>
         </div>
@@ -53,7 +54,7 @@ export default async function DocsLayout({ children, params }: LayoutProps) {
     </Navbar>
   );
 
-  const footer = <Footer>{new Date().getFullYear()} © Nano Collective.</Footer>;
+  const footer = <CustomFooter />;
 
   return (
     <ProjectProvider project={project}>

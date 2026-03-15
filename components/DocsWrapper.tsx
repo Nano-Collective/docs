@@ -127,24 +127,47 @@ export function DocsWrapper({
   const [versionContainer, setVersionContainer] = useState<HTMLElement | null>(
     null,
   );
+  const [mobileProjectContainer, setMobileProjectContainer] =
+    useState<HTMLElement | null>(null);
+  const [mobileVersionContainer, setMobileVersionContainer] =
+    useState<HTMLElement | null>(null);
 
   useEffect(() => {
     if (versions.length === 0) return;
 
+    // Inject into desktop sidebar
     const sidebar = document.querySelector("aside.nextra-sidebar");
-    if (!sidebar || sidebar.querySelector(".version-selector-container"))
-      return;
+    if (sidebar && !sidebar.querySelector(".version-selector-container")) {
+      const projDiv = document.createElement("div");
+      projDiv.className = "project-selector-container";
+      const verDiv = document.createElement("div");
+      verDiv.className = "version-selector-container";
 
-    const projDiv = document.createElement("div");
-    projDiv.className = "project-selector-container";
-    const verDiv = document.createElement("div");
-    verDiv.className = "version-selector-container";
+      sidebar.insertBefore(verDiv, sidebar.firstChild);
+      sidebar.insertBefore(projDiv, sidebar.firstChild);
 
-    sidebar.insertBefore(verDiv, sidebar.firstChild);
-    sidebar.insertBefore(projDiv, sidebar.firstChild);
+      setProjectContainer(projDiv);
+      setVersionContainer(verDiv);
+    }
 
-    setProjectContainer(projDiv);
-    setVersionContainer(verDiv);
+    // Inject into mobile nav
+    const mobileNav = document.querySelector(".nextra-mobile-nav");
+    if (mobileNav && !mobileNav.querySelector(".version-selector-container")) {
+      // Find the scrollable menu wrapper inside mobile nav
+      const menuWrapper = mobileNav.querySelector("ul")?.parentElement;
+      if (menuWrapper) {
+        const projDiv = document.createElement("div");
+        projDiv.className = "project-selector-container";
+        const verDiv = document.createElement("div");
+        verDiv.className = "version-selector-container";
+
+        menuWrapper.insertBefore(verDiv, menuWrapper.firstChild);
+        menuWrapper.insertBefore(projDiv, menuWrapper.firstChild);
+
+        setMobileProjectContainer(projDiv);
+        setMobileVersionContainer(verDiv);
+      }
+    }
   }, [versions]);
 
   const handleVersionChange = (newVersion: string) => {
@@ -192,6 +215,34 @@ export function DocsWrapper({
             }))}
           />,
           versionContainer,
+        )}
+      {mobileProjectContainer &&
+        createPortal(
+          <SidebarSelector
+            label="Project"
+            value={currentProject.id}
+            displayValue={currentProject.name}
+            onValueChange={(id) => {
+              window.location.href = `/${id}/docs/latest`;
+            }}
+            disabled={allProjects.length === 1}
+            items={allProjects.map((p) => ({ value: p.id, label: p.name }))}
+          />,
+          mobileProjectContainer,
+        )}
+      {mobileVersionContainer &&
+        createPortal(
+          <SidebarSelector
+            label="Version"
+            value={currentVersion}
+            displayValue={versionDisplay}
+            onValueChange={handleVersionChange}
+            items={versions.map((v, i) => ({
+              value: v,
+              label: i === 0 ? `${v} (latest)` : v,
+            }))}
+          />,
+          mobileVersionContainer,
         )}
       <DefaultWrapper
         toc={toc}

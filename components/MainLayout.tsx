@@ -1,7 +1,8 @@
 import Link from "next/link";
 import type { MdxFile, MetaJsonFile, PageMapItem } from "nextra";
-import { Footer, Layout, Navbar, ThemeSwitch } from "nextra-theme-docs";
+import { Layout, Navbar, ThemeSwitch } from "nextra-theme-docs";
 import { getApps, getLibraries } from "@/lib/projects";
+import Footer from "./home/Footer";
 import { ProjectSearch } from "./ProjectSearch";
 import { TooltipProvider } from "./ui/tooltip";
 
@@ -23,7 +24,7 @@ export function MainLayout({ children }: MainLayoutProps) {
     </Navbar>
   );
 
-  const footer = <Footer>{new Date().getFullYear()} © Nano Collective.</Footer>;
+  const footer = <Footer />;
 
   const apps = getApps();
   const libraries = getLibraries();
@@ -51,7 +52,12 @@ export function MainLayout({ children }: MainLayoutProps) {
   // the list, so separators and href-links must be included as items too.
   const pageMap = [
     { data: metaData } as MetaJsonFile,
-    { name: "index", route: "/", title: "Home", frontMatter: { title: "Home" } } as MdxFile,
+    {
+      name: "index",
+      route: "/",
+      title: "Home",
+      frontMatter: { title: "Home" },
+    } as MdxFile,
     { name: "---projects", type: "separator", title: "Projects" },
     ...apps.map((app) => ({
       name: app.id,
