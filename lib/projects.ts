@@ -2,6 +2,7 @@ export interface ProjectConfig {
   id: string; // URL slug: "nanocoder"
   name: string; // Display name: "Nanocoder"
   description: string; // Short description for project cards
+  type: "project" | "library"; // Distinguish between applications and libraries
   repo: {
     owner: string; // "Nano-Collective"
     name: string; // "nanocoder"
@@ -15,6 +16,7 @@ export const PROJECTS: ProjectConfig[] = [
     name: "Nanocoder",
     description:
       "A beautiful privacy-first coding agent running in your terminal",
+    type: "project",
     repo: {
       owner: "Nano-Collective",
       name: "nanocoder",
@@ -25,6 +27,7 @@ export const PROJECTS: ProjectConfig[] = [
     name: "Nanotune",
     description:
       "A simple, interactive CLI for fine-tuning small language models on Apple Silicon.",
+    type: "project",
     repo: {
       owner: "Nano-Collective",
       name: "nanotune",
@@ -34,6 +37,7 @@ export const PROJECTS: ProjectConfig[] = [
     id: "get-md",
     name: "get-md",
     description: "Extract and convert content to Markdown format.",
+    type: "library",
     repo: {
       owner: "Nano-Collective",
       name: "get-md",
@@ -44,6 +48,7 @@ export const PROJECTS: ProjectConfig[] = [
     name: "json-up",
     description:
       "A fast, type-safe JSON migration tool with Zod schema validation.",
+    type: "library",
     repo: {
       owner: "Nano-Collective",
       name: "json-up",
@@ -58,6 +63,14 @@ export function getProject(id: string): ProjectConfig | undefined {
 
 export function getAllProjects(): ProjectConfig[] {
   return PROJECTS;
+}
+
+export function getApps(): ProjectConfig[] {
+  return PROJECTS.filter((p) => p.type === "project");
+}
+
+export function getLibraries(): ProjectConfig[] {
+  return PROJECTS.filter((p) => p.type === "library");
 }
 
 export function isValidProject(id: string): boolean {

@@ -45,10 +45,11 @@ export async function generateStaticParams(): Promise<
           `✓ Found ${paths.length} docs for ${project.name} ${version}`,
         );
 
-        // Add root page without slug (optional catch-all)
+        // Add root page (empty slug array for optional catch-all)
         params.push({
           project: project.id,
           version,
+          slug: [],
         });
 
         // Add all doc paths
@@ -75,6 +76,7 @@ export async function generateStaticParams(): Promise<
         params.push({
           project: project.id,
           version: "latest",
+          slug: [],
         });
 
         for (const slugPath of latestPaths) {
