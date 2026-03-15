@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen, GitBranch } from "lucide-react";
+import { BookOpen, ExternalLink, GitBranch } from "lucide-react";
 import { EffectScene } from "@/components/home/EffectScene";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -55,6 +55,21 @@ export function HeroSection() {
               >
                 <GitBranch className="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
                 View on GitHub
+              </a>
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="group text-base w-full sm:w-auto"
+              asChild
+            >
+              <a
+                href="https://nanocollective.org"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <ExternalLink className="mr-2 h-5 w-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                Main Website
               </a>
             </Button>
           </div>
