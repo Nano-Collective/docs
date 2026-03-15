@@ -27,6 +27,7 @@ function pathToDisplayName(filePath: string): string {
 
 /**
  * Build a pageMap for a specific version from remote GitHub files
+ * Supports recursive nested folder structures
  */
 export async function buildPageMapForVersion(
   projectId: string,
@@ -64,11 +65,27 @@ export async function buildPageMapForVersion(
     }),
   );
 
-  // Build pageMap manually for remote content
-  // Note: normalizePages expects items with 'title' property (not just frontMatter.title)
-  const pageMap: PageMapItem[] = [];
-  const folders = new Map<string, Folder<PageMapItem>>();
+  // Build nested pageMap manually for remote content
+  // Structure: root array containing files and nested Folder objects
+  const root: PageMapItem[] = [];
 
+  // Index files grouped by their directory (for folder default pages)
+  const indexFilesByFolder = new Map<string, string>();
+
+  for (const file of files) {
+    const relativePath = file.replace(/^docs\//, "").replace(/\.(md|mdx)$/, "");
+    const parts = relativePath.split("/");
+    const isIndex = parts[parts.length - 1] === "index";
+
+    // Track index files for folder default routes
+    if (isIndex && parts.length > 1) {
+      // e.g., docs/api/index.md -> folderPath = "api"
+      const folderPath = parts.slice(0, -1).join("/");
+      indexFilesByFolder.set(folderPath, file);
+    }
+  }
+
+  // Process each file and build the tree
   for (const file of files) {
     const fm = fileFrontmatter.get(file) || {};
 
@@ -79,85 +96,117 @@ export async function buildPageMapForVersion(
 
     // e.g., 'docs/guide/intro.md' -> 'guide/intro'
     const relativePath = file.replace(/^docs\//, "").replace(/\.(md|mdx)$/, "");
-
     const parts = relativePath.split("/");
     const isIndex = parts[parts.length - 1] === "index";
-    // Use frontmatter title, fallback to path-based title
     const title = fm.title || pathToDisplayName(file);
 
     if (isIndex && parts.length === 1) {
-      // Root index file
-      pageMap.unshift({
+      // Root index file - add at beginning
+      root.unshift({
         name: "index",
         route: `/${projectId}/docs/${version}`,
         title: "Introduction",
         frontMatter: { title: "Introduction" },
       } as MdxFile & { title: string });
-    } else if (!isIndex && parts.length === 1) {
-      // Top-level file
-      pageMap.push({
+      continue;
+    }
+
+    if (isIndex) {
+      // Subfolder index - skip adding as a page, but it becomes folder default
+      continue;
+    }
+
+    if (parts.length === 1) {
+      // Top-level file - add directly to root
+      root.push({
         name: parts[0],
         route: `/${projectId}/docs/${version}/${parts[0]}`,
         title,
         frontMatter: { title, ...fm },
       } as MdxFile & { title: string });
-    } else if (!isIndex) {
-      // Nested file - create folder structure
-      const folderPath = parts.slice(0, -1).join("/");
-      let folder = folders.get(folderPath);
+      continue;
+    }
+
+    // Nested file - find or create folder hierarchy
+    // parts = ['api', 'endpoints', 'users'] -> folderPath = 'api/endpoints'
+    const folderParts = parts.slice(0, -1);
+    const fileName = parts[parts.length - 1];
+    const fileRoute = `/${projectId}/docs/${version}/${relativePath}`;
+
+    // Find or create the parent folder at the correct nesting level
+    let currentLevel: PageMapItem[] = root;
+
+    for (let i = 0; i < folderParts.length; i++) {
+      const folderName = folderParts[i];
+      const folderPath = folderParts.slice(0, i + 1).join("/");
+
+      // Check if folder already exists at this level
+      let folder = currentLevel.find(
+        (item): item is Folder<PageMapItem> =>
+          "children" in item && item.name === folderName,
+      );
 
       if (!folder) {
-        // Check if folder has frontmatter (from index file)
-        const folderIndexPath = `docs/${folderPath}/index.md`;
-        const folderFm = fileFrontmatter.get(folderIndexPath) || {};
-        const folderTitle =
-          folderFm.title || pathToDisplayName(parts[parts.length - 2]);
+        // Create new folder
+        // Check if this folder has an index file for default route
+        const folderIndexFile = indexFilesByFolder.get(folderPath);
+        const folderFm = folderIndexFile
+          ? fileFrontmatter.get(folderIndexFile)
+          : undefined;
+        const folderTitle = folderFm?.title || pathToDisplayName(folderName);
+
+        // Determine route - use index file if exists, otherwise first child
+        const route = folderIndexFile
+          ? `/${projectId}/docs/${version}/${folderPath}`
+          : undefined;
 
         folder = {
-          name: parts[parts.length - 2],
-          route: `/${projectId}/docs/${version}/${folderPath}`,
+          name: folderName,
+          route: route || "",
           title: folderTitle,
           children: [],
         } as Folder<PageMapItem> & { title: string };
-        folders.set(folderPath, folder);
-        pageMap.push(folder);
+
+        currentLevel.push(folder);
       }
 
-      folder.children.push({
-        name: parts[parts.length - 1],
-        route: `/${projectId}/docs/${version}/${relativePath}`,
-        title,
-        frontMatter: { title, ...fm },
-      } as MdxFile & { title: string });
+      // Move to children for next iteration
+      currentLevel = folder.children || [];
     }
+
+    // Add the file to the deepest folder's children
+    currentLevel.push({
+      name: fileName,
+      route: fileRoute,
+      title,
+      frontMatter: { title, ...fm },
+    } as MdxFile & { title: string });
   }
 
-  // Sort top-level items and folder children by sidebar_order
-  const getSidebarOrder = (item: PageMapItem): number => {
-    // Only MdxFile items have frontMatter with sidebar_order
-    const fm = (item as unknown as { frontMatter?: PageFrontmatter })
-      .frontMatter;
-    return fm?.sidebar_order ?? Infinity;
-  };
+  // Sort items at each level by sidebar_order
+  const sortByOrder = (items: PageMapItem[]): void => {
+    const getOrder = (item: PageMapItem): number => {
+      const fm = (item as unknown as { frontMatter?: PageFrontmatter })
+        .frontMatter;
+      return fm?.sidebar_order ?? Infinity;
+    };
 
-  const sortByOrder = (a: PageMapItem, b: PageMapItem): number => {
-    return getSidebarOrder(a) - getSidebarOrder(b);
-  };
+    items.sort((a, b) => getOrder(a) - getOrder(b));
 
-  // Sort items at top level
-  pageMap.sort(sortByOrder);
-
-  // Sort children within each folder
-  for (const folder of folders.values()) {
-    if (folder.children) {
-      folder.children.sort(sortByOrder);
+    // Recursively sort children in folders
+    for (const item of items) {
+      if ("children" in item && item.children) {
+        sortByOrder(item.children);
+      }
     }
-  }
+  };
+
+  sortByOrder(root);
 
   // Cache the result
-  pageMapCache.set(cacheKey, pageMap);
+  pageMapCache.set(cacheKey, root);
 
-  return pageMap;
+  return root;
 }
 
 /**

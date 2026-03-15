@@ -56,13 +56,16 @@ your-repo/
 │   ├── getting-started.md
 │   ├── installation.md
 │   └── api/
+│       ├── index.md       # Folder default page
 │       ├── overview.md
-│       └── reference.md
+│       └── endpoints/
+│           ├── users.md
+│           └── items.md
 └── src/
     └── ...
 ```
 
-The sidebar automatically displays all files, organized by folder structure.
+The sidebar automatically displays all files, organized by folder structure. Subfolder `index.md` files become the folder's default page.
 
 ## Frontmatter
 
