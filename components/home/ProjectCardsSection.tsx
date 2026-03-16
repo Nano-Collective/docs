@@ -64,10 +64,20 @@ function ProjectCard({
           </div>
           <p className="text-muted-foreground text-sm">{project.description}</p>
           <div className="flex flex-col sm:flex-row gap-3 mt-auto">
-            <Button asChild variant="default" size="sm" className="w-full sm:w-auto">
+            <Button
+              asChild
+              variant="default"
+              size="sm"
+              className="w-full sm:w-auto"
+            >
               <Link href={`/${project.id}/docs`}>Docs</Link>
             </Button>
-            <Button asChild variant="secondary" size="sm" className="w-full sm:w-auto">
+            <Button
+              asChild
+              variant="secondary"
+              size="sm"
+              className="w-full sm:w-auto"
+            >
               <Link href={`/${project.id}`}>Home</Link>
             </Button>
           </div>
