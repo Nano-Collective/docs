@@ -38,14 +38,14 @@ function ProjectCard({
             <p className="text-muted-foreground text-lg">
               {project.description}
             </p>
-            <div className="flex gap-3 mt-auto">
-              <Button asChild className="group/btn">
+            <div className="flex flex-col sm:flex-row gap-3 mt-auto">
+              <Button asChild className="group/btn w-full sm:w-auto">
                 <Link href={`/${project.id}/docs`}>
                   View Docs
                   <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover/btn:translate-x-1" />
                 </Link>
               </Button>
-              <Button asChild variant="secondary">
+              <Button asChild variant="secondary" className="w-full sm:w-auto">
                 <Link href={`/${project.id}`}>Home</Link>
               </Button>
             </div>
@@ -63,11 +63,11 @@ function ProjectCard({
             <h3 className="text-lg font-semibold">{project.name}</h3>
           </div>
           <p className="text-muted-foreground text-sm">{project.description}</p>
-          <div className="flex gap-3 mt-auto">
-            <Button asChild variant="default" size="sm">
+          <div className="flex flex-col sm:flex-row gap-3 mt-auto">
+            <Button asChild variant="default" size="sm" className="w-full sm:w-auto">
               <Link href={`/${project.id}/docs`}>Docs</Link>
             </Button>
-            <Button asChild variant="secondary" size="sm">
+            <Button asChild variant="secondary" size="sm" className="w-full sm:w-auto">
               <Link href={`/${project.id}`}>Home</Link>
             </Button>
           </div>
