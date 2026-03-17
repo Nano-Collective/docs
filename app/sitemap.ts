@@ -3,6 +3,8 @@ import { getDocPathsForVersion } from "@/lib/page-map-builder";
 import { getAllProjects } from "@/lib/projects";
 import { getVersions } from "@/lib/versions";
 
+export const dynamic = "force-static";
+
 const BASE_URL = "https://docs.nanocollective.org";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
