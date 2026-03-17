@@ -45,11 +45,20 @@ export const metadata: Metadata = {
     siteName: "Nano Collective",
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1080,
+        height: 1080,
+        alt: "Nano Collective",
+      },
+    ],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Nano Collective Docs",
     description: "Official documentation for Nano Collective projects",
+    images: ["/og-image.png"],
   },
 };
 
