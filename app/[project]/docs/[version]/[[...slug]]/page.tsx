@@ -324,7 +324,12 @@ export default async function DocPage({ params }: PageProps) {
   const editUrl = `https://github.com/${project.repo.owner}/${project.repo.name}/edit/${resolvedVersion}/${filePath}`;
 
   return (
-    <DocsWrapper toc={toc} metadata={mdxMetadata || {}} sourceCode={rawMdx} editUrl={editUrl}>
+    <DocsWrapper
+      toc={toc}
+      metadata={mdxMetadata || {}}
+      sourceCode={rawMdx}
+      editUrl={editUrl}
+    >
       <MDXContent />
     </DocsWrapper>
   );
