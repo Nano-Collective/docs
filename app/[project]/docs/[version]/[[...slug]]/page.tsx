@@ -321,8 +321,10 @@ export default async function DocPage({ params }: PageProps) {
   // Import DocsWrapper dynamically to avoid SSR issues
   const { DocsWrapper } = await import("@/components/DocsWrapper");
 
+  const editUrl = `https://github.com/${project.repo.owner}/${project.repo.name}/edit/${resolvedVersion}/${filePath}`;
+
   return (
-    <DocsWrapper toc={toc} metadata={mdxMetadata || {}} sourceCode={rawMdx}>
+    <DocsWrapper toc={toc} metadata={mdxMetadata || {}} sourceCode={rawMdx} editUrl={editUrl}>
       <MDXContent />
     </DocsWrapper>
   );

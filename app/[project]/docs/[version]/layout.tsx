@@ -96,6 +96,7 @@ export default async function DocsLayout({ children, params }: LayoutProps) {
           navbar={navbar}
           pageMap={pageMapWithSelectors}
           docsRepositoryBase={`https://github.com/${project.repo.owner}/${project.repo.name}/tree/${resolvedVersion}`}
+          editLink={null}
           footer={footer}
           search={<ProjectSearch />}
           sidebar={{
