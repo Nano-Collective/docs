@@ -211,12 +211,12 @@ export async function getAllDocsFiles(
 }
 
 /**
- * Check if a docs folder exists for a given version with actual markdown files
+ * Check if a docs folder exists for a given version
  */
 export async function docsExistForVersion(
   version: string,
   repo: Repo,
 ): Promise<boolean> {
-  const files = await getAllDocsFiles(version, "docs", repo);
-  return files.length > 0;
+  const contents = await fetchDirectoryContents(version, "docs", repo);
+  return contents.length > 0;
 }

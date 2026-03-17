@@ -87,14 +87,7 @@ export function SidebarSelectors() {
   if (versions.length === 0) return null;
 
   const handleVersionChange = (newVersion: string) => {
-    const newPath = window.location.pathname.replace(
-      /\/[^/]+\/docs\/[^/]+/,
-      (match) => {
-        const project = match.split("/").filter(Boolean)[0];
-        return `/${project}/docs/${newVersion}`;
-      },
-    );
-    window.location.href = newPath;
+    window.location.href = `/${currentProject.id}/docs/${newVersion}`;
   };
 
   const isLatestVersion = versions.length > 0 && versions[0] === currentVersion;
