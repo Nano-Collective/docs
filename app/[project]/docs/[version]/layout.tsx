@@ -41,9 +41,10 @@ export default async function DocsLayout({ children, params }: LayoutProps) {
   // and then processes the remaining items. Separator items in the meta are
   // spliced into the items list, but since we're building the page map
   // programmatically, we inject directly into both the meta and the items list.
-  const existingMeta = pageMap.length > 0 && "data" in pageMap[0]
-    ? (pageMap[0] as { data: Record<string, unknown> }).data
-    : {};
+  const existingMeta =
+    pageMap.length > 0 && "data" in pageMap[0]
+      ? (pageMap[0] as { data: Record<string, unknown> }).data
+      : {};
 
   const pageMapWithSelectors = [
     {
@@ -62,7 +63,9 @@ export default async function DocsLayout({ children, params }: LayoutProps) {
       title: <SidebarSelectors />,
     },
     // Rest of page map items (skip existing meta if it was the first item)
-    ...(pageMap.length > 0 && "data" in pageMap[0] ? pageMap.slice(1) : pageMap),
+    ...(pageMap.length > 0 && "data" in pageMap[0]
+      ? pageMap.slice(1)
+      : pageMap),
   ] as unknown as typeof pageMap;
 
   const navbar = (

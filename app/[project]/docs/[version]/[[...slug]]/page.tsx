@@ -137,11 +137,31 @@ export async function generateMetadata({
   const versions = await getVersions(projectId, project.repo);
   const resolvedVersion = resolveVersion(version, versions);
 
+  const baseUrl = "https://docs.nanocollective.org";
+  const slugPath = slug && slug.length > 0 ? `/${slug.join("/")}` : "";
+  const canonicalUrl = `${baseUrl}/${projectId}/docs/${version}${slugPath}`;
+
   // If no slug, this will redirect so just return basic metadata
   if (!slug || slug.length === 0) {
+    const pageTitle = `${project.name} ${resolvedVersion} Documentation`;
+    const pageDescription = `Documentation for ${project.name} ${resolvedVersion}`;
     return {
-      title: `${project.name} ${resolvedVersion} Documentation`,
-      description: `Documentation for ${project.name} ${resolvedVersion}`,
+      title: pageTitle,
+      description: pageDescription,
+      alternates: { canonical: canonicalUrl },
+      openGraph: {
+        title: pageTitle,
+        description: pageDescription,
+        url: canonicalUrl,
+        siteName: "Nano Collective",
+        locale: "en_US",
+        type: "article",
+      },
+      twitter: {
+        card: "summary",
+        title: pageTitle,
+        description: pageDescription,
+      },
     };
   }
 
@@ -164,11 +184,28 @@ export async function generateMetadata({
     const title = extractTitle(rawMdx);
     const frontmatter = parseFrontmatter(rawMdx);
 
+    const pageTitle = `${title} | ${project.name} ${resolvedVersion}`;
+    const pageDescription =
+      frontmatter.description ||
+      `Documentation for ${project.name} ${resolvedVersion}`;
+
     return {
-      title: `${title} | ${project.name} ${resolvedVersion}`,
-      description:
-        frontmatter.description ||
-        `Documentation for ${project.name} ${resolvedVersion}`,
+      title: pageTitle,
+      description: pageDescription,
+      alternates: { canonical: canonicalUrl },
+      openGraph: {
+        title: pageTitle,
+        description: pageDescription,
+        url: canonicalUrl,
+        siteName: "Nano Collective",
+        locale: "en_US",
+        type: "article",
+      },
+      twitter: {
+        card: "summary",
+        title: pageTitle,
+        description: pageDescription,
+      },
     };
   } catch {
     return { title: "Not Found" };
