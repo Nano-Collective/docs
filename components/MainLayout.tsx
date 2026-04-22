@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { MdxFile, MetaJsonFile, PageMapItem } from "nextra";
+import type { Folder, MdxFile, MetaJsonFile, PageMapItem } from "nextra";
 import { Layout, Navbar, ThemeSwitch } from "nextra-theme-docs";
 import { getApps, getLibraries } from "@/lib/projects";
 import Footer from "./home/Footer";
@@ -8,9 +8,13 @@ import { TooltipProvider } from "./ui/tooltip";
 
 interface MainLayoutProps {
   children: React.ReactNode;
+  showSidebar?: boolean;
 }
 
-export function MainLayout({ children }: MainLayoutProps) {
+export function MainLayout({
+  children,
+  showSidebar = false,
+}: MainLayoutProps) {
   const navbar = (
     <Navbar
       logoLink={false}
@@ -29,9 +33,43 @@ export function MainLayout({ children }: MainLayoutProps) {
   const apps = getApps();
   const libraries = getLibraries();
 
+  const collective = [
+    { slug: "introduction", title: "Introduction" },
+    { slug: "creating-a-new-project", title: "Creating a New Project" },
+    { slug: "stack-suggestions", title: "Stack Suggestions" },
+    { slug: "community", title: "Community" },
+  ];
+
+  const collectiveFolder = {
+    name: "collective",
+    route: "/collective",
+    title: "Collective",
+    children: [
+      {
+        data: {
+          introduction: "Introduction",
+          "creating-a-new-project": "Creating a New Project",
+          "stack-suggestions": "Stack Suggestions",
+          community: "Community",
+        },
+      } as MetaJsonFile,
+      ...collective.map(
+        (page) =>
+          ({
+            name: page.slug,
+            route: `/collective/${page.slug}`,
+            title: page.title,
+            frontMatter: { title: page.title },
+          }) as MdxFile,
+      ),
+    ],
+    frontMatter: { title: "Collective" },
+  } as Folder<PageMapItem>;
+
   // Build meta data for ordering/titles
   const metaData: Record<string, string | Record<string, unknown>> = {
     index: "Home",
+    collective: "Collective",
     "---projects": { type: "separator", title: "Projects" },
   };
   for (const app of apps) {
@@ -58,6 +96,7 @@ export function MainLayout({ children }: MainLayoutProps) {
       title: "Home",
       frontMatter: { title: "Home" },
     } as MdxFile,
+    collectiveFolder,
     { name: "---projects", type: "separator", title: "Projects" },
     ...apps.map((app) => ({
       name: app.id,
@@ -87,7 +126,11 @@ export function MainLayout({ children }: MainLayoutProps) {
       pageMap={pageMap}
       footer={footer}
       search={<ProjectSearch />}
-      sidebar={{ defaultOpen: false, toggleButton: false }}
+      sidebar={
+        showSidebar
+          ? { defaultOpen: true, toggleButton: true }
+          : { defaultOpen: false, toggleButton: false }
+      }
     >
       <TooltipProvider>{children}</TooltipProvider>
     </Layout>

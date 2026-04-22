@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FaDiscord, FaGithub } from "react-icons/fa";
+import { FaDiscord, FaGithub, FaLinkedin } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
 export default function Footer() {
@@ -28,6 +28,7 @@ export default function Footer() {
             href="https://discord.gg/nanocollective"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Nano Collective on Discord"
             className="text-muted-foreground hover:text-foreground transition-colors group"
           >
             <FaDiscord className="h-6 w-6 group-hover:scale-110 transition-transform" />
@@ -36,6 +37,7 @@ export default function Footer() {
             href="https://github.com/nanocollective"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Nano Collective on GitHub"
             className="text-muted-foreground hover:text-foreground transition-colors group"
           >
             <FaGithub className="h-6 w-6 group-hover:scale-110 transition-transform" />
@@ -44,9 +46,19 @@ export default function Footer() {
             href="https://x.com/nanocollective"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Nano Collective on X"
             className="text-muted-foreground hover:text-foreground transition-colors group"
           >
             <FaXTwitter className="h-6 w-6 group-hover:rotate-12 transition-transform" />
+          </a>
+          <a
+            href="https://www.linkedin.com/company/nano-collective/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Nano Collective on LinkedIn"
+            className="text-muted-foreground hover:text-foreground transition-colors group"
+          >
+            <FaLinkedin className="h-6 w-6 group-hover:scale-110 transition-transform" />
           </a>
         </div>
       </div>
