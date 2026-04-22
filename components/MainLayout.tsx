@@ -11,10 +11,7 @@ interface MainLayoutProps {
   showSidebar?: boolean;
 }
 
-export function MainLayout({
-  children,
-  showSidebar = false,
-}: MainLayoutProps) {
+export function MainLayout({ children, showSidebar = false }: MainLayoutProps) {
   const navbar = (
     <Navbar
       logoLink={false}

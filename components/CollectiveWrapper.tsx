@@ -21,11 +21,7 @@ export function CollectiveWrapper({
   const DefaultWrapper = components.wrapper;
 
   return (
-    <DefaultWrapper
-      toc={toc}
-      metadata={metadata}
-      sourceCode={sourceCode ?? ""}
-    >
+    <DefaultWrapper toc={toc} metadata={metadata} sourceCode={sourceCode ?? ""}>
       {children}
     </DefaultWrapper>
   );
