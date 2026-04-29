@@ -120,7 +120,10 @@ export default function CollectiveLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const pageMap: PageMapItem[] = buildPageMapForDir(CONTENT_ROOT, "/collective");
+  const pageMap: PageMapItem[] = buildPageMapForDir(
+    CONTENT_ROOT,
+    "/collective",
+  );
 
   const navbar = (
     <Navbar

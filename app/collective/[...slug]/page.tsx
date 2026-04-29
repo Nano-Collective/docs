@@ -38,7 +38,9 @@ function collectSlugs(dir: string, prefix: string[] = []): string[][] {
   const out: string[][] = [];
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     if (entry.isDirectory()) {
-      out.push(...collectSlugs(path.join(dir, entry.name), [...prefix, entry.name]));
+      out.push(
+        ...collectSlugs(path.join(dir, entry.name), [...prefix, entry.name]),
+      );
       continue;
     }
     if (!entry.isFile()) continue;
