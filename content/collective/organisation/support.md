@@ -12,16 +12,27 @@ If you have found the collective's work useful, want to see more of it, or want 
 
 For exactly how funds are used and how they reach contributors, see the [Economics Charter](/collective/organisation/economics-charter). In short: every pound, dollar, or sat we receive goes to one of two places — the cost of running the collective, or the **community fund** that pays bounties to OSS contributors.
 
+## Sponsorship
+
+Sponsorship is the recurring path. There are three tiers plus a bespoke door, all listed on [nanocollective.org/sponsor](https://nanocollective.org/sponsor):
+
+- **Individual** — $5, $25, or $100 per month. Self-serve via [Open Collective](https://opencollective.com/nano-collective).
+- **Supporter** — $250 per month. For companies and indie teams that want a visible association with the collective.
+- **Builder** — $1,000 per month. For infrastructure companies, hosting providers, and aligned foundations that want sustained visibility across every NC surface.
+- **Bespoke partnerships** — for larger, named, or otherwise custom arrangements. Designed case by case, terms agreed and published before the relationship begins. Reach out via [Discord](https://discord.gg/ktPDV6rekE).
+
+Tier perks, placement details, and the full pitch live on [nanocollective.org/sponsor](https://nanocollective.org/sponsor). The operational side of how a sponsorship is handled — logo specs, onboarding, offboarding — is documented under the [Sponsors](/collective/sponsors) section.
+
 ## Donations
 
-Donations are the simplest way to support the collective. You can give once, or set up a recurring contribution.
+Donations are the one-off path. You can give once, or set up a recurring contribution.
 
 ### How to donate
 
 We accept donations through two channels:
 
 - **Open Source Collective** — credit card, PayPal, or bank transfer, via our [Open Collective page](https://opencollective.com/nano-collective). Set up one-off or recurring monthly contributions in any supported currency.
-- **Bitcoin** — direct to the Nano Collective's public Bitcoin address. Reach out via [Discord](https://discord.gg/ktPDV6rekE) or to the core team for the address and confirmation flow.
+- **Bitcoin** — direct to the Nano Collective's public Bitcoin address. Reach out via [Discord](https://discord.gg/ktPDV6rekE) for the address and confirmation flow.
 
 ### Invoiced contributions
 
@@ -29,27 +40,7 @@ Organisations and institutions that need an invoice before contributing can do s
 
 ### Designated donations
 
-If you want your contribution to fund a specific thing — a particular project, a piece of work, or the community fund specifically — let us know when you donate. We will honour the designation and report publicly on how the funds were used.
-
-## Sponsorship
-
-Sponsorship is for individuals and organisations that want to support the collective on a recurring basis. Sponsors help fund the cost of running NC and the community fund that pays contributors — keeping the work open, accessible, and free at the point of use.
-
-### Current state
-
-Sponsorship is **rolling out now**. The collective is at an early stage of formalising sponsorship: tiers, recognition, and any other terms are being finalised and will be published openly here as they are set.
-
-If you or your organisation are interested in sponsoring the collective today, the conversation is one-on-one. We will work with you on what makes sense, and any arrangement will be transparent — both in this charter and on the public Open Collective ledger.
-
-### Who sponsorship is for
-
-- **Organisations** that use Nano Collective tooling and want to help sustain it.
-- **Companies** that want to support open AI tooling that respects users and contributors.
-- **Individuals** who want to make a meaningful, recurring contribution beyond a one-off donation.
-
-### How to start a conversation
-
-Reach out via [Discord](https://discord.gg/ktPDV6rekE) or directly to the core team. We will share what's currently on the table and work with you on something that fits.
+If you want your contribution to fund a specific piece of work — a particular project, a feature, a bounty — let us know before you donate. The scope is agreed with the core team first; nothing is open-ended, nothing is retrospective. Delivery is reported publicly.
 
 ## Other ways to support
 
