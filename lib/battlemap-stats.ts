@@ -5,10 +5,14 @@
  * `<!--contributors:owner/repo-->VALUE<!--/contributors-->` with live counts
  * fetched from the GitHub API. Called from fetchFileContent so any markdown
  * pulled through the docs build gets resolved counts at deploy time.
+ *
+ * After substitution, the HTML comment syntax is stripped to avoid MDX JSX
+ * parsing errors (MDX fails on `<!--` since `!` isn't a valid JSX element start).
  */
 
 const isDev = process.env.NODE_ENV === "development";
 
+// Match HTML comment markers: <!--stars:owner/repo-->VALUE<!--/stars-->
 const MARKER =
   /<!--\s*(stars|contributors):([A-Za-z0-9._/-]+?)\s*-->[^<]*<!--\s*\/\1\s*-->/g;
 
@@ -87,6 +91,10 @@ async function fetchRepoStats(repo: string): Promise<RepoStats> {
 /**
  * Substitute battlemap stat markers with live values. Returns the original
  * content unchanged if no markers are present or if fetches fail.
+ *
+ * After substitution, the HTML comment markers are stripped so only the
+ * formatted count remains. This prevents MDX JSX parsing errors (MDX fails
+ * on `<!--` since `!` isn't a valid JSX element start character).
  */
 export async function substituteBattlemapMarkers(
   content: string,
@@ -112,11 +120,13 @@ export async function substituteBattlemapMarkers(
   );
   const cache = new Map(entries);
 
+  // Strip HTML comment syntax after substitution to avoid MDX parsing errors
   return content.replace(MARKER, (full, kind: string, repo: string) => {
     const stats = cache.get(repo);
     if (!stats) return full;
     const count = kind === "stars" ? stats.stars : stats.contributors;
     if (count === null) return full;
-    return `<!--${kind}:${repo}-->${formatCount(count)}<!--/${kind}-->`;
+    // Return only the formatted count, without HTML comment markers
+    return formatCount(count);
   });
 }
