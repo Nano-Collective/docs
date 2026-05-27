@@ -198,6 +198,7 @@ export function ProjectSearch() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<React.ReactNode>("");
   const [results, setResults] = useState<PagefindResult[]>([]);
+  const [resultCount, setResultCount] = useState(0);
   const [search, setSearch] = useState("");
   const [focused, setFocused] = useState(false);
 
@@ -232,13 +233,16 @@ export function ProjectSearch() {
         try {
           await importPagefind();
         } catch (err) {
+          const isDev = process.env.NODE_ENV !== "production";
+          const errMsg = err instanceof Error ? err.message : String(err);
+          const isLoadError =
+            errMsg.includes("Failed to fetch") ||
+            errMsg.includes("dynamically imported module") ||
+            errMsg.includes("pagefind");
           const message =
-            err instanceof Error
-              ? process.env.NODE_ENV !== "production" &&
-                err.message.includes("Failed to fetch")
-                ? "Search isn't available in development. Run `next build` first."
-                : `${err.constructor.name}: ${err.message}`
-              : String(err);
+            isDev && isLoadError
+              ? "Search isn't available in development. Run next build first."
+              : `${err instanceof Error ? err.constructor.name : "Error"}: ${errMsg}`;
           setError(message);
           setIsLoading(false);
           return;
@@ -255,6 +259,7 @@ export function ProjectSearch() {
       setIsLoading(false);
       setError("");
       setResults(data);
+      setResultCount(response.results.length);
     };
 
     handleSearch(deferredSearch);
@@ -409,11 +414,35 @@ export function ProjectSearch() {
             Loading…
           </>
         ) : results.length ? (
-          results.map((result) => (
-            <Result key={result.url} data={result} showBadge={showBadges} />
-          ))
+          <>
+            <div
+              className={cn(
+                "x:mx-2.5 x:mb-1 x:px-2.5 x:text-xs x:text-gray-400",
+                "x:dark:text-gray-500 x:flex x:justify-between",
+              )}
+            >
+              <span>
+                {resultCount} {resultCount === 1 ? "result" : "results"}
+                {currentProject ? ` in ${currentProject}` : ""}
+              </span>
+            </div>
+            {results.map((result) => (
+              <Result key={result.url} data={result} showBadge={showBadges} />
+            ))}
+          </>
         ) : (
-          deferredSearch && "No results found."
+          deferredSearch && (
+            <div className="x:text-center x:py-4">
+              <p className="x:font-medium x:mb-2">
+                No results for &ldquo;{deferredSearch}&rdquo;
+              </p>
+              <p className="x:text-xs x:text-gray-500">
+                {currentProject
+                  ? "Try searching with different keywords or check all projects from the home page."
+                  : "Try using different or fewer keywords."}
+              </p>
+            </div>
+          )
         )}
       </ComboboxOptions>
     </Combobox>

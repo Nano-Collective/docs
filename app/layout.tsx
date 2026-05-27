@@ -1,5 +1,7 @@
+import type { Metadata } from "next";
 import { Fira_Code, Lora, Poppins } from "next/font/google";
 import { Head } from "nextra/components";
+import { JsonLd } from "@/components/JsonLd";
 import "nextra-theme-docs/style.css";
 import "./globals.css";
 
@@ -24,9 +26,39 @@ const firaCode = Fira_Code({
   display: "swap",
 });
 
-export const metadata = {
+export const metadata: Metadata = {
+  metadataBase: new URL("https://docs.nanocollective.org"),
   title: "Nano Collective Docs",
   description: "Official documentation for Nano Collective projects",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "48x48" },
+      { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
+  openGraph: {
+    title: "Nano Collective Docs",
+    description: "Official documentation for Nano Collective projects",
+    url: "https://docs.nanocollective.org",
+    siteName: "Nano Collective",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1080,
+        height: 1080,
+        alt: "Nano Collective",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Nano Collective Docs",
+    description: "Official documentation for Nano Collective projects",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({
@@ -42,7 +74,22 @@ export default function RootLayout({
       className={`${poppins.variable} ${lora.variable} ${firaCode.variable}`}
     >
       <Head />
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: "Nano Collective Docs",
+            url: "https://docs.nanocollective.org",
+            publisher: {
+              "@type": "Organization",
+              name: "Nano Collective",
+              url: "https://nanocollective.org",
+            },
+          }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

@@ -6,7 +6,7 @@ import { fetchFileContent, getAllDocsFiles } from "@/lib/github";
 import { findDocFile, getDocPathsForVersion } from "@/lib/page-map-builder";
 import { getAllProjects, getProject } from "@/lib/projects";
 import { remarkResolveRelativeLinks } from "@/lib/remark-resolve-relative-links";
-import { extractTitle } from "@/lib/remote-content";
+import { extractTitle, parseFrontmatter } from "@/lib/remote-content";
 import { getVersions, resolveVersion } from "@/lib/versions";
 import { useMDXComponents } from "../../../../../mdx-components";
 
@@ -23,11 +23,11 @@ interface PageProps {
  * Generates params for ALL unique slugs across ALL versions to support 404 pages
  */
 export async function generateStaticParams(): Promise<
-  Array<{ project: string; version: string; slug: string[] }>
+  Array<{ project: string; version: string; slug?: string[] }>
 > {
   try {
     const projects = getAllProjects();
-    const params: Array<{ project: string; version: string; slug: string[] }> =
+    const params: Array<{ project: string; version: string; slug?: string[] }> =
       [];
 
     for (const project of projects) {
@@ -45,7 +45,7 @@ export async function generateStaticParams(): Promise<
           `✓ Found ${paths.length} docs for ${project.name} ${version}`,
         );
 
-        // Add root page with empty slug array
+        // Add root page (empty slug array for optional catch-all)
         params.push({
           project: project.id,
           version,
@@ -137,11 +137,31 @@ export async function generateMetadata({
   const versions = await getVersions(projectId, project.repo);
   const resolvedVersion = resolveVersion(version, versions);
 
+  const baseUrl = "https://docs.nanocollective.org";
+  const slugPath = slug && slug.length > 0 ? `/${slug.join("/")}` : "";
+  const canonicalUrl = `${baseUrl}/${projectId}/docs/${version}${slugPath}`;
+
   // If no slug, this will redirect so just return basic metadata
   if (!slug || slug.length === 0) {
+    const pageTitle = `${project.name} ${resolvedVersion} Documentation`;
+    const pageDescription = `Documentation for ${project.name} ${resolvedVersion}`;
     return {
-      title: `${project.name} ${resolvedVersion} Documentation`,
-      description: `Documentation for ${project.name} ${resolvedVersion}`,
+      title: pageTitle,
+      description: pageDescription,
+      alternates: { canonical: canonicalUrl },
+      openGraph: {
+        title: pageTitle,
+        description: pageDescription,
+        url: canonicalUrl,
+        siteName: "Nano Collective",
+        locale: "en_US",
+        type: "article",
+      },
+      twitter: {
+        card: "summary",
+        title: pageTitle,
+        description: pageDescription,
+      },
     };
   }
 
@@ -162,10 +182,30 @@ export async function generateMetadata({
       project.repo,
     );
     const title = extractTitle(rawMdx);
+    const frontmatter = parseFrontmatter(rawMdx);
+
+    const pageTitle = `${title} | ${project.name} ${resolvedVersion}`;
+    const pageDescription =
+      frontmatter.description ||
+      `Documentation for ${project.name} ${resolvedVersion}`;
 
     return {
-      title: `${title} | ${project.name} ${resolvedVersion}`,
-      description: `Documentation for ${project.name} ${resolvedVersion}`,
+      title: pageTitle,
+      description: pageDescription,
+      alternates: { canonical: canonicalUrl },
+      openGraph: {
+        title: pageTitle,
+        description: pageDescription,
+        url: canonicalUrl,
+        siteName: "Nano Collective",
+        locale: "en_US",
+        type: "article",
+      },
+      twitter: {
+        card: "summary",
+        title: pageTitle,
+        description: pageDescription,
+      },
     };
   } catch {
     return { title: "Not Found" };
@@ -281,8 +321,15 @@ export default async function DocPage({ params }: PageProps) {
   // Import DocsWrapper dynamically to avoid SSR issues
   const { DocsWrapper } = await import("@/components/DocsWrapper");
 
+  const editUrl = `https://github.com/${project.repo.owner}/${project.repo.name}/edit/${resolvedVersion}/${filePath}`;
+
   return (
-    <DocsWrapper toc={toc} metadata={mdxMetadata || {}} sourceCode={rawMdx}>
+    <DocsWrapper
+      toc={toc}
+      metadata={mdxMetadata || {}}
+      sourceCode={rawMdx}
+      editUrl={editUrl}
+    >
       <MDXContent />
     </DocsWrapper>
   );

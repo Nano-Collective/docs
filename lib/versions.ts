@@ -5,6 +5,8 @@ import {
   type Repo,
 } from "./github";
 
+const isDev = process.env.NODE_ENV === "development";
+
 // Cache for versions to avoid repeated API calls during build
 // Map keyed by project ID
 const versionCache = new Map<string, string[]>();
@@ -79,6 +81,11 @@ export async function getVersions(
   projectId: string,
   repo: Repo,
 ): Promise<string[]> {
+  // In dev mode, use main branch directly to avoid release API calls
+  if (isDev) {
+    return ["main"];
+  }
+
   const cached = versionCache.get(projectId);
   if (cached) {
     return cached;
@@ -104,7 +111,7 @@ export async function getVersions(
  * Resolve "latest" to the actual latest version
  */
 export function resolveVersion(version: string, allVersions: string[]): string {
-  if (version === "latest" && allVersions.length > 0) {
+  if ((version === "latest" || version === "main") && allVersions.length > 0) {
     return allVersions[0];
   }
   return version;
@@ -117,7 +124,7 @@ export function isValidVersion(
   version: string,
   allVersions: string[],
 ): boolean {
-  if (version === "latest") return allVersions.length > 0;
+  if (version === "latest" || version === "main") return allVersions.length > 0;
   return allVersions.includes(version);
 }
 

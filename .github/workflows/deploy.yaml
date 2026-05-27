@@ -5,9 +5,12 @@ on:
         branches:
             - main
     workflow_dispatch:
+    schedule:
+        # Rebuild latest docs daily shortly after midnight UTC.
+        - cron: "15 0 * * *"
 
 concurrency:
-    group: ${{ github.actor }}-push
+    group: ${{ github.workflow }}-${{ github.ref }}
     cancel-in-progress: true
 
 jobs:
@@ -24,9 +27,9 @@ jobs:
                   lfs: true
 
             - name: Set up PNPM
-              uses: pnpm/action-setup@v2
+              uses: pnpm/action-setup@v4
               with:
-                  version: 10.11.0
+                  version: null
 
             - name: Use Node.js ${{ matrix.node-version }}
               uses: actions/setup-node@v4

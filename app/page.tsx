@@ -20,7 +20,12 @@ function getLocalContent(): string | null {
 }
 
 export default async function HomePage() {
-  const components = useMDXComponents({});
+  const components = useMDXComponents({
+    HeroSection: () =>
+      import("@/components/home/HeroSection").then((mod) => (
+        <mod.HeroSection />
+      )),
+  });
 
   // Check for local content first
   const localContent = getLocalContent();

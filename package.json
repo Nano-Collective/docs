@@ -2,19 +2,21 @@
   "name": "docs",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@11.0.9",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "npx serve@latest out",
     "lint": "biome check",
     "format": "biome format --write",
-    "postbuild": "pagefind --site .next/server/app --output-path out/_pagefind"
+    "postbuild": "pagefind --site .next/server/app --output-path out/_pagefind && tsx scripts/generate-llms-content.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.2.0",
     "@headlessui/react": "^2.2.9",
     "@radix-ui/react-slot": "^1.0.2",
     "@react-three/fiber": "^9.5.0",
+    "@react-three/postprocessing": "^3.0.4",
     "@shadergradient/react": "^2.4.20",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
@@ -28,10 +30,12 @@
     "nextra": "^4.6.1",
     "nextra-theme-docs": "^4.6.1",
     "postcss": "^8.5.6",
+    "postprocessing": "^6.38.3",
     "radix-ui": "^1.4.3",
     "react": "19.2.3",
     "react-day-picker": "^9.13.2",
     "react-dom": "19.2.3",
+    "react-icons": "^5.6.0",
     "react-resizable-panels": "^4.6.5",
     "recharts": "2.15.4",
     "shadcn": "^3.8.5",
@@ -47,8 +51,10 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/three": "^0.183.1",
     "pagefind": "^1.4.0",
     "tailwindcss": "^4",
+    "tsx": "^4.20.0",
     "typescript": "^5"
   }
 }
