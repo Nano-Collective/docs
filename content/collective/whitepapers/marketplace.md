@@ -2,6 +2,11 @@
 title: "Marketplace (working title)"
 description: "A working whitepaper for an open, harness-agnostic marketplace and packaging format for agent assets — skills, tools, prompts, sub-agents — that can be installed into any agent harness without rewriting"
 sidebar_order: 6
+proposer: "Matt Spence"
+proposer_github: "mrspence"
+status: "In public review"
+review_opens: "2026-05-27"
+review_closes: "2026-06-26"
 ---
 
 # Marketplace (working title)

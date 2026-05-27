@@ -2,6 +2,11 @@
 title: "Prompt Scrubber (working title)"
 description: "A working whitepaper for a small open source tool that scrubs identifying content from LLM prompts and messages before they leave the user's machine"
 sidebar_order: 2
+proposer: "Will Lamerton"
+proposer_github: "will-lamerton"
+status: "In public review"
+review_opens: "2026-05-19"
+review_closes: "2026-06-18"
 ---
 
 # Prompt Scrubber (working title)

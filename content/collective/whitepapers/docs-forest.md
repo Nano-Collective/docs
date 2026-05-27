@@ -2,6 +2,11 @@
 title: "DocsForest (working title)"
 description: "A working whitepaper for a Nanocoder driven workflow that runs weekly across the collective's repositories, checks the documentation in each repo against the actual functionality, and raises an issue on the repo when the two have drifted"
 sidebar_order: 5
+proposer: "Will Lamerton"
+proposer_github: "will-lamerton"
+status: "In public review"
+review_opens: "2026-05-22"
+review_closes: "2026-06-21"
 ---
 
 # DocsForest (working title)

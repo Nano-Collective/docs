@@ -2,6 +2,11 @@
 title: "NanoOS (working title)"
 description: "A working whitepaper for an open source agent orchestration CLI that lets a user compose an oracle agent, specialist sub-agents, skill packs, and custom tools into a personal operating system of agents"
 sidebar_order: 3
+proposer: "Will Lamerton"
+proposer_github: "will-lamerton"
+status: "In public review"
+review_opens: "2026-05-20"
+review_closes: "2026-06-19"
 ---
 
 # NanoOS (working title)

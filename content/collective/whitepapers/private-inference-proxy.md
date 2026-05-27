@@ -2,6 +2,11 @@
 title: "Private Inference Proxy (working title)"
 description: "A working whitepaper for an open source proxy that lets users call cloud LLM providers with stronger privacy properties than a direct call"
 sidebar_order: 1
+proposer: "Will Lamerton"
+proposer_github: "will-lamerton"
+status: "In public review"
+review_opens: "2026-05-19"
+review_closes: "2026-06-18"
 ---
 
 # Private Inference Proxy (working title)
