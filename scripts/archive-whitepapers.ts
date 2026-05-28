@@ -139,7 +139,9 @@ function main(): void {
       fs.unlinkSync(file.filePath);
       console.log(`  deleted ${file.slug} (${file.frontmatter.status})`);
       deletedThisRun += 1;
-    } else if (TERMINAL_STATUSES.includes(String(file.frontmatter.status ?? ""))) {
+    } else if (
+      TERMINAL_STATUSES.includes(String(file.frontmatter.status ?? ""))
+    ) {
       console.log(`  skip ${file.slug}: ${decision.reason}`);
     }
   }
