@@ -1,6 +1,6 @@
 ---
 title: "How a Project Comes to Life"
-description: "How an idea becomes a Nano Collective project, from a sanity-check conversation to a shippedv1.0"
+description: "How an idea becomes a Nano Collective project, from a sanity-check conversation to a shipped v1.0"
 sidebar_order: 1
 ---
 
@@ -9,6 +9,8 @@ sidebar_order: 1
 The Nano Collective umbrellas a growing set of independent projects. Some of them were built by the founding core team. The collective expects more of them, over time, to be built by other people who want their work to land under a brand and a community that takes the same things seriously they do.
 
 This page is the canonical description of how that happens. It is the path from "I have an idea" to "the project ships under the Nano Collective umbrella". If you are thinking about proposing a project, this is for you.
+
+Giving people the resources and the power to build AI in the open, and a home for the work once it exists, is the whole point of this process. The stages below exist to make that path clear and fair, not to gatekeep it.
 
 ## Who can propose
 
@@ -66,7 +68,7 @@ What needs to be true at merge:
 - Proposed approach in shape form. Architecture sketch, key trade-offs, failure modes. Not a full design.
 - Alternatives considered, with the reasons they lost.
 - Open questions listed honestly, not hidden.
-- Av1.0 success picture. What would prove the idea.
+- A v1.0 success picture. What would prove the idea.
 - A named proposer (you), committed to driving it.
 
 What does NOT need to be true at merge:
@@ -141,8 +143,8 @@ The decision is recorded on the whitepaper page itself as a short note, dated, w
 #### Criteria for a yes
 
 - **The whitepaper has held up.** Concerns raised in review have been addressed in the document or acknowledged as known trade-offs.
-- **Maintainer commitment is real.** At least one named maintainer ready to drive the project for an initial period (aim for three months of active maintenance afterv1.0). Co-maintainers welcome.
-- **Scope is buildable.** Av1.0 that proves the core idea is realistic within a reasonable window.
+- **Maintainer commitment is real.** At least one named maintainer ready to drive the project for an initial period (aim for three months of active maintenance after v1.0). Co-maintainers welcome.
+- **Scope is buildable.** A v1.0 that proves the core idea is realistic within a reasonable window.
 - **Fit with the collective remains true.** Nothing surfaced in review that conflicts with the positive shape.
 
 #### What "no" looks like
@@ -175,14 +177,14 @@ Every whitepaper carries a status badge. The eight values:
 | `In public review` | Merged. Inside the review window. Issues actively invited. |
 | `Build approved` | Stage 3 yes. Maintainer named. Repository creation imminent or done. |
 | `Building` | Repository live, project under active build. Whitepaper now sits as historical record. |
-| `Shipped` | Project has reachedv1.0+ and is in the projects list. |
+| `Shipped` | Project has reached v1.0+ and is in the projects list. |
 | `Paused` | Approved or in-progress work that has stalled. Honest label, not a hiding place. |
 | `Declined` | Reviewed, decided against. Rationale attached. |
 | `Superseded` | Replaced by a newer whitepaper or folded into another project. Links to the successor. |
 
 Terminal statuses are archived after a set window so the whitepapers section does not accumulate clutter:
 
-- `Shipped`: 90 days afterv1.0.
+- `Shipped`: 90 days after v1.0.
 - `Paused`: 90 days after entering paused.
 - `Declined`: 30 days after the decline.
 - `Superseded`: archived immediately. The successor is canonical.
@@ -194,7 +196,7 @@ Archiving deletes the whitepaper file outright. Git history is the archive. Once
 A whitepaper-to-project journey is a real time commitment:
 
 - **30 days of active review iteration.** Responding to issues, sharpening the doc.
-- **Maintainer commitment** for the initial build phase. Aim for at least three months of active maintainership afterv1.0.
+- **Maintainer commitment** for the initial build phase. Aim for at least three months of active maintainership after v1.0.
 - **Following the conventions.** Repo structure, CI, docs, brand. The [Creating a New Project](/collective/projects/creating-a-new-project) playbook covers them.
 - **Not flying solo if you do not want to.** The collective will help find co-maintainers and contributors where it can. Solo maintenance is allowed but discouraged.
 

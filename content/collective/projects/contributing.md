@@ -22,10 +22,10 @@ Three ways to find work that matches what you can offer.
 
 Every NC project lives at [github.com/Nano-Collective](https://github.com/Nano-Collective). The active projects are:
 
-- **[Nanocoder](https://github.com/Nano-Collective/nanocoder)** — local-first CLI coding agent.
-- **[Nanotune](https://github.com/Nano-Collective/nanotune)** — fine-tuning small models on Apple Silicon.
-- **[get-md](https://github.com/Nano-Collective/get-md)** — HTML to Markdown converter.
-- **[json-up](https://github.com/Nano-Collective/json-up)** — JSON migration tool.
+- **[Nanocoder](https://github.com/Nano-Collective/nanocoder)**: a coding agent in your terminal that runs on any model you choose.
+- **[Nanotune](https://github.com/Nano-Collective/nanotune)**: fine-tuning small models on Apple Silicon.
+- **[get-md](https://github.com/Nano-Collective/get-md)**: HTML to Markdown converter.
+- **[json-up](https://github.com/Nano-Collective/json-up)**: JSON migration tool.
 
 Pick the one closest to what you actually use or care about.
 
@@ -33,8 +33,8 @@ Pick the one closest to what you actually use or care about.
 
 Every project tags issues for newcomers. Filter the issues tab by:
 
-- `good first issue` — scoped, well-defined, low context required.
-- `help wanted` — the maintainers would love help with this one.
+- `good first issue`: scoped, well-defined, low context required.
+- `help wanted`: the maintainers would love help with this one.
 
 Comment on an issue to claim it before you start working, so two people don't end up writing the same patch.
 
@@ -127,7 +127,7 @@ The terms are clear, in writing, in the [Economics Charter](/collective/organisa
 
 Be respectful and inclusive. Focus on constructive feedback. Help create a welcoming environment for every contributor, regardless of experience.
 
-If something goes wrong — you experience or witness behaviour that falls short of this — reach out to a maintainer on [Discord](https://discord.gg/ktPDV6rekE) or email [hello@nanocollective.org](mailto:hello@nanocollective.org). We take this seriously.
+If something goes wrong (you experience or witness behaviour that falls short of this), reach out to a maintainer on [Discord](https://discord.gg/ktPDV6rekE) or email [hello@nanocollective.org](mailto:hello@nanocollective.org). We take this seriously.
 
 The full text is on the [Community page](/collective/organisation/community#code-of-conduct).
 

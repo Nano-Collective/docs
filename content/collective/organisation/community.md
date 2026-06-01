@@ -6,22 +6,22 @@ sidebar_order: 1
 
 # Community
 
-The Nano Collective is more than the software — it is the people building, maintaining, and using it. We coordinate in the open, welcome contributors of every skill level, and try to keep the bar for getting involved as low as possible.
+The Nano Collective is more than the software. It is the people building, maintaining, and using it. We coordinate in the open, welcome contributors of every skill level, and try to keep the bar for getting involved as low as possible.
 
 ## Where We Talk
 
-- **[Discord](https://discord.gg/ktPDV6rekE)** — Real-time chat. Ask questions, suggest ideas, get help, or just say hello.
-- **[GitHub Discussions](https://github.com/Nano-Collective/website/discussions)** — Announcements, roadmaps, and longer-form conversations from the core team and wider community.
-- **GitHub Issues** — Per-project bug reports and feature requests. Each project's issue tracker is the source of truth for work on that project.
+- **[Discord](https://discord.gg/ktPDV6rekE).** Real-time chat. Ask questions, suggest ideas, get help, or just say hello.
+- **[GitHub Discussions](https://github.com/Nano-Collective/website/discussions).** Announcements, roadmaps, and longer-form conversations from the core team and wider community.
+- **GitHub Issues.** Per-project bug reports and feature requests. Each project's issue tracker is the source of truth for work on that project.
 
 ## What You'll Find in Discussions
 
 The core team uses GitHub Discussions to share:
 
-- **Project updates** — announcements about new features, releases, and progress.
-- **Roadmap and direction** — plans for upcoming work and longer-term vision.
-- **Architectural decisions** — technical choices and the reasoning behind them.
-- **RFCs (Request for Comments)** — proposals for major changes where community feedback is welcome.
+- **Project updates**: announcements about new features, releases, and progress.
+- **Roadmap and direction**: plans for upcoming work and longer-term vision.
+- **Architectural decisions**: technical choices and the reasoning behind them.
+- **RFCs (Request for Comments)**: proposals for major changes where community feedback is welcome.
 
 If you want to understand where a project is heading or why a decision was made, Discussions is usually the first place to look.
 
@@ -50,18 +50,18 @@ You do not need to write code to help build the Nano Collective. A few ways peop
 ## Getting Started as a Contributor
 
 1. Find a project that interests you on [github.com/Nano-Collective](https://github.com/Nano-Collective).
-2. Read its `CONTRIBUTING.md` — every project has one with setup instructions, coding standards, and testing expectations.
+2. Read its `CONTRIBUTING.md`. Every project has one with setup instructions, coding standards, and testing expectations.
 3. Browse open issues. Look for ones tagged `good first issue` or `help wanted` if you are new.
 4. Comment on the issue to claim it, ask questions, and open a PR when you are ready.
 
-For the conventions that apply across every project in the collective — repo structure, CI, testing, release process — see the [Creating a New Project](/collective/projects/creating-a-new-project) guide. For stack-specific tooling suggestions, see [Stack Suggestions](/collective/projects/stack-suggestions).
+For the conventions that apply across every project in the collective (repo structure, CI, testing, release process), see the [Creating a New Project](/collective/projects/creating-a-new-project) guide. For stack-specific tooling suggestions, see [Stack Suggestions](/collective/projects/stack-suggestions).
 
 ## Supporting the Collective
 
-The Nano Collective is built by volunteers and offered freely. If the work has been useful to you and you would like to help sustain it — through donations, sponsorship, or other means — see [Support the Collective](/collective/organisation/support) for the current channels and how to get involved. Any funds the collective receives go to the cost of running NC and the [community fund](/collective/organisation/economics-charter) that pays bounties to contributors. Nothing else.
+The Nano Collective is built by volunteers and offered freely. If the work has been useful to you and you would like to help sustain it through donations, sponsorship, or other means, see [Support the Collective](/collective/organisation/support) for the current channels and how to get involved. Any funds the collective receives go to the cost of running NC and the [community fund](/collective/organisation/economics-charter) that pays bounties to contributors. Nothing else.
 
 ## Code of Conduct
 
 Be respectful and inclusive. Focus on constructive feedback. Help create a welcoming environment for every contributor, regardless of experience. Remember that everyone here is learning and contributing voluntarily.
 
-If something goes wrong — you experience or witness behaviour that falls short of this — reach out to a maintainer on [Discord](https://discord.gg/ktPDV6rekE) or email [hello@nanocollective.org](mailto:hello@nanocollective.org). We take this seriously.
+If something goes wrong, if you experience or witness behaviour that falls short of this, reach out to a maintainer on [Discord](https://discord.gg/ktPDV6rekE) or email [hello@nanocollective.org](mailto:hello@nanocollective.org). We take this seriously.

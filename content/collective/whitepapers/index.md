@@ -31,7 +31,7 @@ There is no rigid template. Each whitepaper should be shaped by what the project
 - **Proposed approach.** The technical shape of the solution at whatever depth is useful. Architecture sketches, data flows, failure modes, dependencies.
 - **Alternatives considered.** What else was on the table and why this approach won.
 - **Open questions.** What is still unresolved, and where input from the collective is most valuable.
-- **Av1.0 success picture.** What would prove the idea.
+- **A v1.0 success picture.** What would prove the idea.
 
 Whitepapers are versioned in git like the rest of the docs. They are expected to evolve as the thinking sharpens during the public review window (see [How a Project Comes to Life](/collective/projects/how-a-project-comes-to-life)). When a whitepaper graduates into a real project, it stays in place as the historical record and the live project's README links back to it.
 

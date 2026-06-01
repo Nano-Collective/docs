@@ -38,7 +38,7 @@ These values are not marketing. They are the filter we apply when deciding what 
 
 The collective builds a range of AI tools and developer utilities. Some projects currently under the Nano Collective umbrella include:
 
-- **[Nanocoder](https://github.com/Nano-Collective/nanocoder)**: a local-first CLI coding agent with multi-provider AI support.
+- **[Nanocoder](https://github.com/Nano-Collective/nanocoder)**: a coding agent in your terminal that runs on any model you choose.
 - **[Nanotune](https://github.com/Nano-Collective/nanotune)**: tooling focused on fine-tuning and improving small, local models for practical use.
 - **[get-md](https://github.com/Nano-Collective/get-md)**: a fast, lightweight HTML to Markdown converter optimised for LLM consumption.
 - **[json-up](https://github.com/Nano-Collective/json-up)**: a type-safe JSON migration tool with Zod schema validation.
