@@ -21,6 +21,7 @@ The line between the two is deliberately soft. Sustained contribution that shows
 ## In this section
 
 - **[Onboarding](/collective/core-team/onboarding).** The working playbook for bringing a new core team member on board: what we set up before they start, what their first weeks look like, how we work together, and what each side can expect of the other.
+- **[Onboarding template](/collective/core-team/onboarding-template).** A fillable welcome sheet the point of contact completes for each new member and sends privately, alongside the playbook above.
 
 ## Principles this section follows
 
