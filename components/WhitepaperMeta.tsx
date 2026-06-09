@@ -3,8 +3,11 @@
 import { createContext, type ReactNode, useContext } from "react";
 import { ProposerBadge } from "./ProposerBadge";
 import { StatusBadge } from "./StatusBadge";
+import { WhitepaperFeedbackInline } from "./WhitepaperFeedbackSidebar";
 
 interface WhitepaperMeta {
+  slug?: string;
+  title?: string;
   proposer?: string;
   proposer_github?: string;
   status?: string;
@@ -31,7 +34,7 @@ export function WhitepaperMetaProvider({
 export function WhitepaperMetaInline() {
   const meta = useContext(WhitepaperMetaContext);
   if (!meta) return null;
-  if (!meta.proposer && !meta.status) return null;
+  if (!meta.proposer && !meta.status && !meta.slug) return null;
 
   return (
     <div className="not-prose flex flex-col gap-2 mt-4 mb-8">
@@ -44,6 +47,9 @@ export function WhitepaperMetaInline() {
           reviewOpens={meta.review_opens}
           reviewCloses={meta.review_closes}
         />
+      )}
+      {meta.slug && meta.title && (
+        <WhitepaperFeedbackInline title={meta.title} />
       )}
     </div>
   );

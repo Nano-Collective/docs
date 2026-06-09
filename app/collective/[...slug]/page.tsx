@@ -91,6 +91,7 @@ export default async function CollectivePage({ params }: PageProps) {
     <CollectiveWrapper
       toc={toc}
       metadata={mdxMetadata || {}}
+      pageSlug={slug.join("/")}
       sourceCode={found.content}
     >
       <MDXContent />

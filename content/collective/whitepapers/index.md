@@ -46,6 +46,8 @@ When your whitepaper merges:
 - You iterate the document in response to feedback (via further PRs against the merged file).
 - At the end of the window, the core team makes a build / decline / iterate decision, recorded on the whitepaper page itself.
 
+Every whitepaper page carries a **"Question? Give us feedback."** link directly under the title, alongside the proposer and status badges. Clicking it opens a pre-filled GitHub issue against the docs repo, with the title `Feedback for "<page title>"` so it shows up alongside the others. The widget also shows a live count of open and closed issues for the current whitepaper, so readers can see at a glance what has already been raised before posting a duplicate.
+
 Full details in [How a Project Comes to Life](/collective/projects/how-a-project-comes-to-life).
 
 ## Frontmatter
@@ -76,10 +78,12 @@ review_closes: "2026-06-21"
 
 ## How to add one
 
-1. Raise the idea first via an [issue on the docs repo](https://github.com/Nano-Collective/docs/issues/new), an [issue on the organisation repo](https://github.com/Nano-Collective/organisation/issues/new), or a message in [Discord](https://discord.gg/ktPDV6rekE). This is Stage 0 in the lifecycle.
+1. Raise the idea first via an [issue on the docs repo](https://github.com/Nano-Collective/docs/issues/new) (start the title with `Feedback for "<project working title>"` once the slug is known), an [issue on the organisation repo](https://github.com/Nano-Collective/organisation/issues/new), or a message in [Discord](https://discord.gg/ktPDV6rekE). This is Stage 0 in the lifecycle.
 2. With a green light, create a new file at `content/collective/whitepapers/<project-slug>.md`.
 3. Add the frontmatter above, including yourself as proposer.
 4. Write the document in whatever structure best serves the project. The sections above are a starting point, not a contract.
 5. Open a PR against the [docs repository](https://github.com/Nano-Collective/docs).
+
+All issues raised against a whitepaper (Stage 0 conversation, public review feedback, or follow-ups) should start their title with `Feedback for "<page title>"` (using the exact same punctuation, including the curly quotation marks) so they show up in that paper's feedback count and so the proposer can keep track of them in one place.
 
 If you are not sure whether your idea warrants a whitepaper, open a Stage 0 conversation first.

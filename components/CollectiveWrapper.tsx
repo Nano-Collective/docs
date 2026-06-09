@@ -15,6 +15,13 @@ interface CollectiveWrapperProps {
     review_opens?: string;
     review_closes?: string;
   };
+  /**
+   * The page's route slug (the array segments from the `[...slug]` param
+   * joined with `/`). Used to scope the feedback link + count to the
+   * current whitepaper. Optional — only required for pages that should
+   * render the feedback widget in their header.
+   */
+  pageSlug?: string;
   sourceCode?: string;
 }
 
@@ -22,6 +29,7 @@ export function CollectiveWrapper({
   toc,
   children,
   metadata,
+  pageSlug,
   sourceCode,
 }: CollectiveWrapperProps) {
   const components = useMDXComponents({});
@@ -31,6 +39,14 @@ export function CollectiveWrapper({
     <DefaultWrapper toc={toc} metadata={metadata} sourceCode={sourceCode ?? ""}>
       <WhitepaperMetaProvider
         value={{
+          // Only set `slug` when this page actually lives under
+          // /collective/whitepapers/ — the feedback widget only renders
+          // there. We pass it from the page component so the provider
+          // doesn't have to know about routing.
+          slug: pageSlug?.startsWith("whitepapers/")
+            ? pageSlug.slice("whitepapers/".length)
+            : undefined,
+          title: metadata.title,
           proposer: metadata.proposer,
           proposer_github: metadata.proposer_github,
           status: metadata.status,
