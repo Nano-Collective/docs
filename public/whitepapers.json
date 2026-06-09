@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-06-09T08:00:07.101Z",
+  "generated_at": "2026-06-09T09:31:05.703Z",
   "count": 6,
   "whitepapers": [
     {
       "slug": "private-inference-proxy",
-      "title": "Private Inference Proxy (working title)",
-      "description": "A working whitepaper for an open source proxy that lets users call cloud LLM providers with stronger privacy properties than a direct call",
+      "title": "Private Inference Proxy",
+      "description": "A working whitepaper for an open source proxy that lets users call cloud LLM providers with stronger privacy properties than a direct call. The proposer recommends the project be declined as currently scoped; reasoning is recorded in the Decision section.",
       "proposer": "Will Lamerton",
       "proposer_github": "will-lamerton",
       "status": "In public review",
