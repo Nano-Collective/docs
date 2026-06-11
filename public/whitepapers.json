@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-11T17:49:05.266Z",
+  "generated_at": "2026-06-11T18:40:17.732Z",
   "count": 6,
   "whitepapers": [
     {
@@ -26,8 +26,8 @@
     },
     {
       "slug": "nano-os",
-      "title": "NanoOS (working title)",
-      "description": "A working whitepaper for an open source agent orchestration CLI that lets a user compose an oracle agent, specialist sub-agents, skill packs, and custom tools into a personal operating system of agents",
+      "title": "NanoOS",
+      "description": "A whitepaper for an open source agent orchestration CLI that lets a user compose an oracle agent, specialist sub-agents, skill packs, and custom tools into a personal operating system of agents",
       "proposer": "Will Lamerton",
       "proposer_github": "will-lamerton",
       "status": "In public review",
