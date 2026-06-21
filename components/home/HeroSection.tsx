@@ -56,9 +56,9 @@ export function HeroSection() {
               href="https://nanocollective.org"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-12 items-center justify-center border border-foreground/20 bg-transparent px-8 text-sm font-semibold tracking-wide text-foreground transition-colors hover:bg-foreground hover:text-background focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black w-full sm:w-auto group"
+              className="inline-flex h-12 items-center justify-center border border-foreground/20 bg-transparent px-8 text-sm font-semibold tracking-wide text-foreground transition-colors hover:border-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black w-full sm:w-auto group"
             >
-              <span className="mr-3 font-bold text-[#0000EE] dark:text-[#A1A1AA] group-hover:text-background transition-colors">&gt;</span> 
+              <span className="mr-3 font-bold text-[#0000EE] dark:text-[#A1A1AA] transition-colors">&gt;</span>
               Main Website
             </a>
           </div>
