@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-29T09:05:46.946Z",
+  "generated_at": "2026-06-29T11:46:13.879Z",
   "count": 6,
   "whitepapers": [
     {
@@ -30,7 +30,7 @@
       "description": "A whitepaper for an open source agent orchestration CLI that lets a user compose an oracle agent, specialist sub-agents, skill packs, and custom tools into a personal operating system of agents",
       "proposer": "Will Lamerton",
       "proposer_github": "will-lamerton",
-      "status": "In public review",
+      "status": "Paused",
       "review_opens": "2026-05-20",
       "review_closes": "2026-07-01",
       "sidebar_order": 3
