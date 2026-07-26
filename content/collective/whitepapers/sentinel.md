@@ -4,7 +4,7 @@ description: "A working whitepaper for an installable Nanocoder driven workflow 
 sidebar_order: 4
 proposer: "Will Lamerton"
 proposer_github: "will-lamerton"
-status: "Building"
+status: "Shipped"
 review_opens: "2026-05-22"
 review_closes: "2026-06-21"
 ---

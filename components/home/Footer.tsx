@@ -47,6 +47,20 @@ export default function Footer() {
                 </li>
                 <li>
                   <a
+                    href="https://nanocollective.org/sentinel"
+                    className="hover:text-[#0000EE] dark:hover:text-[#A1A1AA] transition-colors flex items-center gap-2 group"
+                  >
+                    <span className="text-[#0000EE] dark:text-[#A1A1AA] opacity-0 -ml-4 transition-all group-hover:opacity-100 group-hover:ml-0">
+                      &gt;
+                    </span>
+                    Sentinel
+                    <span className="text-[10px] uppercase tracking-widest text-foreground/50">
+                      alpha
+                    </span>
+                  </a>
+                </li>
+                <li>
+                  <a
                     href="https://github.com/Nano-Collective/get-md"
                     target="_blank"
                     rel="noopener noreferrer"

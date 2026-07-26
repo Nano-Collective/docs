@@ -22,7 +22,7 @@ function ProjectCard({
     <div className="bg-background border border-foreground/20 p-8 group hover:bg-muted transition-all hover:shadow-lg dark:hover:shadow-[0_4px_20px_rgb(0,0,0,0.5)] hover:-translate-y-1 flex flex-col h-full relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 dark:opacity-100 pointer-events-none" />
       <div className="relative z-10 flex flex-col h-full">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-6 gap-4">
           <div className="flex items-center gap-4">
             <span className="font-mono text-xs sm:text-sm font-bold text-[#0000EE] dark:text-[#A1A1AA]">
               {tag}
@@ -31,6 +31,11 @@ function ProjectCard({
               {project.name}
             </h3>
           </div>
+          {project.status && (
+            <span className="font-mono text-xs font-bold uppercase tracking-widest border border-[#0000EE] dark:border-[#A1A1AA] text-[#0000EE] dark:text-[#A1A1AA] px-3 py-1 shrink-0">
+              {project.status}
+            </span>
+          )}
         </div>
         <p className="text-sm sm:text-lg text-foreground/70 leading-relaxed mb-8 flex-grow">
           {project.description}

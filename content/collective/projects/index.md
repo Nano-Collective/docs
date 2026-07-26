@@ -14,8 +14,10 @@ This is where the collective's mission becomes concrete. It is a home where anyo
 
 - **[Nanocoder](https://github.com/Nano-Collective/nanocoder)**: a coding agent in your terminal that runs on any model you choose.
 - **[Nanotune](https://github.com/Nano-Collective/nanotune)**: tooling focused on fine-tuning and improving small, local models for practical use.
+- **[Sentinel](https://github.com/Nano-Collective/sentinel)** *(alpha)*: an installable, Nanocoder-driven workflow that runs continuous, configurable security and code audits across the repositories in a GitHub organisation and files what it finds as issues.
 - **[get-md](https://github.com/Nano-Collective/get-md)**: a fast, lightweight HTML, PDF, DOCX, and Markdown to Markdown converter optimised for LLM consumption.
 - **[json-up](https://github.com/Nano-Collective/json-up)**: a type-safe JSON migration tool with Zod schema validation.
+- **[prompt-scrub](https://github.com/Nano-Collective/prompt-scrubber)**: a local-first tool that strips identifying content out of your prompts before they reach a cloud LLM.
 
 Each project has its own dedicated documentation. The pages in this section cover the rules and conventions that apply across **all** Nano Collective projects, regardless of stack or domain.
 

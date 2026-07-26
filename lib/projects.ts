@@ -8,6 +8,18 @@ export interface ProjectConfig {
     name: string; // "nanocoder"
   };
   docsPath?: string; // Default: "docs"
+  /**
+   * Release maturity. Anything other than "stable" (the default) renders a
+   * badge on the project card so readers know the docs describe a moving
+   * target.
+   */
+  status?: "alpha" | "beta";
+  /**
+   * Include GitHub pre-releases when resolving documentation versions.
+   * Pre-release tags are filtered out by default; alpha/beta projects have no
+   * stable release yet, so without this they would have no docs at all.
+   */
+  includePrereleases?: boolean;
 }
 
 export const PROJECTS: ProjectConfig[] = [
@@ -32,6 +44,19 @@ export const PROJECTS: ProjectConfig[] = [
       owner: "Nano-Collective",
       name: "nanotune",
     },
+  },
+  {
+    id: "sentinel",
+    name: "Sentinel",
+    description:
+      "Continuous, configurable security and code audits across the repositories in your GitHub organisation, filed as issues for a human to act on.",
+    type: "project",
+    repo: {
+      owner: "Nano-Collective",
+      name: "sentinel",
+    },
+    status: "alpha",
+    includePrereleases: true,
   },
   {
     id: "get-md",

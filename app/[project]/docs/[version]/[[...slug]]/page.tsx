@@ -31,7 +31,11 @@ export async function generateStaticParams(): Promise<
       [];
 
     for (const project of projects) {
-      const versions = await getVersions(project.id, project.repo);
+      const versions = await getVersions(
+        project.id,
+        project.repo,
+        project.includePrereleases,
+      );
       console.log(`✓ Found versions for ${project.name}:`, versions);
 
       // Generate params for each version
@@ -134,7 +138,11 @@ export async function generateMetadata({
     return { title: "Not Found" };
   }
 
-  const versions = await getVersions(projectId, project.repo);
+  const versions = await getVersions(
+    projectId,
+    project.repo,
+    project.includePrereleases,
+  );
   const resolvedVersion = resolveVersion(version, versions);
 
   const baseUrl = "https://docs.nanocollective.org";
@@ -222,7 +230,11 @@ export default async function DocPage({ params }: PageProps) {
     notFound();
   }
 
-  const versions = await getVersions(projectId, project.repo);
+  const versions = await getVersions(
+    projectId,
+    project.repo,
+    project.includePrereleases,
+  );
 
   // Validate version
   if (version !== "latest" && !versions.includes(version)) {

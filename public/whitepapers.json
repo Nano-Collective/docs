@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-26T06:46:23.476Z",
+  "generated_at": "2026-07-26T21:15:03.045Z",
   "count": 8,
   "whitepapers": [
     {
@@ -11,7 +11,12 @@
       "status": "In public review",
       "review_opens": "2026-07-05",
       "review_closes": "2026-08-04",
-      "sidebar_order": 1
+      "sidebar_order": 1,
+      "issue_counts": {
+        "open": 4,
+        "closed": 4,
+        "total": 8
+      }
     },
     {
       "slug": "private-inference-proxy",
@@ -22,7 +27,12 @@
       "status": "Paused",
       "review_opens": "2026-05-19",
       "review_closes": "2026-06-18",
-      "sidebar_order": 1
+      "sidebar_order": 1,
+      "issue_counts": {
+        "open": 0,
+        "closed": 0,
+        "total": 0
+      }
     },
     {
       "slug": "nano-os",
@@ -33,7 +43,12 @@
       "status": "Paused",
       "review_opens": "2026-05-20",
       "review_closes": "2026-07-01",
-      "sidebar_order": 3
+      "sidebar_order": 3,
+      "issue_counts": {
+        "open": 0,
+        "closed": 4,
+        "total": 4
+      }
     },
     {
       "slug": "nanoterm",
@@ -44,7 +59,12 @@
       "status": "In Public Review",
       "review_opens": "2026-07-09",
       "review_closes": "2026-08-09",
-      "sidebar_order": 3
+      "sidebar_order": 3,
+      "issue_counts": {
+        "open": 0,
+        "closed": 6,
+        "total": 6
+      }
     },
     {
       "slug": "sentinel",
@@ -52,10 +72,15 @@
       "description": "A working whitepaper for an installable Nanocoder driven workflow that runs security and code audits across a GitHub organisation's repositories, with configurable rule packs and automatic issue filing",
       "proposer": "Will Lamerton",
       "proposer_github": "will-lamerton",
-      "status": "Building",
+      "status": "Shipped",
       "review_opens": "2026-05-22",
       "review_closes": "2026-06-21",
-      "sidebar_order": 4
+      "sidebar_order": 4,
+      "issue_counts": {
+        "open": 0,
+        "closed": 0,
+        "total": 0
+      }
     },
     {
       "slug": "docs-forest",
@@ -66,7 +91,12 @@
       "status": "Build Approved",
       "review_opens": "2026-05-22",
       "review_closes": "2026-06-21",
-      "sidebar_order": 5
+      "sidebar_order": 5,
+      "issue_counts": {
+        "open": 0,
+        "closed": 0,
+        "total": 0
+      }
     },
     {
       "slug": "marketplace",
@@ -75,7 +105,12 @@
       "proposer": "Matt Spence",
       "proposer_github": "mrspence",
       "status": "Building",
-      "sidebar_order": 6
+      "sidebar_order": 6,
+      "issue_counts": {
+        "open": 0,
+        "closed": 0,
+        "total": 0
+      }
     },
     {
       "slug": "scriptura",
@@ -86,7 +121,12 @@
       "status": "In public review",
       "review_opens": "2026-07-15",
       "review_closes": "2026-08-14",
-      "sidebar_order": 7
+      "sidebar_order": 7,
+      "issue_counts": {
+        "open": 0,
+        "closed": 0,
+        "total": 0
+      }
     }
   ]
 }

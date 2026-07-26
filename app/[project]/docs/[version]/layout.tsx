@@ -26,7 +26,11 @@ export default async function DocsLayout({ children, params }: LayoutProps) {
     notFound();
   }
 
-  const versions = await getVersions(projectId, project.repo);
+  const versions = await getVersions(
+    projectId,
+    project.repo,
+    project.includePrereleases,
+  );
   const resolvedVersion = resolveVersion(version, versions);
 
   // Build pageMap for the current version

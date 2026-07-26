@@ -74,9 +74,16 @@ function getFetchOptions(): RequestInit {
 }
 
 /**
- * Fetch all releases from the GitHub repository
+ * Fetch all releases from the GitHub repository.
+ *
+ * Drafts are always excluded. Pre-releases are excluded unless
+ * `includePrereleases` is set — alpha/beta projects have no stable tag yet, so
+ * their docs only exist on pre-release tags.
  */
-export async function fetchReleases(repo: Repo): Promise<Release[]> {
+export async function fetchReleases(
+  repo: Repo,
+  includePrereleases = false,
+): Promise<Release[]> {
   const response = await fetch(
     `https://api.github.com/repos/${repo.owner}/${repo.name}/releases`,
     getFetchOptions(),
@@ -94,8 +101,9 @@ export async function fetchReleases(repo: Repo): Promise<Release[]> {
 
   const releases: Release[] = await response.json();
 
-  // Filter out drafts and prereleases
-  return releases.filter((r) => !r.draft && !r.prerelease);
+  return releases.filter(
+    (r) => !r.draft && (includePrereleases || !r.prerelease),
+  );
 }
 
 /**

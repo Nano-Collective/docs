@@ -40,8 +40,10 @@ The collective builds a range of AI tools and developer utilities. Some projects
 
 - **[Nanocoder](https://github.com/Nano-Collective/nanocoder)**: a coding agent in your terminal that runs on any model you choose.
 - **[Nanotune](https://github.com/Nano-Collective/nanotune)**: tooling focused on fine-tuning and improving small, local models for practical use.
+- **[Sentinel](https://github.com/Nano-Collective/sentinel)** *(alpha)*: continuous, configurable security and code audits across the repositories in a GitHub organisation, filed as issues for a human to act on.
 - **[get-md](https://github.com/Nano-Collective/get-md)**: a fast, lightweight HTML, PDF, DOCX, and Markdown to Markdown converter optimised for LLM consumption.
 - **[json-up](https://github.com/Nano-Collective/json-up)**: a type-safe JSON migration tool with Zod schema validation.
+- **[prompt-scrub](https://github.com/Nano-Collective/prompt-scrubber)**: a local-first tool that strips identifying content out of your prompts before they reach a cloud LLM.
 
 Projects under the Nano Collective run independently. Each has its own maintainers, roadmap, and release cadence, but they share a consistent approach to how they are structured, tested, released, and presented. That consistency is deliberate. It makes the collective legible from the outside, lowers the barrier for contributors moving between projects, and ensures every tool we ship meets a shared bar for quality and openness.
 

@@ -53,8 +53,10 @@ Spelling and capitalisation are not optional. Use these exactly:
 | --- | --- |
 | Nanocoder | One word, capital N. Not "NanoCoder", not "nano-coder", not "nanocoder" in body copy. |
 | Nanotune | One word, capital N. Same pattern. |
+| Sentinel | Capital S, no prefix. Not "NanoSentinel". While it is pre-1.0, pair the first mention in any piece of copy with "alpha". |
 | get-md | All lowercase, hyphenated. Render in inline code style (`get-md`) when the surrounding text might confuse it with prose. |
 | json-up | All lowercase, hyphenated. Same pattern as `get-md`. |
+| prompt-scrub | All lowercase, hyphenated. The npm package and product are `prompt-scrub`; the repository is `prompt-scrubber`. |
 
 When listing projects in copy, alphabetise unless there is a deliberate reason to prioritise (e.g. flagship project first in marketing copy).
 

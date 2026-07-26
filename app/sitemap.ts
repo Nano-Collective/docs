@@ -15,7 +15,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const projects = getAllProjects();
 
   for (const project of projects) {
-    const versions = await getVersions(project.id, project.repo);
+    const versions = await getVersions(
+      project.id,
+      project.repo,
+      project.includePrereleases,
+    );
 
     for (const version of versions) {
       const paths = await getDocPathsForVersion(

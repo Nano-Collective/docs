@@ -75,11 +75,15 @@ export function filterMajorReleases(releases: Release[]): Release[] {
 }
 
 /**
- * Get list of available versions (latest patch of each minor release)
+ * Get list of available versions (latest patch of each minor release).
+ *
+ * Pass `includePrereleases` for projects whose only tagged releases are
+ * pre-releases (alpha/beta) — see ProjectConfig.includePrereleases.
  */
 export async function getVersions(
   projectId: string,
   repo: Repo,
+  includePrereleases = false,
 ): Promise<string[]> {
   // In dev mode, use main branch directly to avoid release API calls
   if (isDev) {
@@ -91,7 +95,7 @@ export async function getVersions(
     return cached;
   }
 
-  const releases = await fetchReleases(repo);
+  const releases = await fetchReleases(repo, includePrereleases);
   const majorReleases = filterMajorReleases(releases);
 
   // Filter to only versions that have a docs/ folder
@@ -134,8 +138,9 @@ export function isValidVersion(
 export async function getLatestVersion(
   projectId: string,
   repo: Repo,
+  includePrereleases = false,
 ): Promise<string | null> {
-  const versions = await getVersions(projectId, repo);
+  const versions = await getVersions(projectId, repo, includePrereleases);
   return versions.length > 0 ? versions[0] : null;
 }
 

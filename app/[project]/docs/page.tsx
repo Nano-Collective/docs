@@ -22,7 +22,11 @@ export default async function ProjectDocsPage({ params }: PageProps) {
     notFound();
   }
 
-  const latestVersion = await getLatestVersion(projectId, project.repo);
+  const latestVersion = await getLatestVersion(
+    projectId,
+    project.repo,
+    project.includePrereleases,
+  );
   if (latestVersion) {
     redirect(`/${projectId}/docs/${latestVersion}`);
   }

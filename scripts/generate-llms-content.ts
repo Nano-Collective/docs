@@ -110,7 +110,11 @@ async function processProjectDocs(): Promise<Map<string, PageEntry[]>> {
   const result = new Map<string, PageEntry[]>();
 
   for (const project of PROJECTS) {
-    const version = await getLatestVersion(project.id, project.repo);
+    const version = await getLatestVersion(
+      project.id,
+      project.repo,
+      project.includePrereleases,
+    );
     if (!version) {
       console.warn(`  No latest version for ${project.id}, skipping`);
       continue;

@@ -27,9 +27,15 @@ export const PROJECTS: ProjectConfig[] = [
       name: "nanocoder",           // GitHub repo name
     },
     docsPath: "docs",          // Optional: custom docs folder (default: "docs")
+    status: "alpha",           // Optional: renders a maturity badge on the project card
+    includePrereleases: true,  // Optional: resolve docs from pre-release tags too
   },
 ];
 ```
+
+`includePrereleases` is what pre-1.0 projects need: release tags marked as
+pre-releases on GitHub are ignored by default, so an alpha project with only
+`v0.1.0-alpha.x` tags would otherwise have no documentation versions at all.
 
 ## Writing Documentation
 
