@@ -12,6 +12,8 @@ This page is the canonical description of how that happens. It is the path from 
 
 Giving people the resources and the power to build AI in the open, and a home for the work once it exists, is the whole point of this process. The stages below exist to make that path clear and fair, not to gatekeep it.
 
+This page covers the path for new ideas. If you have already built the thing and want to bring it under the umbrella, the route is different and lighter: see [Bringing an Existing Project](/collective/projects/bringing-an-existing-project).
+
 ## Who can propose
 
 Anyone. There is no prerequisite contribution history. You do not need to be a maintainer of an existing NC project, you do not need to have shipped a previous open source project, and you do not need to have been around the collective for any length of time. The quality of the whitepaper is the filter, not the proposer's history.

@@ -1,7 +1,7 @@
 ---
 title: "Contributing"
 description: "How to get involved with an existing Nano Collective project. Where to find work, how to submit, and what to expect from review."
-sidebar_order: 2
+sidebar_order: 3
 ---
 
 # Contributing

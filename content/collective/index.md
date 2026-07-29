@@ -45,7 +45,7 @@ The collective builds a range of AI tools and developer utilities. Some projects
 - **[json-up](https://github.com/Nano-Collective/json-up)**: a type-safe JSON migration tool with Zod schema validation.
 - **[prompt-scrub](https://github.com/Nano-Collective/prompt-scrubber)**: a local-first tool that strips identifying content out of your prompts before they reach a cloud LLM.
 
-Projects under the Nano Collective run independently. Each has its own maintainers, roadmap, and release cadence, but they share a consistent approach to how they are structured, tested, released, and presented. That consistency is deliberate. It makes the collective legible from the outside, lowers the barrier for contributors moving between projects, and ensures every tool we ship meets a shared bar for quality and openness.
+Projects under the Nano Collective run independently. Each has its own maintainers, roadmap, and release cadence, but they share a consistent approach to how they are structured, tested, released, and presented. That consistency is deliberate. It makes the collective legible from the outside, lowers the barrier for contributors moving between projects, and ensures every tool we ship meets a shared bar for quality and openness. The list above is where the collective is today, not a closed set. Anyone can propose a new project, or bring an existing one, and have it ship under the same rails.
 
 If you are creating a new project under the collective, read the [Creating a New Project](/collective/projects/creating-a-new-project) guide. It walks through the conventions every Nano Collective repository should follow, from repo structure and CI, to licensing, testing, documentation, and release.
 
@@ -67,6 +67,8 @@ The collective is volunteer-led today, and is fiscally hosted by the [Open Sourc
 ## Getting Involved
 
 Whether you want to contribute code, improve documentation, design something better, or simply spread the word, we would love your help. There is no application process. Find a project that interests you, read its `CONTRIBUTING.md`, and open an issue or PR. And if the thing you want to build does not exist yet, the collective is a place to start it rather than carry it alone.
+
+That applies to work that already exists, too. The collective is a home for independent projects, not only the ones the core team started. If you are already maintaining something that fits the three principles, or you have an idea for something new, both have a route in. The [How a Project Comes to Life](/collective/projects/how-a-project-comes-to-life) page is the canonical description of how that works.
 
 The collective is still early. The contributors who show up now are the ones shaping what it becomes: the conventions, the tools, the direction, and the culture. If any of that sounds interesting, this is a good moment to get involved.
 

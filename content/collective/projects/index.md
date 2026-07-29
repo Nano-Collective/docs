@@ -10,6 +10,8 @@ The Nano Collective umbrellas a growing set of independent projects. Each has it
 
 This is where the collective's mission becomes concrete. It is a home where anyone can build AI in the open and have it land under a shared brand, a community, and a set of ready-made rails, rather than carry it alone.
 
+There are two routes in. You can propose something new, covered in [How a Project Comes to Life](/collective/projects/how-a-project-comes-to-life), or you can bring a project you are already maintaining, covered in [Bringing an Existing Project](/collective/projects/bringing-an-existing-project).
+
 ## Projects under the umbrella
 
 - **[Nanocoder](https://github.com/Nano-Collective/nanocoder)**: a coding agent in your terminal that runs on any model you choose.
@@ -24,8 +26,9 @@ Each project has its own dedicated documentation. The pages in this section cove
 ## In this section
 
 - **[How a Project Comes to Life](/collective/projects/how-a-project-comes-to-life)**: the path from "I have an idea" to "the project ships under the Nano Collective". Stages, gates, status taxonomy, what you sign up for, what you get.
+- **[Bringing an Existing Project](/collective/projects/bringing-an-existing-project)**: the lighter route for moving an already-shipped project under the umbrella. Submission document, 14-day public review, recorded decision, migration.
 - **[Contributing](/collective/projects/contributing)**: how to get involved with an existing project. Where to find work, how to submit, what to expect from review.
 - **[Creating a New Project](/collective/projects/creating-a-new-project)**: the conventions playbook that kicks in once a project is approved to build. Covers repo structure, licensing, CI, testing, documentation, and release.
 - **[Stack Suggestions](/collective/projects/stack-suggestions)**: recommended tooling and conventions per language stack. The *how* that complements the *what* in the Creating a New Project guide.
 
-If you are starting something new under the Nano Collective, the How a Project Comes to Life page is the place to begin. If you want to contribute to an existing project, the Contributing guide is.
+If you are starting something new under the Nano Collective, the How a Project Comes to Life page is the place to begin. If you have already built something and want to move it under the umbrella, start at Bringing an Existing Project. If you want to contribute to an existing project, the Contributing guide is.

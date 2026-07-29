@@ -1,7 +1,7 @@
 ---
 title: "Stack Suggestions"
 description: "Suggested tooling and conventions per language stack for Nano Collective projects"
-sidebar_order: 4
+sidebar_order: 5
 ---
 
 # Stack Suggestions

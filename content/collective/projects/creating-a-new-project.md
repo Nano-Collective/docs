@@ -1,7 +1,7 @@
 ---
 title: "Creating a New Project"
 description: "Conventions and playbook for spinning up a new project under the Nano Collective"
-sidebar_order: 3
+sidebar_order: 4
 ---
 
 # Creating a New Project
@@ -15,6 +15,8 @@ The goal is not bureaucracy. It is to make every project in the collective legib
 ## Before this playbook
 
 This page is for projects that have already been approved to build. For non-trivial new projects, the path to approval starts at [How a Project Comes to Life](/collective/projects/how-a-project-comes-to-life): a whitepaper, a public review window, and a Stage 3 build decision. The conventions below kick in once that decision is a yes.
+
+Existing projects joining the collective follow [Bringing an Existing Project](/collective/projects/bringing-an-existing-project) instead; the conventions below apply to them at the migration stage.
 
 Small utilities, focused libraries, and well-scoped tools can skip the whitepaper and go straight to this playbook. If you are not sure which path applies, raise it in [Discord](https://discord.gg/ktPDV6rekE) first.
 
