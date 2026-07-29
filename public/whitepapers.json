@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-07-29T06:42:08.718Z",
-  "count": 8,
+  "generated_at": "2026-07-29T11:10:09.086Z",
+  "count": 7,
   "whitepapers": [
     {
       "slug": "nanobench",
@@ -41,21 +41,10 @@
       "description": "A whitepaper for an open-source, ultra-lightweight terminal companion that translates natural language into safe, executable shell commands.",
       "proposer": "Sk Akram",
       "proposer_github": "akramcodez",
-      "status": "In Public Review",
+      "status": "Building",
       "review_opens": "2026-07-09",
       "review_closes": "2026-08-09",
       "sidebar_order": 3
-    },
-    {
-      "slug": "sentinel",
-      "title": "Sentinel",
-      "description": "A working whitepaper for an installable Nanocoder driven workflow that runs security and code audits across a GitHub organisation's repositories, with configurable rule packs and automatic issue filing",
-      "proposer": "Will Lamerton",
-      "proposer_github": "will-lamerton",
-      "status": "Shipped",
-      "review_opens": "2026-05-22",
-      "review_closes": "2026-06-21",
-      "sidebar_order": 4
     },
     {
       "slug": "docs-forest",
