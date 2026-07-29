@@ -17,13 +17,21 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fetchFileContent, getAllDocsFiles } from "../lib/github";
-import { PROJECTS } from "../lib/projects";
+import {
+  getApps,
+  getLibraries,
+  PROJECTS,
+  type ProjectConfig,
+} from "../lib/projects";
 import { parseFrontmatter } from "../lib/remote-content";
 import { getLatestVersion } from "../lib/versions";
 
 const OUT_DIR = path.join(process.cwd(), "out");
 const CONTENT_ROOT = path.join(process.cwd(), "content");
 const SITE_BASE = "https://docs.nanocollective.org";
+
+const COLLECTIVE_SUMMARY =
+  "The Nano Collective is a community-led group of developers, designers, and maintainers building open-source AI tools for the people who use them. We build not for profit, but for the community. Every tool we ship aims to be privacy-respecting, local-first, and open for all.";
 
 interface PageEntry {
   route: string;
@@ -146,6 +154,10 @@ async function processProjectDocs(): Promise<Map<string, PageEntry[]>> {
       const title = fm.title || nameFromSlug(path.basename(relativePath));
 
       writeMirror(route, content);
+      // The site also pre-renders a `latest` alias of the newest version's
+      // docs, so mirror the same content there. Only the versioned route is
+      // indexed in llms.txt — one canonical URL per page.
+      writeMirror(route.replace(`/docs/${version}`, "/docs/latest"), content);
 
       entries.push({
         route,
@@ -161,6 +173,74 @@ async function processProjectDocs(): Promise<Map<string, PageEntry[]>> {
   return result;
 }
 
+/**
+ * The home page has no Markdown source of its own — content/index.mdx is just
+ * a composition of React sections — so build its mirror from the same data the
+ * sections render. Written to /index.md, which is what the Pages middleware
+ * serves for `Accept: text/markdown` on `/`.
+ */
+function generateHomeMirror(projects: Map<string, PageEntry[]>): string {
+  const lines: string[] = [];
+
+  // The docs index for a project is its version root, e.g. /nanocoder/docs/v1.2.0.
+  const docsIndex = (projectId: string): string | undefined =>
+    projects
+      .get(projectId)
+      ?.find((entry) =>
+        new RegExp(`^/${projectId}/docs/[^/]+$`).test(entry.route),
+      )?.route;
+
+  const section = (heading: string, blurb: string, group: ProjectConfig[]) => {
+    const items = group.filter((project) => docsIndex(project.id));
+    if (items.length === 0) return;
+
+    lines.push(`## ${heading}`);
+    lines.push("");
+    lines.push(blurb);
+    lines.push("");
+    for (const project of items) {
+      lines.push(
+        `- [${project.name}](${SITE_BASE}${docsIndex(project.id)}.md): ${project.description}`,
+      );
+    }
+    lines.push("");
+  };
+
+  lines.push("# Nano Docs");
+  lines.push("");
+  lines.push(`> ${COLLECTIVE_SUMMARY}`);
+  lines.push("");
+
+  section(
+    "Nano Projects",
+    "Full-fledged applications to boost your development workflow.",
+    getApps(),
+  );
+  section(
+    "Nano Libraries",
+    "Lightweight utilities to integrate into your projects.",
+    getLibraries(),
+  );
+
+  lines.push("## The Collective");
+  lines.push("");
+  lines.push(
+    "Operational documentation for the Nano Collective — the shared conventions, playbooks, and values behind every project.",
+  );
+  lines.push("");
+  lines.push(
+    `- [Nano Collective](${SITE_BASE}/collective.md): How we work as a collective: repo and CI conventions, stack suggestions, community and contribution guidelines — everything that keeps projects consistent across the collective.`,
+  );
+  lines.push("");
+
+  lines.push(
+    `Every page on this site is available as raw Markdown at the same URL with \`.md\` appended, or by requesting it with \`Accept: text/markdown\`. The complete page index is at ${SITE_BASE}/llms.txt.`,
+  );
+  lines.push("");
+
+  return lines.join("\n");
+}
+
 function generateLlmsTxt(
   collective: PageEntry[],
   projects: Map<string, PageEntry[]>,
@@ -169,9 +249,7 @@ function generateLlmsTxt(
 
   lines.push("# Nano Collective Documentation");
   lines.push("");
-  lines.push(
-    "> The Nano Collective is a community-led group of developers, designers, and maintainers building open-source AI tools for the people who use them. We build not for profit, but for the community. Every tool we ship aims to be privacy-respecting, local-first, and open for all.",
-  );
+  lines.push(`> ${COLLECTIVE_SUMMARY}`);
   lines.push("");
   lines.push(
     "This file lists every page in the Nano Collective documentation. Each link points to the page's raw Markdown so it can be fetched and parsed directly without HTML rendering.",
@@ -249,6 +327,12 @@ async function main(): Promise<void> {
   let projectCount = 0;
   for (const entries of projects.values()) projectCount += entries.length;
   console.log(`  Wrote ${projectCount} project pages`);
+
+  fs.writeFileSync(
+    path.join(OUT_DIR, "index.md"),
+    generateHomeMirror(projects),
+  );
+  console.log("  Wrote index.md (home page mirror)");
 
   const llmsTxt = generateLlmsTxt(collective, projects);
   fs.writeFileSync(path.join(OUT_DIR, "llms.txt"), llmsTxt);
