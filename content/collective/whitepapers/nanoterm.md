@@ -4,7 +4,7 @@ description: "A whitepaper for an open-source, ultra-lightweight terminal compan
 sidebar_order: 3
 proposer: "Sk Akram"
 proposer_github: "akramcodez"
-status: "In Public Review"
+status: "Building"
 review_opens: "2026-07-09"
 review_closes: "2026-08-09"
 ---
