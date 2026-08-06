@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-06T06:42:33.747Z",
+  "generated_at": "2026-08-06T13:08:01.612Z",
   "count": 7,
   "whitepapers": [
     {
@@ -74,7 +74,7 @@
       "proposer_github": "jason1015-coder",
       "status": "In public review",
       "review_opens": "2026-07-15",
-      "review_closes": "2026-08-14",
+      "review_closes": "2026-08-24",
       "sidebar_order": 7
     }
   ]
