@@ -6,7 +6,7 @@ proposer: "Jason-Chiu"
 proposer_github: "jason1015-coder"
 status: "In public review"
 review_opens: "2026-07-15"
-review_closes: "2026-08-14"
+review_closes: "2026-08-24"
 ---
 
 # Scriptura
