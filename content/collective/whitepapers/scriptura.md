@@ -17,7 +17,7 @@ The closest sibling inside the collective is Nanocoder, which is the agent runti
 
 The document is published in working form so the collective can argue the shape of it before code lands. Naming and the default provider flow have been settled during the public review window (recorded under "Resolved in review" below); the remaining scope and design decisions are still open.
 
-The proposed editor base already exists at [https://github.com/jason1015-coder/scriptura](https://github.com/jason1015-coder/scriptura)
+The proposed editor base already exists at [Scriptura](https://github.com/jason1015-coder/scriptura)
 
 ## Problem
 
@@ -26,7 +26,7 @@ A developer who wants an AI-shaped editing experience today picks from a small s
 1. **Proprietary AI editors (Cursor, Windsurf, and others).** Excellent UX, tightly integrated agent and completion loops, codebase indexing out of the box. Closed source on the editor side and on the model-routing side. Your code and your prompts go to the vendor's servers unless you pay for the privacy tier, and even then the routing and retention behaviour is a promise in a privacy policy, not something you can audit. The model you use is the model the vendor chose to wire in; bringing your own is second-class.
 2. **VS Code plus a copilot-style extension.** Open editor, closed (or limited) AI backend. Copilot binds you to one vendor. Open alternatives exist but each re-implements the same thin chat panel and none deliver the *editing* feel Cursor nailed: the inline completion that predicts edits, the multi-file agent that actually applies changes, the `@codebase` context that reads the right files without you listing them.
 3. **Terminal agents (Nanocoder, Aider, Claude Code).** Powerful, local-first, model-agnostic. But they live in the terminal. They do not give you the inline-edit affordance, the diff preview in place, the hover-to-explain, the tab-to-accept completion. They are a different category of tool that solves a different part of the problem.
-4. **Rolling your own editor.** Theoretically possible on the VS Code fork or on a from-scratch web view. The integration work to get completion latency under control, to index a codebase well enough for `@codebase`, and to make the agent loop feel safe is large and largely unglamorous. Most developers who start this abandon it before the feels right.
+4. **Rolling your own editor.** Theoretically possible on the VS Code fork or on a from-scratch web view. The integration work to get completion latency under control, to index a codebase well enough for `@codebase`, and to make the agent loop feel safe is large and largely unglamorous. Most developers who start this abandon it before it feels right.
 
 None of these gives a developer an editor that (a) feels like Cursor, (b) is open source end to end, (c) lets them bring any model they want, local or remote, and (d) keeps their code on hardware they control by default. The gap is not a missing feature; it is a missing *posture*. Cursor proved the experience is worth building. The posture is what no one has shipped openly.
 
@@ -58,7 +58,7 @@ The three values that govern every Nano Collective project apply:
 
 ## Architecture
 
-The current implementation consists of full C++ QT based editor shell, with no AI layer yet.
+The current implementation consists of full C++ Qt based editor shell, with no AI layer yet.
 
 The proposed solution will be adding a widget to the editor shell that provides AI functionality, by integrating with existing nanocoder agent (which is in typescript)
 
@@ -73,7 +73,7 @@ Most collective projects compose with Scriptura through the provider contract. A
 
 - **[Nanocoder](https://github.com/Nano-Collective/nanocoder)** is the reference agent backend. Scriptura's agent loop is a thin UI over Nanocoder's non-interactive mode; the same prompts, the same tool access, the same local-first posture. Scriptura pressure-tests Nanocoder on a real interactive workload, the way Sentinel pressure-tests it on a security workload.
 - **[Private Inference Proxy](/collective/whitepapers/private-inference-proxy)**, if it lands, is a natural remote provider adapter. A user who needs cloud capability for the hard agent pass but wants audit logging and scrubbing routes Scriptura's remote calls through the proxy rather than directly at a vendor. The provider abstraction is exactly the seam this plugs into.
-- **[Sentinel](/collective/whitepapers/sentinel)** composes the other way: Scriptura could invoke a Sentinel audit pass against the current workspace as a command, surfacing findings as in-editor diagnostics rather than GitHub issues.
+- **[Sentinel](https://github.com/Nano-Collective/sentinel)** composes the other way: Scriptura could invoke a Sentinel audit pass against the current workspace as a command, surfacing findings as in-editor diagnostics rather than GitHub issues.
 
 This is the long picture from the collective's introduction page expressed as an editor on the same stack: local-first models, a real provider contract anyone can extend, and privacy-preserving paths to external capability when the task genuinely requires it. Scriptura is the editing-shaped instance of the same pattern Nanocoder demonstrates for agents and Sentinel demonstrates for audits.
 
@@ -81,7 +81,7 @@ This is the long picture from the collective's introduction page expressed as an
 
 A deliberately narrow v1, shipped well.
 
-- **An editor built on the open scriptura sources**, 
+- **An editor built on the open Scriptura sources.**
 - **The provider abstraction with at least two adapters shipped:** a local Ollama/LM Studio adapter and an OpenAI-compatible adapter. Nanocoder wired in as the agent backend.
 - **The inline completion loop** against the local provider, with tab-to-accept and latency treated as a primary metric.
 - **The chat and inline-edit surfaces** with `@codebase` retrieval through the local context engine.
@@ -96,7 +96,7 @@ What v1 ships is "an open editor with the Cursor feel, a real provider contract,
 
 - **Not a Copilot replacement that phones home.** The default install makes no remote calls. Remote providers are opt-in configuration, never hidden behaviour.
 - **Not a model trainer or a model vendor.** Scriptura uses whichever providers the user points it at. The collective does not train or ship an editor-tuned model of its own in v1.
-- **Not a from-scratch editor.** It is built on the existing base . A clean-room reimplementation would forfeit that inheritance for no gain.
+- **Not a from-scratch editor.** It is built on the existing base. A clean-room reimplementation would forfeit that inheritance for no gain.
 - **Not a guaranteed-latency product on weak hardware.** Local-first means the feel depends on the local model. On a machine too small to run a completion model, the experience degrades; the project documents the floor rather than hiding it.
 - **Not a replacement for terminal agents.** Nanocoder in the terminal still wins for some workflows. Scriptura is the in-editor surface, not the only surface.
 
@@ -105,8 +105,7 @@ What v1 ships is "an open editor with the Cursor feel, a real provider contract,
 - **Fork Cursor directly.** Impossible: Cursor is closed source. Its value is in the proprietary layer we are precisely trying to replace. No fork path exists.
 - **Ship only as a VS Code extension, not a fork.** Already exists, but has less potential for expansion, integration, and customization.
 - **Fork VS Code.** Possible, but more performance overhead, which is not good for a machine already running a local LLM.
-- **Fork IntelliJ IDEA base**
-Even worst performance and even harder tech stack(java-based), even more restricted architecture for expansion , compare to VScode 
+- **Fork IntelliJ IDEA.** Even worse performance and an even harder tech stack (Java-based), with an even more restricted architecture for expansion compared to VS Code.
 
 ## Resolved in review
 
@@ -129,8 +128,9 @@ For this whitepaper to graduate into docs:
 - [ ] Write the provider contract in enough detail that "model-agnostic" is a testable claim, not a slogan.
 - [x] Decide the out-of-the-box provider flow for a user with no local model. Settled: local by default, no remote fallback; unreachable-endpoint handling scoped into v1.
 - [ ] Settle the plugin system policy (reframed from the extension-host question; the VS Code host premise does not exist).
+- [ ] Transfer the repository from `jason1015-coder/scriptura` to `Nano-Collective`, after which the [Creating a New Project](/collective/projects/creating-a-new-project) playbook takes over.
 
 
-When those are settled, this document becomes the foundation of the project's README and design notes. A repository is created under [`Nano-Collective`](https://github.com/Nano-Collective), and the [Creating a New Project](/collective/projects/creating-a-new-project) playbook takes over.
+When those are settled, this document becomes the foundation of the project's README and design notes.
 
 This page stays in place after the project ships, as the historical record of how the design was argued.
