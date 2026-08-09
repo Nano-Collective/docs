@@ -62,10 +62,22 @@ The current implementation consists of full C++ Qt based editor shell, with no A
 
 The proposed solution will be adding a widget to the editor shell that provides AI functionality, by integrating with existing nanocoder agent (which is in typescript)
 
+All outbound AI network calls are routed through the Rust backend, where the permission manager enforces the plugin-level network bitmask before any request leaves the machine. The egress log is a property of that chokepoint: every request authorised here is logged here, with a flag for local versus remote destination. Because the permission check and the log write happen in the same place, the log is not a best-effort audit surface — it is the enforcement path.
+
 
 ### Why this shape is the point
 
 A proprietary editor could do steps 2-4 with a better model. What it cannot do is step 5 by default, or let the developer swap the model in steps 2-4 for one they own. The combination of "Cursor feel" plus "local by default" plus "any model behind a real contract" is the part no one has shipped openly. The context engine and the agent loop are the hard parts; the provider abstraction is what makes the whole thing mean something.
+
+### Context engine
+
+`@codebase` retrieval is the feature that makes the chat and inline-edit surfaces feel intelligent rather than generic. The v1 design choice is lexical and symbol-aware retrieval built on the editor's existing LSP workspace index and project search, not semantic retrieval via embeddings.
+
+The reasoning is straightforward: the editor already maintains a symbol index through its LSP client, and project search (ripgrep-style, file-content aware) already exists as a first-class command. Reusing both gives `@codebase` a distinctive local-first answer with no embedding model, no vector index, and no incremental reindex story to maintain on a codebase that changes while the user is working. The retrieval layer ranks results by symbol relevance and recency, then feeds the top matches into the prompt context.
+
+Semantic retrieval is a future idea, not a v1 dependency. It would require an embedding model, a vector store, and a strategy for keeping the index coherent as files change — all of which are solvable but none of which are needed to ship `@codebase` competently in v1. If the project later wants to layer semantic retrieval on top, the lexical layer is a strict superset: every result a semantic search can return is also findable by symbol and text search, and the architecture does not preclude adding a rerank step later.
+
+The scope boundary is: v1 ships retrieval from the local codebase only. No remote index, no corpus beyond the open workspace, and no background indexing that runs without the user's knowledge.
 
 ## Composition with other collective projects
 
@@ -86,7 +98,7 @@ A deliberately narrow v1, shipped well.
 - **The inline completion loop** against the local provider, with tab-to-accept and latency treated as a primary metric.
 - **The chat and inline-edit surfaces** with `@codebase` retrieval through the local context engine.
 - **The agent loop** over Nanocoder, proposing diffs the user accepts in place, with command execution scoped to pre-approved commands.
-- **The egress log**, local and readable, marking every request as local or remote with its destination.
+- **The egress log**, local and readable, marking every request as local or remote with its destination. This is a property of the permission-checked network path in the Rust backend, not a standalone feature: every outbound request is authorised and logged in the same place.
 - **First-run failure handling for the local provider.** When the local endpoint is unreachable (Ollama not running, model missing), the editor detects it and offers the "install Ollama, here is the one-liner" flow, the settings tab includes a "test connection" action, and failed requests surface in the notification centre instead of vanishing silently. The failure mode the provider question was worried about — silent degradation to a cloud provider — does not exist in the code path; what does need designing is that a user who enables completions without a local model gets told what is wrong and what to do about it.
 - **Documentation for writing an adapter**, so the model-agnostic contract is real and extensible, not aspirational.
 
@@ -99,6 +111,7 @@ What v1 ships is "an open editor with the Cursor feel, a real provider contract,
 - **Not a from-scratch editor.** It is built on the existing base. A clean-room reimplementation would forfeit that inheritance for no gain.
 - **Not a guaranteed-latency product on weak hardware.** Local-first means the feel depends on the local model. On a machine too small to run a completion model, the experience degrades; the project documents the floor rather than hiding it.
 - **Not a replacement for terminal agents.** Nanocoder in the terminal still wins for some workflows. Scriptura is the in-editor surface, not the only surface.
+- **Not a semantic retrieval product in v1.** The context engine uses lexical and symbol-aware search only. Embedding-based retrieval is a future idea, scoped out of v1 to keep the local-first promise honest and the implementation within reach.
 
 ## Alternatives considered
 
