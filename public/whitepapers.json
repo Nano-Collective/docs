@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-09T05:15:41.489Z",
+  "generated_at": "2026-08-09T18:57:50.596Z",
   "count": 7,
   "whitepapers": [
     {
@@ -8,7 +8,7 @@
       "description": "A provider-neutral benchmark for evaluating AI coding agents on real-world software engineering tasks.",
       "proposer": "Ronak Raj",
       "proposer_github": "RONAK-AI647",
-      "status": "In public review",
+      "status": "review closed",
       "review_opens": "2026-07-05",
       "review_closes": "2026-08-04",
       "sidebar_order": 1
