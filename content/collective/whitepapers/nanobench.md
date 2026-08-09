@@ -4,7 +4,7 @@ description: "A provider-neutral benchmark for evaluating AI coding agents on re
 sidebar_order: 1
 proposer: "Ronak Raj"
 proposer_github: "RONAK-AI647"
-status: "In public review"
+status: "review closed"
 review_opens: "2026-07-05"
 review_closes: "2026-08-04"
 ---
@@ -18,7 +18,7 @@ Unlike existing benchmarks (SWE-bench and its variants), NanoBench is not a data
 
 This is the benchmark the agent benchmarking space does not have. In May 2026, Artificial Analysis launched the first public Coding Agent Index — the first benchmark measuring full agent stacks (model + harness pairs). NanoBench does the same thing, purpose-built for Nanocoder, with the failure taxonomy depth that no existing public benchmark offers.
 
-The project is proposed as a separate repository under the Nano Collective (`Nano-Collective/nanobench`), with Python as the primary language for the evaluation core, Nanocoder as the first and initially only harness, and a maintainer-owned roadmap that starts with a verifiable proof of concept and scales to a community-governed dataset through an open contribution pipeline.
+The project is proposed as a separate repository under the Nano Collective (`Nano-Collective/nanobench`). The evaluation core's orchestration language is left to the maintainer's discretion, with Nanocoder as the first and initially only harness, and a maintainer-owned roadmap...
 
 ---
 
@@ -145,7 +145,7 @@ NanoBench aims to become the standard evaluation suite for the Nano Collective's
             │
             ▼
 ┌───────────────────────────────────────┐
-│     Manifest Ingestion Layer (TS)     │ ──► Parses task constraints & metadata
+│     Manifest Ingestion Layer          │ ──► Parses task constraints & metadata
 └───────────────────────────────────────┘
             │
             ▼
@@ -212,7 +212,8 @@ Tasks are extracted exclusively from real merged pull requests, not from open is
 3. **State Pinning**: Record the immutable `base_commit` (the exact parent commit just before the fix was merged).
 4. **Reproducibility Check**: Clone the repository at the `base_commit` and verify the bug natively reproduces in isolation.
 5. **Verification Gate**: Confirm the test suite fails at the `base_commit`, and successfully passes only after applying the ground-truth patch.
-6.**Contamination Screening**: Apply algorithmic similarity checks against public code indexes to ensure the task description cannot be easily recalled from model training memory.
+6. **Flakiness Gate**: Verify that the `test_command` returns an identical result on three consecutive runs at the `base_commit`. A task that is not deterministic before the agent touches it can never produce a trustworthy score.
+7. **Contamination Screening**: Confirm the merge date falls after the contamination cutoff via immutable pinned SHAs. (Note: Index-backed similarity screening is deferred to the v2 roadmap).
 
 ### Task Schema
 
@@ -445,6 +446,12 @@ reliable. NanoBench makes this explicit with four confidence levels, ranked from
   rather than presented as equally reliable to Levels 1–3.
 Each category below is tagged with its level so the taxonomy states its own
 confidence level rather than leaving it implicit.
+
+**Human Audit Protocol for Level 4 Signals:**
+Because Level 4 signals (`hallucinated_api` and `wrong_abstraction_layer`) rely on string-matching exception types, they require periodic offline human auditing.
+- **No Score Overrides:** Humans audit the taxonomy classification only. They never set or override a task score.
+- **The 90% Agreement Rule:** The audit publishes an agreement rate between the human and the rule engine. If agreement drops below 90%, the `hallucinated_api` and `wrong_abstraction_layer` categories will temporarily collapse into a single, coarser `implementation_error` category until the parser rules are improved.
+- **Mandatory Blinding:** To prevent model bias, reviewers only see the stack trace and the diff. The provider and model names are strictly stripped from the payload. *(Note on v1 Limitations: As the sole dataset maintainer for v1, the author cannot practically blind themselves to the CLI invocations. True blinding is mandatory from the second reviewer onward).*
  
 ---
 
@@ -537,7 +544,7 @@ This workflow can be wired directly to Nanocoder releases to catch agent regress
 |---|---|---|
 | Task source | GitHub issues (automated scrape) | Real merged PRs (expert-curated) |
 | Task complexity | Mostly single-file, single-language | Multi-file, multi-language, architectural |
-| Contamination control | Weak (most tasks predate model cutoffs) | Strong (post-Jan-2026, Jaccard similarity check) |
+| Contamination control | Weak (most tasks predate model cutoffs) | Strong (post-cutoff merge dates, immutable pinned SHAs) |
 | Failure analysis | Pass/fail only | Granular diagnostic taxonomy (hallucination, abstraction mismatch, context exhaustion) |
 | Provider comparison | Not supported | First-class: same task, all providers |
 | Harness specificity | Generic (model-level) | Nanocoder-specific (full stack: model + harness) |
@@ -563,7 +570,7 @@ NanoBench is the only infrastructure that can answer either question for Nanocod
 ### Dataset Contamination
 **Risk:** An agent solves a task using training memory rather than active reasoning, artificially inflating its score.
 
-**Mitigation:** Every task is post-dated beyond relevant model knowledge cutoffs and subjected to automated similarity screening against public code indexes before inclusion. The pinned commit SHA and merge timestamp are stored in every task, making contamination claims auditable and falsifiable.
+**Mitigation:** Every task is post-dated beyond relevant model knowledge cutoffs. The pinned commit SHA and merge timestamp are stored in every task, making contamination claims auditable and falsifiable. (Note: Index-backed similarity screening will be introduced in v2).
 
 ### Environment & Dependency Drift
 **Risk:** Conflicting system dependencies or runtime mismatches cause evaluation failures unrelated to the agent's actual performance.
@@ -620,28 +627,28 @@ All alternatives inherently compromise evaluation quality, narrow the diagnostic
 
 ---
 
-## 14. Open Questions
+## 14. Governance & Curation Decisions
 
-### Orchestration Language
-Should the evaluation core remain in Python for its subprocess and data
-processing strengths, or be rewritten to share a native build toolchain
-with Nanocoder? This affects long-term maintainability and contributor
-onboarding friction.
+Following the public review window, the initial open questions regarding dataset governance and pipeline architecture have been resolved into the following protocols:
 
-### Automated vs. Human Evaluation
- 
-Scoring is fully automated via native test suites, and category assignment is
-fully automated via the deterministic rule engine in §9.1. The one part of the taxonomy that is not yet independently validated is Level 4: the string-matching rules that separate `hallucinated_api` from `wrong_abstraction_layer`. Before these two categories are treated as trustworthy at scale, a human-reviewed spot-check against a sample of runs is needed — specifically checking whether the exception-type matching rule agrees with a human reading the same stack trace. This is a narrower and more concrete question than general human-in-the-loop review of partial-resolution scores, and it is the one open item that most directly affects whether the taxonomy's headline categories can be cited with confidence.
+### Dataset Ownership & Governance
+The dataset is maintainer-owned through v1 and v2, with `@RONAK-AI647` serving as the dataset maintainer. Transition to collective governance is deferred to v3 when community curation formally opens.New domains are proposed via PR against the repository registry. A domain onboards if the target repository scores 12 or higher on the §7 matrix and the domain is not already represented. The maintainer decides, and the reasoning is recorded in the PR itself so the decision is auditable later.Disputes regarding scores or tasks are raised as issues on the `nanobench` repository. The dataset maintainer rules on the dispute and records the outcome in the task file itself, so the resolution history travels with the task. Unresolved disputes escalate to Will.
 
-### Community Contribution Gates
-What programmatic validation requirements must a community-submitted task
-satisfy before entering the dataset? The bar needs to be high enough to
-protect dataset integrity without being so high it discourages contribution.
+### The JSON Integration Contract
+The evaluation core's orchestration language is the maintainer's choice. However, the integration contract is strictly mandated: Nanocoder's `--json` run report must be consumed through a checked-in schema. CI must validate a real payload against this schema and fail on mismatch to prevent silent taxonomy degradation. The pinned Nanocoder version is recorded in every result set.
 
-### Long-Term Dataset Governance
-As the dataset scales, what is the formal process for onboarding new
-architectural domains, retiring outdated tasks, and resolving scoring
-disputes? This is a collective-level decision, not a technical one.
+### Community Contribution Validation Gates
+Task submissions pass through a bifurcated validation pipeline:
+1. **Automated Hard Gates (CI):** Auto-rejections with no human-in-the-loop. Includes schema validation against the versioned §7 schema, reproducible `base_commit` cloning, the Verification Gate (test suite fails at `base_commit` and passes after the golden patch), the Flakiness Gate (`test_command` returns an identical result on 3 consecutive runs at `base_commit`), confirmation that the merge date falls after the contamination cutoff, and the repository scoring matrix reaching 12/20 on the automatically computable axes.
+2. **Maintainer Judgment:** Subjective curation checks. Includes complexity tier assignment, domain novelty and overall dataset balance, whether the `problem_statement` leaks its own solution, and whether `required_files` is actually correct and complete.
+
+Gate failures report which gate failed and how to fix it, rather than a bare rejection. Maintainers help contributors clear gates rather than closing submissions outright — a deliberate choice given that this whitepaper itself arrived from outside the core team.
+
+### Retiring Tasks
+Tasks are retired, never deleted. Triggers for retirement include a task failing the flakiness gate post-onboarding, an upstream repository rewriting history, or post-hoc contamination. A retired task is marked `retired` with a recorded reason and drops out of the next dataset tag. Existing version tags are never rewritten.
+
+### Scoring & Classification Audit
+Scoring remains fully automated; no human judgement sets or overrides a task score. A periodic, off-critical-path human audit checks Level 4 classification agreement (`hallucinated_api` vs. `wrong_abstraction_layer`) against the rule engine's output. If agreement drops below 90%, both categories collapse into a single, coarser `implementation_error` category until the parsing rules improve. Reviewer blinding to provider and model is mandatory from the second reviewer onward. Full protocol in §9.2.
 
 ---
 
