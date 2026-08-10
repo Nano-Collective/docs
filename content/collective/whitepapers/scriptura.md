@@ -133,6 +133,14 @@ Questions 1 (naming) and 2 (default provider) were settled during the review win
 
 3. **Plugin system policy.** Reframed during review: the original question pointed at a VS Code extension host that does not exist. Scriptura is a Qt editor shell, not a VS Code fork, so there is no extension host to keep or restrict (covered in more detail in the separate issue about the VS Code premise). The question that is actually live is about the custom plugin system the repository already has, whose plugin IDs sit under `com.scriptura.*`: what surfaces can a plugin touch, how are plugin capabilities and trust scoped, and does the system stay free of the Copilot-style assumptions a VS Code host would inherit? Full access is more compatible, less safe. Unresolved.
 
+## Must-do(s)
+
+- mainwindow.cpp:888 reads settings straight out of QSettings, ** MUST CHANGE **
+- Create Rust<---> typescript communication layer ** MUST IMPLEMENT **
+- USE ** Nanocoder as the backend AI layer **
+- ** exclude Nanocoder existing TUI **
+- ** TESTING **
+
 ## Next steps
 
 For this whitepaper to graduate into docs:
