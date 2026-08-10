@@ -135,11 +135,21 @@ Questions 1 (naming) and 2 (default provider) were settled during the review win
 
 ## Must-do(s)
 
-- mainwindow.cpp:888 reads settings straight out of QSettings, ** MUST CHANGE **
-- Create Rust<---> typescript communication layer ** MUST IMPLEMENT **
-- USE ** Nanocoder as the backend AI layer **
-- ** exclude Nanocoder existing TUI **
-- ** TESTING **
+Must exist in v1 and after throughout:
+- mainwindow.cpp:888 reads settings straight out of QSettings, **MUST CHANGE**
+- Create Rust<---> typescript communication layer **MUST IMPLEMENT**
+- USE **Nanocoder as the backend AI layer**
+- **exclude Nanocoder existing TUI**
+- UI must **stay C++/QT**
+- all backend must route through **RUST BACKEND LAYER, INCLUDE NANOCODER-AI PARTS**
+- **TESTING**
+
+## could-do(s)
+
+good-to-have features but not for v1: 
+- intergrate with these existing works:
+  - **[Private Inference Proxy](/collective/whitepapers/private-inference-proxy)**, if it lands, is a natural remote provider adapter. A user who needs cloud capability for the hard agent pass but wants audit logging and scrubbing routes Scriptura's remote calls through the proxy rather than directly at a vendor. The provider abstraction is exactly the seam this plugs into.
+  - **[Sentinel](https://github.com/Nano-Collective/sentinel)** composes the other way: Scriptura could invoke a Sentinel audit pass against the current workspace as a command, surfacing findings as in-editor diagnostics rather than GitHub issues.
 
 ## Next steps
 
