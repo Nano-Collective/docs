@@ -94,6 +94,7 @@ This is the long picture from the collective's introduction page expressed as an
 A deliberately narrow v1, shipped well.
 
 - **An editor built on the open Scriptura sources.**
+  - Scriptura is an editor built from scratch on Qt and Rust, the base already exists and is substantial, and a rewrite is off the table.
 - **The provider abstraction with at least two adapters shipped:** a local Ollama/LM Studio adapter and an OpenAI-compatible adapter. Nanocoder wired in as the agent backend.
 - **The inline completion loop** against the local provider, with tab-to-accept and latency treated as a primary metric.
 - **The chat and inline-edit surfaces** with `@codebase` retrieval through the local context engine.
@@ -105,7 +106,7 @@ A deliberately narrow v1, shipped well.
 What v1 ships is "an open editor with the Cursor feel, a real provider contract, and a local-first default that holds." Not a hosted service. Not a model. Not an enterprise control plane.
 
 ## What it is not (in v1)
-
+- **Not another rewrite of UI shell** Scriptura is an editor built from scratch on Qt and Rust, the base already exists and is substantial, and a rewrite is off the table.
 - **Not a Copilot replacement that phones home.** The default install makes no remote calls. Remote providers are opt-in configuration, never hidden behaviour.
 - **Not a model trainer or a model vendor.** Scriptura uses whichever providers the user points it at. The collective does not train or ship an editor-tuned model of its own in v1.
 - **Not a from-scratch editor.** It is built on the existing base (scriptura), maintainers should not . A clean-room reimplementation would forfeit that inheritance for no gain.
