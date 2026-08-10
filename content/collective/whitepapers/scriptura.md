@@ -58,7 +58,7 @@ The three values that govern every Nano Collective project apply:
 
 ## Architecture
 
-The current implementation consists of full C++ Qt based editor shell, with no AI layer yet.
+The current implementation consists of full C++ Qt based editor shell, with **a rough sketch of AI inline system, that is barely functional, negligible compare to the final product**.
 
 The proposed solution will be adding a widget to the editor shell that provides AI functionality, by integrating with existing nanocoder agent (which is in typescript)
 
@@ -94,6 +94,7 @@ This is the long picture from the collective's introduction page expressed as an
 A deliberately narrow v1, shipped well.
 
 - **An editor built on the open Scriptura sources.**
+  - Scriptura is an editor built from scratch on Qt and Rust, the base already exists and is substantial, and a rewrite is off the table.
 - **The provider abstraction with at least two adapters shipped:** a local Ollama/LM Studio adapter and an OpenAI-compatible adapter. Nanocoder wired in as the agent backend.
 - **The inline completion loop** against the local provider, with tab-to-accept and latency treated as a primary metric.
 - **The chat and inline-edit surfaces** with `@codebase` retrieval through the local context engine.
@@ -105,10 +106,10 @@ A deliberately narrow v1, shipped well.
 What v1 ships is "an open editor with the Cursor feel, a real provider contract, and a local-first default that holds." Not a hosted service. Not a model. Not an enterprise control plane.
 
 ## What it is not (in v1)
-
+- **Not another rewrite of UI shell** Scriptura is an editor built from scratch on Qt and Rust, the base already exists and is substantial, and a rewrite is off the table.
 - **Not a Copilot replacement that phones home.** The default install makes no remote calls. Remote providers are opt-in configuration, never hidden behaviour.
 - **Not a model trainer or a model vendor.** Scriptura uses whichever providers the user points it at. The collective does not train or ship an editor-tuned model of its own in v1.
-- **Not a from-scratch editor.** It is built on the existing base. A clean-room reimplementation would forfeit that inheritance for no gain.
+- **Not a from-scratch editor.** It is built on the existing base (scriptura), maintainers should not . A clean-room reimplementation would forfeit that inheritance for no gain.
 - **Not a guaranteed-latency product on weak hardware.** Local-first means the feel depends on the local model. On a machine too small to run a completion model, the experience degrades; the project documents the floor rather than hiding it.
 - **Not a replacement for terminal agents.** Nanocoder in the terminal still wins for some workflows. Scriptura is the in-editor surface, not the only surface.
 - **Not a semantic retrieval product in v1.** The context engine uses lexical and symbol-aware search only. Embedding-based retrieval is a future idea, scoped out of v1 to keep the local-first promise honest and the implementation within reach.
@@ -116,9 +117,9 @@ What v1 ships is "an open editor with the Cursor feel, a real provider contract,
 ## Alternatives considered
 
 - **Fork Cursor directly.** Impossible: Cursor is closed source. Its value is in the proprietary layer we are precisely trying to replace. No fork path exists.
-- **Ship only as a VS Code extension, not a fork.** Already exists, but has less potential for expansion, integration, and customization.
-- **Fork VS Code.** Possible, but more performance overhead, which is not good for a machine already running a local LLM.
-- **Fork IntelliJ IDEA.** Even worse performance and an even harder tech stack (Java-based), with an even more restricted architecture for expansion compared to VS Code.
+- **Ship only as a VS Code extension, not a fork.** Already exists, but has less potential for expansion, integration, and customization( restricted by Microsoft's existing frame).
+- **Fork VS Code.** Possible, but more performance overhead (although classified as "lightweight" but not friendly toward normal users without extremely good hardware to run alongside with ollama or other local LLM providers) , which is not good for a machine already running a local LLM.
+- **Fork IntelliJ IDEA.** Even worst performance (heavy weight) and an even harder tech stack (Java-based), with an even more restricted architecture (forced java-based editor APIs) for expansion compared to VS Code, not favorable at all for local models.
 
 ## Resolved in review
 
@@ -132,6 +133,36 @@ These questions were open when the whitepaper was published and were settled dur
 Questions 1 (naming) and 2 (default provider) were settled during the review window and are recorded above. What remains open:
 
 3. **Plugin system policy.** Reframed during review: the original question pointed at a VS Code extension host that does not exist. Scriptura is a Qt editor shell, not a VS Code fork, so there is no extension host to keep or restrict (covered in more detail in the separate issue about the VS Code premise). The question that is actually live is about the custom plugin system the repository already has, whose plugin IDs sit under `com.scriptura.*`: what surfaces can a plugin touch, how are plugin capabilities and trust scoped, and does the system stay free of the Copilot-style assumptions a VS Code host would inherit? Full access is more compatible, less safe. Unresolved.
+
+## Must-do(s)
+
+Must exist in v1 and after throughout:
+
+
+- **MUST update** docs of scriptura to match Nano-collective's brand guidelines
+- find some contributors, at least **one more core maintainer** (**jason1015-coder alone not practical to do all work**) by a issue in the transferred repo to Nano-collective
+- mainwindow.cpp:888 reads settings straight out of QSettings, **MUST CHANGE** to:
+  - OS keychain
+  - encrypt it (personal key)
+- Create Rust<---> typescript communication layer **MUST BE IMPLEMENTED**
+- USE **Nanocoder as the backend AI layer** instead of current existing , roughly sketched AI layer
+- **exclude Nanocoder existing TUI**
+- UI must **stay C++/QT**
+- all backend must route through **RUST BACKEND LAYER, INCLUDE NANOCODER-AI PARTS** (already did, keep this going)
+- ai/enabled defaults to false, so a fresh install makes no model calls at all. (already did, keep this going)
+- ai/endpoint defaults to http://localhost:11434/api/chat, so the first thing it reaches for is a local model. (already did, keep this going)
+- ai/provider defaults to ollama. (already did, keep this going)
+- The plugin manifest declares network.access rather than assuming it. (already did, keep this going)
+- **TESTING**
+
+## could-do(s)
+
+good-to-have features but not for v1: 
+- integrate  with these existing works:
+  - **[Private Inference Proxy](/collective/whitepapers/private-inference-proxy)**, if it lands, is a natural remote provider adapter. A user who needs cloud capability for the hard agent pass but wants audit logging and scrubbing routes Scriptura's remote calls through the proxy rather than directly at a vendor. The provider abstraction is exactly the seam this plugs into.
+  - **[Sentinel](https://github.com/Nano-Collective/sentinel)** composes the other way: Scriptura could invoke a Sentinel audit pass against the current workspace as a command, surfacing findings as in-editor diagnostics rather than GitHub issues
+  - appear on nano-collective website for direct downloading : [webite](https://nanocollective.org) , not strictly needed but makes the project feels even more professional , yet more publicly accessible .
+- **VS code extension and settings compatibility**: [Zed](https://github.com/zed-industries/zed) proves it is possible but not strictly required , could do, not enforced .
 
 ## Next steps
 
