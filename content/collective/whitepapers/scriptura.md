@@ -138,11 +138,13 @@ Questions 1 (naming) and 2 (default provider) were settled during the review win
 
 Must exist in v1 and after throughout:
 
+
+- **MUST update** docs of scriptura to match Nano-collective's brand guidelines
 - find some contributors, at least **one more core maintainer** (**jason1015-coder alone not practical to do all work**) by a issue in the transferred repo to Nano-collective
 - mainwindow.cpp:888 reads settings straight out of QSettings, **MUST CHANGE** to:
   - OS keychain
   - encrypt it (personal key)
-- Create Rust<---> typescript communication layer **MUST IMPLEMENT**
+- Create Rust<---> typescript communication layer **MUST BE IMPLEMENTED**
 - USE **Nanocoder as the backend AI layer** instead of current existing , roughly sketched AI layer
 - **exclude Nanocoder existing TUI**
 - UI must **stay C++/QT**
