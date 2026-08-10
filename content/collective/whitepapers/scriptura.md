@@ -58,7 +58,7 @@ The three values that govern every Nano Collective project apply:
 
 ## Architecture
 
-The current implementation consists of full C++ Qt based editor shell, with no AI layer yet.
+The current implementation consists of full C++ Qt based editor shell, with **a rough sketch of AI inline system, that is barely functional, negligible compare to the final product**.
 
 The proposed solution will be adding a widget to the editor shell that provides AI functionality, by integrating with existing nanocoder agent (which is in typescript)
 
@@ -143,7 +143,7 @@ Must exist in v1 and after throughout:
   - OS keychain
   - encrypt it (personal key)
 - Create Rust<---> typescript communication layer **MUST IMPLEMENT**
-- USE **Nanocoder as the backend AI layer**
+- USE **Nanocoder as the backend AI layer** instead of current existing , roughly sketched AI layer
 - **exclude Nanocoder existing TUI**
 - UI must **stay C++/QT**
 - all backend must route through **RUST BACKEND LAYER, INCLUDE NANOCODER-AI PARTS** (already did, keep this going)
@@ -160,6 +160,7 @@ good-to-have features but not for v1:
   - **[Private Inference Proxy](/collective/whitepapers/private-inference-proxy)**, if it lands, is a natural remote provider adapter. A user who needs cloud capability for the hard agent pass but wants audit logging and scrubbing routes Scriptura's remote calls through the proxy rather than directly at a vendor. The provider abstraction is exactly the seam this plugs into.
   - **[Sentinel](https://github.com/Nano-Collective/sentinel)** composes the other way: Scriptura could invoke a Sentinel audit pass against the current workspace as a command, surfacing findings as in-editor diagnostics rather than GitHub issues
   - appear on nano-collective website for direct downloading : [webite](https://nanocollective.org) , not strictly needed but makes the project feels even more professional , yet more publicly accessible .
+- **VS code extension and settings compatibility**: [Zed](https://github.com/zed-industries/zed) proves it is possible but not strictly required , could do, not enforced .
 
 ## Next steps
 
