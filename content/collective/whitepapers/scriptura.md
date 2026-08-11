@@ -37,7 +37,7 @@ Scriptura is built for developers who want the Cursor experience without the Cur
 - **Local-first developers.** People who already run Ollama, LM Studio, or llama.cpp and want their editor's completions and agents to run against those models. This is the loudest case for the project and the natural first design partner.
 - **Privacy-sensitive teams.** Organisations that cannot send source to a third party, who need the editor to prove (not promise) that the code stays local unless they explicitly route it elsewhere.
 - **Model-flexible developers.** People who want to swap providers per task: a small local model for completions, a large remote model for the hard agent pass, a self-hosted proxy for audit logging. The provider abstraction is for them.
-- **VS Code refugees.** Developers who like the VS Code editing model but not the telemetry, the vendor lock, or the copilot billing, and who want an open editor that inherits the extension ecosystem rather than forking it badly.
+
 
 What the project is explicitly **not** optimised for, at least in v1:
 
