@@ -113,6 +113,7 @@ What v1 ships is "an open editor with the Cursor feel, a real provider contract,
 - **Not a guaranteed-latency product on weak hardware.** Local-first means the feel depends on the local model. On a machine too small to run a completion model, the experience degrades; the project documents the floor rather than hiding it.
 - **Not a replacement for terminal agents.** Nanocoder in the terminal still wins for some workflows. Scriptura is the in-editor surface, not the only surface.
 - **Not a semantic retrieval product in v1.** The context engine uses lexical and symbol-aware search only. Embedding-based retrieval is a future idea, scoped out of v1 to keep the local-first promise honest and the implementation within reach.
+- **AI layer is not a plugin** There is no point remaking another plugin when vs code extension exist, we need INTEGRTION
 
 ## Alternatives considered
 
