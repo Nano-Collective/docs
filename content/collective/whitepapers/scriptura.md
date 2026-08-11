@@ -1,5 +1,5 @@
 ---
-title: "Scriptura (working title)"
+title: "Scriptura"
 description: "A working whitepaper for an open source, local-first AI code editor that replaces the proprietary editing and agent experience of Cursor with a model-agnostic, privacy-respecting shell built on open tooling"
 sidebar_order: 7
 proposer: "Jason-Chiu"
