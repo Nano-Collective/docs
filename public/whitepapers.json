@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-13T05:46:33.581Z",
+  "generated_at": "2026-08-13T16:21:25.631Z",
   "count": 7,
   "whitepapers": [
     {
@@ -68,7 +68,7 @@
     },
     {
       "slug": "scriptura",
-      "title": "Scriptura (working title)",
+      "title": "Scriptura",
       "description": "A working whitepaper for an open source, local-first AI code editor that replaces the proprietary editing and agent experience of Cursor with a model-agnostic, privacy-respecting shell built on open tooling",
       "proposer": "Jason-Chiu",
       "proposer_github": "jason1015-coder",
