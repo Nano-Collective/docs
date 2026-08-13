@@ -1,5 +1,5 @@
 ---
-title: "Scriptura (working title)"
+title: "Scriptura"
 description: "A working whitepaper for an open source, local-first AI code editor that replaces the proprietary editing and agent experience of Cursor with a model-agnostic, privacy-respecting shell built on open tooling"
 sidebar_order: 7
 proposer: "Jason-Chiu"
@@ -37,7 +37,7 @@ Scriptura is built for developers who want the Cursor experience without the Cur
 - **Local-first developers.** People who already run Ollama, LM Studio, or llama.cpp and want their editor's completions and agents to run against those models. This is the loudest case for the project and the natural first design partner.
 - **Privacy-sensitive teams.** Organisations that cannot send source to a third party, who need the editor to prove (not promise) that the code stays local unless they explicitly route it elsewhere.
 - **Model-flexible developers.** People who want to swap providers per task: a small local model for completions, a large remote model for the hard agent pass, a self-hosted proxy for audit logging. The provider abstraction is for them.
-- **VS Code refugees.** Developers who like the VS Code editing model but not the telemetry, the vendor lock, or the copilot billing, and who want an open editor that inherits the extension ecosystem rather than forking it badly.
+
 
 What the project is explicitly **not** optimised for, at least in v1:
 
@@ -113,6 +113,7 @@ What v1 ships is "an open editor with the Cursor feel, a real provider contract,
 - **Not a guaranteed-latency product on weak hardware.** Local-first means the feel depends on the local model. On a machine too small to run a completion model, the experience degrades; the project documents the floor rather than hiding it.
 - **Not a replacement for terminal agents.** Nanocoder in the terminal still wins for some workflows. Scriptura is the in-editor surface, not the only surface.
 - **Not a semantic retrieval product in v1.** The context engine uses lexical and symbol-aware search only. Embedding-based retrieval is a future idea, scoped out of v1 to keep the local-first promise honest and the implementation within reach.
+- **AI layer is not a plugin** There is no point remaking another plugin when vs code extension exist, we need INTEGRTION
 
 ## Alternatives considered
 
