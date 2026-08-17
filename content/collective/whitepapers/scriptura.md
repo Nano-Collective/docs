@@ -139,33 +139,21 @@ Questions 1 (naming) and 2 (default provider) were settled during the review win
 
 Must exist in v1 and after throughout:
 
-
+- [ ] update the apple specfic secrets for nanocoder for a worked MacOS app registery
 - [ ] **MUST update** docs of scriptura to match Nano-collective's brand guidelines
-
 - [ ] find some contributors, at least **one more core maintainer** (**jason1015-coder alone not practical to do all work**) by a issue in the transferred repo to Nano-collective
-
 - [ ] mainwindow.cpp:888 reads settings straight out of QSettings, **MUST CHANGE** to:
   - OS keychain
   - encrypt it (personal key)
-
 - [ ] Create Rust<---> typescript communication layer **MUST BE IMPLEMENTED**
-
 - [ ] use **Nanocoder as the backend AI layer** instead of current existing , roughly sketched AI layer
-
 - [ ] **exclude Nanocoder existing TUI**
-
 - [ ] UI must **stay C++/QT**
-
 - [ ] all backend must route through **RUST BACKEND LAYER, INCLUDE NANOCODER-AI PARTS** (already did, keep this going)
-
 - [ ] ai/enabled defaults to false, so a fresh install makes no model calls at all. (already did, keep this going)
-
 - [ ] ai/endpoint defaults to http://localhost:11434/api/chat, so the first thing it reaches for is a local model. (already did, keep this going)
-
 - [ ] ai/provider defaults to ollama. (already did, keep this going)
-
 - [ ] The plugin manifest declares network.access rather than assuming it. (already did, keep this going)
-
 - [ ] **TESTING** before v1
 
 ## could-do(s)
