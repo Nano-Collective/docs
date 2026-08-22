@@ -110,6 +110,7 @@ What v1 ships is "an open editor with the Cursor feel, a real provider contract,
 - **Not a Copilot replacement that phones home.** The default install makes no remote calls. Remote providers are opt-in configuration, never hidden behaviour.
 - **Not a model trainer or a model vendor.** Scriptura uses whichever providers the user points it at. The collective does not train or ship an editor-tuned model of its own in v1.
 - **Not a from-scratch editor.** It is built on the existing base (scriptura), maintainers should not . A clean-room reimplementation would forfeit that inheritance for no gain.
+- **Not a competitor to VScode, Jetbrains IDEs, Cursor, windsurf, Kiro, or Devin etc. AT LEAST FOR v1** The editor will not be able to competing direct in the market in v1, although we aim for similar AI editing features 
 - **Not a guaranteed-latency product on weak hardware.** Local-first means the feel depends on the local model. On a machine too small to run a completion model, the experience degrades; the project documents the floor rather than hiding it.
 - **Not a replacement for terminal agents.** Nanocoder in the terminal still wins for some workflows. Scriptura is the in-editor surface, not the only surface.
 - **Not a semantic retrieval product in v1.** The context engine uses lexical and symbol-aware search only. Embedding-based retrieval is a future idea, scoped out of v1 to keep the local-first promise honest and the implementation within reach.
@@ -117,7 +118,7 @@ What v1 ships is "an open editor with the Cursor feel, a real provider contract,
 
 ## Alternatives considered
 
-- **Fork Cursor directly.** Impossible: Cursor is closed source. Its value is in the proprietary layer we are precisely trying to replace. No fork path exists.
+- **Fork Cursor, windsurf(devin desktop) directly.** Impossible: Cursor and windsurf are closed sourced. Its values are in the proprietary layers we are precisely trying to replace. No fork paths exist.
 - **Ship only as a VS Code extension, not a fork.** Already exists, but has less potential for expansion, integration, and customization( restricted by Microsoft's existing frame).
 - **Fork VS Code.** Possible, but more performance overhead (although classified as "lightweight" but not friendly toward normal users without extremely good hardware to run alongside with ollama or other local LLM providers) , which is not good for a machine already running a local LLM.
 - **Fork IntelliJ IDEA.** Even worst performance (heavy weight) and an even harder tech stack (Java-based), with an even more restricted architecture (forced java-based editor APIs) for expansion compared to VS Code, not favorable at all for local models.
