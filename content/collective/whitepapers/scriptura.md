@@ -67,7 +67,7 @@ All outbound AI network calls are routed through the Rust backend, where the per
 
 ### Why this shape is the point
 
-A proprietary editor could do steps 2-4 with a better model. What it cannot do is step 5 by default, or let the developer swap the model in steps 2-4 for one they own. The combination of "Cursor feel" plus "local by default" plus "any model behind a real contract" is the part no one has shipped openly. The context engine and the agent loop are the hard parts; the provider abstraction is what makes the whole thing mean something.
+The combination of "Cursor feel" plus "local by default" plus "any model behind a real contract" is the part no one has shipped openly. The context engine and the agent loop are the hard parts; the provider abstraction is what makes the whole thing mean something.
 
 ### Context engine
 
@@ -110,6 +110,7 @@ What v1 ships is "an open editor with the Cursor feel, a real provider contract,
 - **Not a Copilot replacement that phones home.** The default install makes no remote calls. Remote providers are opt-in configuration, never hidden behaviour.
 - **Not a model trainer or a model vendor.** Scriptura uses whichever providers the user points it at. The collective does not train or ship an editor-tuned model of its own in v1.
 - **Not a from-scratch editor.** It is built on the existing base (scriptura), maintainers should not . A clean-room reimplementation would forfeit that inheritance for no gain.
+- **Not a competitor to VScode, Jetbrains IDEs, Cursor, windsurf, Kiro, or Devin etc. AT LEAST FOR v1** The editor will not be able to competing direct in the market in v1, although we aim for similar AI editing features 
 - **Not a guaranteed-latency product on weak hardware.** Local-first means the feel depends on the local model. On a machine too small to run a completion model, the experience degrades; the project documents the floor rather than hiding it.
 - **Not a replacement for terminal agents.** Nanocoder in the terminal still wins for some workflows. Scriptura is the in-editor surface, not the only surface.
 - **Not a semantic retrieval product in v1.** The context engine uses lexical and symbol-aware search only. Embedding-based retrieval is a future idea, scoped out of v1 to keep the local-first promise honest and the implementation within reach.
@@ -117,7 +118,7 @@ What v1 ships is "an open editor with the Cursor feel, a real provider contract,
 
 ## Alternatives considered
 
-- **Fork Cursor directly.** Impossible: Cursor is closed source. Its value is in the proprietary layer we are precisely trying to replace. No fork path exists.
+- **Fork Cursor, windsurf(devin desktop) directly.** Impossible: Cursor and windsurf are closed sourced. Its values are in the proprietary layers we are precisely trying to replace. No fork paths exist.
 - **Ship only as a VS Code extension, not a fork.** Already exists, but has less potential for expansion, integration, and customization( restricted by Microsoft's existing frame).
 - **Fork VS Code.** Possible, but more performance overhead (although classified as "lightweight" but not friendly toward normal users without extremely good hardware to run alongside with ollama or other local LLM providers) , which is not good for a machine already running a local LLM.
 - **Fork IntelliJ IDEA.** Even worst performance (heavy weight) and an even harder tech stack (Java-based), with an even more restricted architecture (forced java-based editor APIs) for expansion compared to VS Code, not favorable at all for local models.
@@ -139,22 +140,22 @@ Questions 1 (naming) and 2 (default provider) were settled during the review win
 
 Must exist in v1 and after throughout:
 
-
-- **MUST update** docs of scriptura to match Nano-collective's brand guidelines
-- find some contributors, at least **one more core maintainer** (**jason1015-coder alone not practical to do all work**) by a issue in the transferred repo to Nano-collective
-- mainwindow.cpp:888 reads settings straight out of QSettings, **MUST CHANGE** to:
+- [ ] update the apple specfic secrets for nanocoder for a worked MacOS app registery
+- [ ] **MUST update** docs of scriptura to match Nano-collective's brand guidelines
+- [ ] find some contributors, at least **one more core maintainer** (**jason1015-coder alone not practical to do all work**) by a issue in the transferred repo to Nano-collective
+- [ ] mainwindow.cpp:888 reads settings straight out of QSettings, **MUST CHANGE** to:
   - OS keychain
   - encrypt it (personal key)
-- Create Rust<---> typescript communication layer **MUST BE IMPLEMENTED**
-- USE **Nanocoder as the backend AI layer** instead of current existing , roughly sketched AI layer
-- **exclude Nanocoder existing TUI**
-- UI must **stay C++/QT**
-- all backend must route through **RUST BACKEND LAYER, INCLUDE NANOCODER-AI PARTS** (already did, keep this going)
-- ai/enabled defaults to false, so a fresh install makes no model calls at all. (already did, keep this going)
-- ai/endpoint defaults to http://localhost:11434/api/chat, so the first thing it reaches for is a local model. (already did, keep this going)
-- ai/provider defaults to ollama. (already did, keep this going)
-- The plugin manifest declares network.access rather than assuming it. (already did, keep this going)
-- **TESTING**
+- [ ] Create Rust<---> typescript communication layer **MUST BE IMPLEMENTED**
+- [ ] use **Nanocoder as the backend AI layer** instead of current existing , roughly sketched AI layer
+- [ ] **exclude Nanocoder existing TUI**
+- [ ] UI must **stay C++/QT**
+- [ ] all backend must route through **RUST BACKEND LAYER, INCLUDE NANOCODER-AI PARTS** (already did, keep this going)
+- [ ] ai/enabled defaults to false, so a fresh install makes no model calls at all. (already did, keep this going)
+- [ ] ai/endpoint defaults to http://localhost:11434/api/chat, so the first thing it reaches for is a local model. (already did, keep this going)
+- [ ] ai/provider defaults to ollama. (already did, keep this going)
+- [ ] The plugin manifest declares network.access rather than assuming it. (already did, keep this going)
+- [ ] **TESTING** before v1
 
 ## could-do(s)
 
