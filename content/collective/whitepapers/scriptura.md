@@ -67,7 +67,7 @@ All outbound AI network calls are routed through the Rust backend, where the per
 
 ### Why this shape is the point
 
-A proprietary editor could do steps 2-4 with a better model. What it cannot do is step 5 by default, or let the developer swap the model in steps 2-4 for one they own. The combination of "Cursor feel" plus "local by default" plus "any model behind a real contract" is the part no one has shipped openly. The context engine and the agent loop are the hard parts; the provider abstraction is what makes the whole thing mean something.
+The combination of "Cursor feel" plus "local by default" plus "any model behind a real contract" is the part no one has shipped openly. The context engine and the agent loop are the hard parts; the provider abstraction is what makes the whole thing mean something.
 
 ### Context engine
 
