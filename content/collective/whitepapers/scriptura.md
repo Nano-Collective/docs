@@ -165,6 +165,7 @@ good-to-have features but not for v1:
   - **[Sentinel](https://github.com/Nano-Collective/sentinel)** composes the other way: Scriptura could invoke a Sentinel audit pass against the current workspace as a command, surfacing findings as in-editor diagnostics rather than GitHub issues
   - appear on nano-collective website for direct downloading : [webite](https://nanocollective.org) , not strictly needed but makes the project feels even more professional , yet more publicly accessible .
 - **VS code extension and settings compatibility**: [Zed](https://github.com/zed-industries/zed) proves it is possible but not strictly required , could do, not enforced .
+- **drop current prototype of plugin architecture**: could do if the plugin architecture face maintaining, security or other problems, or improving the current one 
 
 ## Next steps
 
