@@ -172,7 +172,7 @@ For this whitepaper to graduate into docs:
 - [x] Resolve the naming question. Settled: keep Scriptura.
 - [ ] Write the provider contract in enough detail that "model-agnostic" is a testable claim, not a slogan.
 - [x] Decide the out-of-the-box provider flow for a user with no local model. Settled: local by default, no remote fallback; unreachable-endpoint handling scoped into v1.
-- [ ] Settle the plugin system policy (reframed from the extension-host question; the VS Code host premise does not exist).
+- [x] Settle the plugin system policy (reframed from the extension-host question; the VS Code host premise does not exist). settled: a could do, not must do
 - [ ] Transfer the repository from `jason1015-coder/scriptura` to `Nano-Collective`, after which the [Creating a New Project](/collective/projects/creating-a-new-project) playbook takes over.
 
 
