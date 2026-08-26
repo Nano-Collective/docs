@@ -145,7 +145,7 @@ Must exist in v1 and after throughout:
 - mainwindow.cpp:888 reads settings straight out of QSettings, **MUST CHANGE** to:
   - OS keychain
   - encrypt it (personal key)
-- Create Rust<---> typescript communication layer **MUST BE IMPLEMENTED**
+- Create `Rust <---> typescript` communication layer **MUST BE IMPLEMENTED**
 - USE **Nanocoder as the backend AI layer** instead of current existing , roughly sketched AI layer
 - **exclude Nanocoder existing TUI**
 - UI must **stay C++/QT**
