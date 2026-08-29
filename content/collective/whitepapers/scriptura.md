@@ -6,7 +6,7 @@ proposer: "Jason-Chiu"
 proposer_github: "jason1015-coder"
 status: "In public review"
 review_opens: "2026-07-15"
-review_closes: "2026-08-24"
+review_closes: "2026-09-15"
 ---
 
 # Scriptura
@@ -15,7 +15,9 @@ This whitepaper proposes **Scriptura**: an open source code editor that reproduc
 
 The closest sibling inside the collective is Nanocoder, which is the agent runtime. Scriptura is the *editor* that wraps that runtime. Nanocoder is the engine; Scriptura is the cabin. The two are designed to compose, and the design below assumes Nanocoder as the default local backend while keeping the provider abstraction open enough that anything satisfying the contract can sit behind it.
 
-The document was published in working form so the collective could argue the shape of it before code lands. The public review window is now closed (it closed 2026-08-24). Naming, the default provider flow, and the plugin system policy were settled during the window and are recorded under "Resolved in review" below; the build-time decisions that remain are recorded in the must-do list and next steps.
+The document was published in working form so the collective could argue the shape of it before code lands. Naming, the default provider flow, and the plugin system policy were settled during the first review window and are recorded under "Resolved in review" below; the build-time decisions that remain are recorded in the must-do list and next steps.
+
+> **Review window extended to 2026-09-15.** The window originally closed on 2026-08-24. A second review pass after that date raised new issues against the design, several of them about claims in this document that do not yet hold in the repository. Those belong inside a review window rather than after one, so the window is extended rather than the build decision being taken over them. The extension is not a reset: the proposal has not pivoted, and the questions settled in the first window stay settled.
 
 The proposed editor base already exists at [Scriptura](https://github.com/jason1015-coder/scriptura)
 
@@ -202,7 +204,7 @@ These questions were open when the whitepaper was published and were settled dur
 
 ## Open questions
 
-All three questions raised during the review window — naming, the default provider, and the plugin system policy — are resolved and recorded under "Resolved in review" above. None remain open. New concerns can still be raised as issues against the docs repo; if a fundamental one surfaces, it gets added here and argued.
+All three questions raised during the first review window (naming, the default provider, and the plugin system policy) are resolved and recorded under "Resolved in review" above. A second round of feedback is open against the extended window and is tracked under the `whitepaper:scriptura` label on the docs repo. Anything fundamental that surfaces there gets added here and argued.
 
 ## Must-do(s)
 
