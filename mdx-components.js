@@ -1,3 +1,4 @@
+import { Mermaid } from "nextra/components";
 import { useMDXComponents as getThemeComponents } from "nextra-theme-docs";
 import { CollectiveDocsSection } from "./components/home/CollectiveDocsSection";
 import { HeroSection } from "./components/home/HeroSection";
@@ -33,6 +34,12 @@ export function useMDXComponents(components) {
   return {
     ...themeComponents,
     h1: H1WithMeta,
+    // Nextra's remark pipeline rewrites ```mermaid fences into <Mermaid /> but
+    // the docs theme does not supply the component, so every page must provide
+    // it or prerendering throws "Expected component `Mermaid` to be defined".
+    // Project docs are fetched from their own repos at build time, so any repo
+    // adding a mermaid diagram would otherwise break this build.
+    Mermaid,
     ProjectList,
     HeroSection,
     QuickLinksSection,
