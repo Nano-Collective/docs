@@ -18,8 +18,20 @@ The closest sibling inside the collective is Nanocoder, which is the agent runti
 The document was published in working form so the collective could argue the shape of it before code lands. Naming, the default provider flow, and the plugin system policy were settled during the first review window and are recorded under "Resolved in review" below; the build-time decisions that remain are recorded in the must-do list and next steps.
 
 > **Review window extended to 2026-09-15.** The window originally closed on 2026-08-24. A second review pass after that date raised new issues against the design, several of them about claims in this document that do not yet hold in the repository. Those belong inside a review window rather than after one, so the window is extended rather than the build decision being taken over them. The extension is not a reset: the proposal has not pivoted, and the questions settled in the first window stay settled.
+>
+> **Decision at window close.** When this window closes, the decision is recorded on this page as a short dated note with rationale — including for a no — per [How a Project Comes to Life](/collective/projects/how-a-project-comes-to-life). The decision has two substantive questions to weigh, both stated plainly in this document: whether the second-maintainer requirement (see People) is met or the solo-maintenance risk is accepted, and whether the P0 items that the second review showed to be unmet (the chokepoint, the AI-layer move, the streaming path) are committed to with dates. Rationale is mandatory either way; a window that closes without a recorded decision is a process failure, not a neutral state.
 
-The proposed editor base already exists at [Scriptura](https://github.com/jason1015-coder/scriptura)
+The proposed editor base already exists at [Scriptura](https://github.com/jason1015-coder/scriptura).
+
+## Architecture
+
+The current implementation is a complete C++ and Qt editor shell with a rough sketch of an inline AI system. That sketch is barely functional and is not the basis for what ships.
+
+The proposed solution adds a surface to the editor shell that provides AI functionality, by integrating with the existing Nanocoder agent (which is TypeScript).
+
+The target architecture routes all outbound AI network calls through the Rust backend, where the permission manager enforces the plugin-level network bitmask before any request leaves the machine. The egress log is a property of that chokepoint: every request authorised there is logged there, with a flag for local versus remote destination. Because the permission check and the log write happen in the same place, the log is not a best-effort audit surface — it is the enforcement path.
+
+**This chokepoint does not exist yet.** Today the AI completion plugin constructs its own `QNetworkAccessManager` and posts directly from C++, the permission manager is an in-memory advisory bitmask that no network path consults, and there is no egress log. The three sentences above are the design the build must deliver, and the P0 list below carries them as unmet work — they are restated here because the egress guarantee in the Principles section is only as strong as this chokepoint.
 
 ## Problem
 
@@ -57,14 +69,17 @@ The three values that govern every Nano Collective project apply:
 - **Local first.** The completion and agent loops must make local providers (Ollama, LM Studio, llama.cpp, MLX, or Nanocoder on a local model) a first-class path with latency that feels native. Remote is allowed where capability requires it and is opt-in rather than the default.
 - **Open for all.** Full source open. The provider abstraction documented in enough detail that anyone can write an adapter for a model backend we never anticipated. Anyone can run Scriptura without an account, a key we issued, or a service we host.
 
+### What a remote request contains
 
-## Architecture
+"Surfaces clearly which requests it is about to send" needs a concrete statement of what a request actually contains, per surface, because the surfaces differ sharply:
 
-The current implementation consists of full C++ Qt based editor shell, with **a rough sketch of AI inline system, that is barely functional, negligible compare to the final product**.
+- **Inline completion.** A system prompt plus the edited context suffix, capped at a small `max_tokens` (today 64). The payload is narrow by construction and worth saying so.
+- **Chat.** The user's message plus whatever `@codebase` retrieval attached. Retrieval by design pulls in files the user did not name, and on a remote provider those file contents leave the machine. The chat surface therefore shows the attached context before sending: the user can see which files are about to leave.
+- **Agent.** The task, the conversation, and any context the agent gathered — on a remote provider this is the largest and most sensitive payload, and the same pre-send context surface applies.
 
-The proposed solution will be adding a widget to the editor shell that provides AI functionality, by integrating with existing nanocoder agent (which is in typescript)
+The settings UI carries a per-surface summary of what a remote request includes, so a reader can judge the privacy claim instead of taking it. The egress log then records what was actually sent, after the fact — the pre-send surface and the post-send log are two halves of the same guarantee, not substitutes.
 
-All outbound AI network calls are routed through the Rust backend, where the permission manager enforces the plugin-level network bitmask before any request leaves the machine. The egress log is a property of that chokepoint: every request authorised here is logged here, with a flag for local versus remote destination. Because the permission check and the log write happen in the same place, the log is not a best-effort audit surface — it is the enforcement path.
+**Prompt-scrub belongs in this composition.** [Private Inference Proxy](/collective/whitepapers/private-inference-proxy) defines secret scrubbing for exactly this traffic; Scriptura's remote path is one of the callers that proxy was designed for. v1 keeps scrubbing out of Scriptura's own code (no second scrubber to maintain) but the composition is explicit: a user who needs cloud capability with scrubbing routes Scriptura's remote adapter through the proxy, and the adapter documentation says so. What Scriptura itself guarantees is the pre-send visibility above — scrubbing is a routing choice layered on top of it.
 
 
 ### Why this shape is the point
@@ -77,7 +92,7 @@ The combination of "Cursor feel" plus "local by default" plus "any model behind 
 
 The reasoning is straightforward: the editor already maintains a symbol index through its LSP client, and project search (ripgrep-style, file-content aware) already exists as a first-class command. Reusing both gives `@codebase` a distinctive local-first answer with no embedding model, no vector index, and no incremental reindex story to maintain on a codebase that changes while the user is working. The retrieval layer ranks results by symbol relevance and recency, then feeds the top matches into the prompt context.
 
-Semantic retrieval is a future idea, not a v1 dependency. It would require an embedding model, a vector store, and a strategy for keeping the index coherent as files change — all of which are solvable but none of which are needed to ship `@codebase` competently in v1. If the project later wants to layer semantic retrieval on top, the lexical layer is a strict superset: every result a semantic search can return is also findable by symbol and text search, and the architecture does not preclude adding a rerank step later.
+Semantic retrieval is a future idea, not a v1 dependency. It would require an embedding model, a vector store, and a strategy for keeping the index coherent as files change — all of which are solvable but none of which are needed to ship `@codebase` competently in v1. If the project later wants to layer semantic retrieval on top, the lexical layer is a strict superset in terms of reachability: every file in the workspace is reachable through symbol and text search, so a future semantic layer needs no different corpus, no different index lifecycle, and no different permission story. Reachability is not ranking — a query like "where do we handle expired sessions" can match a function called `pruneStaleTokens` with no lexical overlap, and only embedding search closes that vocabulary gap. The architecture does not preclude adding a rerank step later.
 
 The scope boundary is: v1 ships retrieval from the local codebase only. No remote index, no corpus beyond the open workspace, and no background indexing that runs without the user's knowledge.
 
@@ -85,9 +100,14 @@ The scope boundary is: v1 ships retrieval from the local codebase only. No remot
 
 The completion loop is the surface where the editor character of the product is decided, and the one where latency decides whether it feels native. This is a latency budget for a mid-range laptop running a local model, given as targets rather than measured numbers:
 
-- **~50 ms** editor-side: keystroke debounce, diff of the edited context, and assembly of the token window from the LSP symbol index.
+- **~400 ms** keystroke debounce (the current default, `ai/debounceMs = 400`); this is the largest editor-side term and the one the editor actually controls, so it is a tuning target rather than a fixed cost.
+- **~50 ms** editor-side after the debounce: diff of the edited context and assembly of the token window from the LSP symbol index.
 - **Model inference** dominates and is outside the editor's control; the v1 target is a default model small enough that first tokens land within the perceived-instant window.
 - **~20 ms** to mutate and paint the ghost text and the tab-to-accept path.
+
+The user-perceived total is the sum: debounce + editor work + first token + paint. "Feels native" is a property of that total, so the budget is only measurable once the debounce and the model are pinned down; the two editor-side terms together must stay well under 100 ms so the model term decides the feel.
+
+The shipped request must be streaming. Today the completion request sets `stream = false` with `max_tokens: 64`, so nothing renders until the full completion is generated — that contradicts the adapter surface below ("all operations are asynchronous and streaming") and conformance test C2, and it is the difference between a perceived-instant first line and a 64-token wait. v1 ships streaming ghost text: first tokens paint as they arrive. Cancellation is part of the same contract: a new keystroke cancels the in-flight request (the debounce already bounds how often this happens), and closing the file or losing focus cancels it too; an uncancelled stale completion is a correctness bug, not a latency nuisance.
 
 Tab-to-accept is a plain local edit: accept the ghost range, refresh the LSP index, resume. The loop makes no network call unless the user has explicitly routed completions to a remote provider, in which case it passes the same permission chokepoint and lands in the egress log like any other outbound request.
 
@@ -95,11 +115,13 @@ The hard part is not the accept path — it is building a token window that prod
 
 ### The agent loop
 
-The agent loop is Scriptura's interactive surface over Nanocoder's non-interactive mode, run across the Rust ⟷ TypeScript seam:
+The agent loop is Scriptura's interactive surface over Nanocoder, run across the Rust ⟷ TypeScript seam:
 
 1. The user asks for a change; the request and the relevant `@codebase` context are handed to Nanocoder.
 2. Nanocoder proposes edits as diffs. Scriptura renders them in place for the user to accept, reject, or edit before applying — nothing is applied silently.
 3. Command execution is scope-limited. Pre-approved commands run without sign-off; everything else surfaces as a proposed diff awaiting acceptance.
+
+The seam itself likely already exists: **Nanocoder ships an Agent Client Protocol (ACP) server** (`--acp` runs it as an ndJSON-over-stdio ACP server via `@agentclientprotocol/sdk`, with session handling, tool calls, permission requests, and a capability report, each carrying tests). ACP is the protocol Zed uses for exactly this editor-drives-agent shape. The P0 "Rust ⟷ TypeScript communication layer" is therefore expected to be an ACP client in the Rust backend plus the glue that maps ACP events to the surfaces below — a much smaller job than designing a protocol, and the remaining design question (whether the Rust side needs more than ACP exposes, for example the egress classification) is a build-time check, not a new protocol.
 
 Two properties are non-negotiable for v1. First, every file mutation goes through the visible diff surface; the agent cannot write outside what is shown to the user. Second, every model call that leaves the machine — including agent turns routed to a remote provider — passes the permission chokepoint and appears in the egress log.
 
@@ -116,6 +138,8 @@ Every provider is wrapped by an adapter implementing the same minimal interface.
 - `agent(request, context) -> stream[AgentEvent]` — agent turns; in v1 this delegates to Nanocoder and is subject to the same contract.
 - `capabilities() -> CapabilityReport` — what this model supports: streaming, tool calls, function calling, and its declared maximum context window.
 
+On the agent path there are two provider configurations that can disagree: the one the user set in Scriptura's settings, and the one Nanocoder resolves from its own configuration and `--provider`/`--model` flags when it starts. **The Scriptura configuration wins.** Scriptura passes its configured provider and model explicitly on the agent hand-off (today's ACP start already accepts `--provider`/`--model`, so the mechanism exists); Nanocoder's own config is a default, never an override. This is invariant 5 below, and it is what keeps the local-first posture intact: a user who points Scriptura at a local Ollama model must never have an agent turn land on a remote provider because Nanocoder's config said so. The egress classification in invariant 3 is made by Scriptura's layer, which now owns the decision.
+
 `capabilities()` is what stops the editor from hard-coding assumptions about any single vendor. The editor configures itself from the report; a feature the model cannot do is declared off, never silently emulated.
 
 ### Invariants
@@ -126,6 +150,7 @@ These hold for every adapter and are the legal definition of the contract:
 2. **Failure transparency.** Every error is returned as a typed error the editor can surface. There is no swallowing of failures and no degenerate empty response that masquerades as a valid completion.
 3. **Egress classification.** Every request declares its destination as local or remote, and that classification is consistent with the configured provider. Remote is explicit configuration, never implicit routing.
 4. **No fallback.** An adapter never routes to any provider other than the one configured. There is no hidden failover in the code path.
+5. **Single source of provider truth on the agent path.** The agent backend runs the provider and model configured in Scriptura, passed explicitly at hand-off. The backend's own provider configuration is a default for standalone use, never an override of Scriptura's choice, and there is no code path in which an agent turn reaches a provider Scriptura did not configure.
 
 ### Conformance suite
 
@@ -135,7 +160,8 @@ A claim is testable when there is a file an engineer can run. An adapter ships o
 - **C2 — streaming.** On a reference model, `complete()`/`chat()` return at least the minimum expected events within a fixed timeout, with first-token latency recorded against the budget above.
 - **C3 — failure path.** With the provider stopped, a request returns a typed connection error: it does not crash the shell, does not block, and surfaces in the notification centre. This is the failure-mode test for "no silent degradation".
 - **C4 — context window.** A request larger than the model's declared maximum is either trimmed or rejected per the contract — never truncated silently and never sent regardless.
-- **C5 — substitution parity.** Against a fixed golden prompt set, two distinct adapters (reference pair: a local Ollama adapter and an OpenAI-compatible adapter) differ only in model output, not in editor-side errors, crashes, or missing events.
+- **C5 — substitution parity.** Against a fixed golden prompt set, two distinct adapters (reference pair: a local Ollama adapter and an OpenAI-compatible adapter) differ only in model output, not in editor-side errors, crashes, or missing events. The agent adapter is in scope: substitution parity is measured with the agent backend receiving its provider from the caller (invariant 5), and the golden set includes an agent turn whose Scriptura-configured provider differs from the backend's own default, verifying the caller's choice wins.
+- **C6 — egress classification on the agent path.** The destination recorded for an agent turn matches the provider Scriptura configured, including when the agent backend's own configuration points elsewhere.
 
 ### What model-agnostic does not promise
 
@@ -175,7 +201,7 @@ What v1 ships is "an open editor with the Cursor feel, a real provider contract,
 - **Not a guaranteed-latency product on weak hardware.** Local-first means the feel depends on the local model. On a machine too small to run a completion model, the experience degrades; the project documents the floor rather than hiding it.
 - **Not a replacement for terminal agents.** Nanocoder in the terminal still wins for some workflows. Scriptura is the in-editor surface, not the only surface.
 - **Not a semantic retrieval product in v1.** The context engine uses lexical and symbol-aware search only. Embedding-based retrieval is a future idea, scoped out of v1 to keep the local-first promise honest and the implementation within reach.
-- **Not a plugin.** The AI layer is an integration into the Qt shell, not a plugin. There is little point remaking another plugin system when VS Code extensions already exist; the work here is integration, not a new extension host.
+- **Not a plugin.** The AI layer is an integration into the Qt shell, not a plugin. There is little point remaking another plugin system when VS Code extensions already exist; the work here is integration, not a new extension host. Today the AI layer *is* a plugin (`src/plugins/aiinlinecompletion` with a manifest declaring `network.access`), so this is a shape change to make, not a description of the current tree: moving the AI layer out of the plugin system decides what the plugin API has to expose, and it is carried on the P0 list for exactly that reason.
 
 ## Alternatives considered
 
@@ -188,9 +214,10 @@ What v1 ships is "an open editor with the Cursor feel, a real provider contract,
 
 The largest risks are not feature gaps; they are integration risks from the choice to build a Rust/Qt/C++ editor in front of a TypeScript agent runtime.
 
-- **Three-language integration (C++/Qt shell, Rust backend, TypeScript agent).** The Rust ⟷ TypeScript communication layer does not exist yet and is a hard must-do. Mitigation: keep the contract narrow and documented as a typed message protocol rather than ad hoc bridging, and build it first so everything else sits on a stable seam.
+- **Three-language integration (C++/Qt shell, Rust backend, TypeScript agent).** The Rust ⟷ TypeScript communication layer does not exist yet and is a hard must-do. Mitigation: build it as an ACP client against Nanocoder's existing ACP server rather than ad hoc bridging (see the agent loop above), and build it first so everything else sits on a stable, already-tested seam.
 - **Completion latency on the user's hardware.** Local-first means quality depends on the model the user can actually run. Mitigation: document the minimum hardware floor, default to a small completion model, and treat latency as a first-class metric with an explicit budget (see the completion loop above).
-- **Cross-cutting acceptance of a permissive plugin network model.** The custom plugin system scopes network access through an explicit declaration, but the detailed capability-and-trust policy is build-time work. Mitigation: keep the AI layer inside the Qt shell rather than exposing it as plugins, so the trust surface stays small.
+- **Cross-cutting acceptance of a permissive plugin network model.** The custom plugin system scopes network access through an explicit declaration, but the detailed capability-and-trust policy is build-time work. Mitigation: keep the AI layer inside the Qt shell rather than exposing it as plugins, so the trust surface stays small. A declared permission is not an enforcement: the declaration only becomes real when the permission manager sits on the network path (the chokepoint above), which is why the move and the chokepoint land together.
+- **Provider disagreement on the agent path.** Scriptura and the agent backend each carry a provider configuration, and a disagreement silently reroutes agent turns. Mitigation: invariant 5 (Scriptura's configuration wins, passed explicitly at hand-off) plus conformance test C6, so the failure mode is caught by the suite rather than by a user reading an egress log.
 - **Adoption risk.** Scriptura competes on a posture, not a feature; a user already on Cursor gives up polish for local-first control. Mitigation: deliver the editor feel first and the provider story as the differentiator, and ship against the local-first audience named under "Intended audience" before broadening.
 - **Settings migration regression.** `mainwindow.cpp:888` reads settings out of QSettings today; moving to the OS keychain with personal-key encryption touches the provider flow. Mitigation: do the migration as its own checkpoint so the already-implemented default provider flow is not regressed.
 
@@ -199,7 +226,7 @@ The largest risks are not feature gaps; they are integration risks from the choi
 These questions were open when the whitepaper was published and were settled during the public review window. They are recorded here as the design history.
 
 1. **Naming.** Settled: **keep Scriptura**. The name fits the collective's Latin noun convention, and there is no meaningful software collision: the npm name `scriptura` is unregistered, and no well-known editor or developer tool carries the name. The nearest namesake is a small web frontend framework under a `scriptura` GitHub org, which is not in the same category and is not widely used. The one real cost is discoverability: a GitHub search for `scriptura` returns 236 repositories, and the top hits are biblical study tools and projects named after "sola scriptura", the theological term; the word skews heavily religious in general search too, so someone looking for the editor will wade through that. That is a soft cost. Against it, the name is already embedded in the repository, the binary, the SDK headers, and the plugin ID namespace (`com.scriptura.*`), and renaming gets more expensive every week; the project will live at `Nano-Collective/scriptura`, so the taken org handle does not matter. Decision: keep it, close the question (recorded against issue #49), and let the project's own results do the search ranking work over time. It is also currently the only open question blocking the repository transfer, which is a lot of friction for a soft cost.
-2. **Default provider out of the box.** Settled: **local by default, no remote fallback** — the answer the local-first principle wants, and it is already implemented in the repository. The default configuration in `mainwindow.cpp` reads a local Ollama provider and endpoint (`http://localhost:11434/api/chat`) with a local model (`codellama`), and the feature ships disabled until the user turns it on; there is no remote fallback anywhere in the code path, and no silent degradation to a cloud provider — the exact failure mode the question was worried about. What is genuinely still open is narrower, and it is what issue #50 is circling: the first-run experience when the endpoint is not reachable. Today `requestCompletionInternal` returns silently if the endpoint or model is empty, and `onReplyFinished` drops network errors on the floor without telling the user anything; a user who enables completions without Ollama running gets no ghost text and no explanation. That part is now scoped into v1 (see v1 scope above): detect an unreachable local endpoint and offer the Ollama install one-liner, include a "test connection" action in the settings tab, and surface failed requests in the notification centre rather than letting them vanish.
+2. **Default provider out of the box.** Settled: **local by default, no remote fallback** — the answer the local-first principle wants. The default configuration in `mainwindow.cpp` reads a local Ollama provider and endpoint (`http://localhost:11434/api/chat`) with a local model (`codellama`), and the feature ships disabled until the user turns it on; there is no remote fallback anywhere in the code path, and no silent degradation to a cloud provider — the exact failure mode the question was worried about. One honesty note recorded during the second review pass: those defaults currently sit inside a commented-out block (see P1), so "already implemented" means "written and present in the tree", not "wired up and running"; wiring them is part of the P0 AI-layer move. What is genuinely still open is narrower, and it is what issue #50 is circling: the first-run experience when the endpoint is not reachable. Today `requestCompletionInternal` returns silently if the endpoint or model is empty, and `onReplyFinished` drops network errors on the floor without telling the user anything; a user who enables completions without Ollama running gets no ghost text and no explanation. That part is now scoped into v1 (see v1 scope above): detect an unreachable local endpoint and offer the Ollama install one-liner, include a "test connection" action in the settings tab, and surface failed requests in the notification centre rather than letting them vanish.
 3. **Plugin system policy.** Settled: **a could-do refinement for the build, not a v1 must-do; the capability and trust scoping stays open as build-time work.** The question was reframed during review: the original version pointed at a VS Code extension host that does not exist. Scriptura is a Qt editor shell, not a VS Code fork, so there is no extension host to keep or restrict (covered in more detail in the separate issue about the VS Code premise). The question that is actually live concerns the custom plugin system the repository already has, whose plugin IDs sit under `com.scriptura.*`: what surfaces can a plugin touch, how are plugin capabilities and trust scoped, and does the system stay free of the Copilot-style assumptions a VS Code host would inherit? Full access is more compatible but less safe. The posture that holds for v1 is: the plugin manifest declares `network.access` rather than assuming it (already implemented, kept going), the AI layer is an integration into the Qt shell rather than a plugin, and a detailed capability-and-trust policy is worked out at build time — a could-do improvement, not a gate on v1. See "Not a plugin" under "What it is not" and the must-do list.
 
 ## Open questions
@@ -212,21 +239,24 @@ Must exist in v1 and after. These are grouped by priority so it is clear what bl
 
 ### P0 — blocks a working v1
 
-- **Create the Rust ⟷ TypeScript communication layer.** Must be implemented; it is the seam every backend call relies on.
+- **Create the Rust ⟷ TypeScript communication layer.** Must be implemented; it is the seam every backend call relies on. The expected shape is an ACP client in the Rust backend against Nanocoder's existing ACP server (see the agent loop above), with a build-time check that ACP exposes everything the seam needs.
+- **Move the AI layer out of the plugin system into the Qt shell.** Today it lives at `src/plugins/aiinlinecompletion` with a `network.access` manifest; the move decides what the plugin API has to expose and is the trust-surface work the risk section points at.
+- **Put the permission manager on the network path and land the egress log there.** Today `aiinlinecompletion.cpp` constructs its own `QNetworkAccessManager` and posts directly; `permission.rs` is an advisory in-memory bitmask no network path consults (`request()` is a stub); and no egress log exists. All three must be true before the Architecture section's chokepoint claims hold: every outbound AI request authorised by the permission manager, every authorised request logged with its local/remote flag, in one place.
 - **Use Nanocoder as the backend AI layer** instead of the current, roughly sketched AI layer.
 - **Exclude Nanocoder's existing TUI.** Scriptura is its own surface; the terminal loop stays out.
 - `mainwindow.cpp:888` currently reads settings straight out of QSettings. **Must change** to the OS keychain plus encryption with a personal key — carried out as its own checkpoint so the provider flow is not regressed.
 - **Keep the UI in C++/Qt.**
-- **All backend calls route through the Rust backend layer, including the Nanocoder AI parts.** (already done; keep going)
+- **All backend calls route through the Rust backend layer, including the Nanocoder AI parts.** (not yet true — the current AI plugin bypasses Rust entirely; this lands with the chokepoint above)
+- **Ship the completion path as streaming with cancellation.** `stream = false` with `max_tokens: 64` contradicts the adapter surface and C2; first tokens must paint as they arrive, and a new keystroke, file close, or focus loss cancels the in-flight request.
 
 ### P1 — the local-first posture holds by default
 
-Already implemented; verify on every release and keep going.
+Implemented in the tree but **inside a commented-out block** (`mainwindow.cpp:888` onward — the defaults exist as code but the wiring is commented out with a TODO, so the completion object is never connected). Un-commenting and verifying them is part of the P0 AI-layer move; after that they are verify-on-every-release properties.
 
 - `ai/enabled` defaults to `false` — a fresh install makes no model calls at all.
 - `ai/endpoint` defaults to `http://localhost:11434/api/chat` — the first thing the editor reaches for is a local model.
 - `ai/provider` defaults to `ollama`.
-- The plugin manifest declares `network.access` rather than assuming it.
+- The plugin manifest declares `network.access` rather than assuming it. (Declaration only; enforcement arrives with the P0 chokepoint.)
 
 ### P2 — release readiness
 
