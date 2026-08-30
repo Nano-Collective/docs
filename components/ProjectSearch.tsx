@@ -62,6 +62,13 @@ async function importPagefind() {
 
 const INPUTS = new Set(["INPUT", "SELECT", "BUTTON", "TEXTAREA"]);
 
+// Pagefind returns a lightweight stub per matching page, and every `.data()`
+// call is its own fragment fetch. A broad query such as a single letter matches
+// most of the 700+ indexed pages, so hydrating all of them means hundreds of
+// concurrent requests plus thousands of DOM nodes in one commit, which locks up
+// the tab. Hydrate only what we actually render.
+const MAX_RENDERED_RESULTS = 20;
+
 function useMounted() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
@@ -221,10 +228,14 @@ export function ProjectSearch() {
   const showBadges = !currentProject;
 
   useEffect(() => {
+    let cancelled = false;
+
     const handleSearch = async (value: string) => {
       if (!value) {
         setResults([]);
+        setResultCount(0);
         setError("");
+        setIsLoading(false);
         return;
       }
       setIsLoading(true);
@@ -233,6 +244,7 @@ export function ProjectSearch() {
         try {
           await importPagefind();
         } catch (err) {
+          if (cancelled) return;
           const isDev = process.env.NODE_ENV !== "production";
           const errMsg = err instanceof Error ? err.message : String(err);
           const isLoadError =
@@ -253,9 +265,15 @@ export function ProjectSearch() {
         value,
         searchOptions,
       );
+      if (cancelled) return;
+      // Pagefind resolves null when a newer query superseded this one. That
+      // newer query owns the loading state, so leave it as-is.
       if (!response) return;
 
-      const data = await Promise.all(response.results.map((o) => o.data()));
+      const data = await Promise.all(
+        response.results.slice(0, MAX_RENDERED_RESULTS).map((o) => o.data()),
+      );
+      if (cancelled) return;
       setIsLoading(false);
       setError("");
       setResults(data);
@@ -263,6 +281,10 @@ export function ProjectSearch() {
     };
 
     handleSearch(deferredSearch);
+
+    return () => {
+      cancelled = true;
+    };
   }, [deferredSearch, searchOptions]);
 
   // Keyboard shortcut: / or Ctrl+K / Cmd+K
@@ -453,6 +475,9 @@ export function ProjectSearch() {
                 {resultCount} {resultCount === 1 ? "result" : "results"}
                 {currentProject ? ` in ${currentProject}` : ""}
               </span>
+              {resultCount > results.length && (
+                <span>showing first {results.length}</span>
+              )}
             </div>
             {results.map((result) => (
               <Result key={result.url} data={result} showBadge={showBadges} />
