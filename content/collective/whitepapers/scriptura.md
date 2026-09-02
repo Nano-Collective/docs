@@ -266,6 +266,7 @@ Implemented in the tree but **inside a commented-out block** (`mainwindow.cpp:88
 ### People
 
 - **Find a second core maintainer.** jason1015-coder alone cannot carry the build; open the contributor issue in the transferred Nano Collective repo. Not a product requirement, but a prerequisite for the build to keep moving.
+**COMPLETE** [sei-ngaan-zai](https://github.com/sei-ngaan-zai)as a second maintainer resolved the solo-maintaining risk
 
 ## Could-do(s)
 
@@ -290,7 +291,7 @@ When those are settled, this document becomes the foundation of the project's RE
 
 ## Getting involved
 
-Scriptura needs a second maintainer before the build can sustain velocity. If this posture is yours — a Cursor-class editor you can audit, running against your own model by default — the entry points are the open "find a core maintainer" issue in the transferred repository and the adapter-writing documentation. The contributions that help most right now: the Rust ⟷ TypeScript communication layer and the testing pass that must accompany it.
+If this posture is yours — a Cursor-class editor you can audit, running against your own model by default — the entry points are the open "find a core maintainer" issue in the transferred repository and the adapter-writing documentation. The contributions that help most right now: the Rust ⟷ TypeScript communication layer and the testing pass that must accompany it.
 
 The build-time questions that remain are tracked in the repository issues; the design above is the settled contract they work against.
 
