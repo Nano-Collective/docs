@@ -266,7 +266,8 @@ Implemented in the tree but **inside a commented-out block** (`mainwindow.cpp:88
 ### People
 
 - **Find a second core maintainer.** jason1015-coder alone cannot carry the build; open the contributor issue in the transferred Nano Collective repo. Not a product requirement, but a prerequisite for the build to keep moving.
-**COMPLETE** [sei-ngaan-zai](https://github.com/sei-ngaan-zai)as a second maintainer resolved the solo-maintaining risk
+**COMPLETE** [sei-ngaan-zai](https://github.com/sei-ngaan-zai)as a second maintainer resolved the solo-maintaining risk, 
+[MKCL](https://github.com/gk9829s3v25-wq)is able to do contributor services, assigning issues, marketing, docs etc.
 
 ## Could-do(s)
 
