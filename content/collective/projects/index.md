@@ -30,5 +30,6 @@ Each project has its own dedicated documentation. The pages in this section cove
 - **[Contributing](/collective/projects/contributing)**: how to get involved with an existing project. Where to find work, how to submit, what to expect from review.
 - **[Creating a New Project](/collective/projects/creating-a-new-project)**: the conventions playbook that kicks in once a project is approved to build. Covers repo structure, licensing, CI, testing, documentation, and release.
 - **[Stack Suggestions](/collective/projects/stack-suggestions)**: recommended tooling and conventions per language stack. The *how* that complements the *what* in the Creating a New Project guide.
+- **[Project Infrastructure](/collective/projects/project-infrastructure)**: the shared CI, rulesets, release automation and review agent every project calls rather than reimplements. Start here for the wiring; a new repository reaches the same bar as Nanocoder in about twenty lines of configuration.
 
 If you are starting something new under the Nano Collective, the How a Project Comes to Life page is the place to begin. If you have already built something and want to move it under the umbrella, start at Bringing an Existing Project. If you want to contribute to an existing project, the Contributing guide is.

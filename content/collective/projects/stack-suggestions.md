@@ -69,13 +69,9 @@ The scripts below keep the test surface consistent across TypeScript projects in
 
 ### CI Specifics
 
-The `pr-checks.yml` workflow runs each of the above as parallel jobs for speed. Add:
+For a TypeScript project you do not write `pr-checks.yml` — you call the shared one, and it already runs each of the above as parallel jobs, including `knip`, `pnpm audit --audit-level=high`, Semgrep and CodeQL. See [Project Infrastructure](/collective/projects/project-infrastructure) for the script names it expects and the caller to drop in.
 
-- `knip`: unused dependency / export detection
-- `pnpm audit --audit-level=high`
-- Semgrep + CodeQL scans
-
-For the `release.yml` workflow, the pattern is: compare `package.json` version against NPM, and if different, run the full gate and publish. See [Nanocoder's release workflow](https://github.com/Nano-Collective/nanocoder/blob/main/.github/workflows/release.yml) for the canonical implementation.
+`release.yml` stays per project, because publishing is project-specific. The pattern is: compare `package.json` version against NPM, and if different, run the full gate and publish. See [Nanocoder's release workflow](https://github.com/Nano-Collective/nanocoder/blob/main/.github/workflows/release.yml) for the canonical implementation. The *version bump* that triggers it is handled by the shared changesets workflows, not by hand.
 
 ### Distribution
 

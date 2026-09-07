@@ -104,7 +104,9 @@ For language- and stack-specific recommendations, see [Stack Suggestions](/colle
 
 ## CI / CD
 
-CI runs on GitHub Actions. Every Nano Collective project should have the following workflows:
+CI runs on GitHub Actions. **For a JavaScript or TypeScript project, do not build any of this by hand** — the checks, the rulesets that enforce them, the release automation and the review agent are all shared, and wiring them up is about twenty lines of configuration. Follow [Project Infrastructure](/collective/projects/project-infrastructure) instead, and come back here for the parts it does not cover (naming, README, licensing, templates, docs).
+
+The rest of this section is the requirement set every project meets, whichever way it gets there. It is the specification; Project Infrastructure is the implementation.
 
 ### `pr-checks.yml`
 
@@ -133,7 +135,7 @@ Runs on pushes to `main`:
 
 Regenerates the status badges referenced from the README.
 
-For canonical, stack-specific implementations of these workflows, see [Nanocoder's `.github/workflows`](https://github.com/Nano-Collective/nanocoder/tree/main/.github/workflows) and the [Stack Suggestions](/collective/projects/stack-suggestions) doc.
+**Where the canonical copies live.** `pr-checks`, `release-prepare` and `changeset-check` are reusable workflows in [`Nano-Collective/.github`](https://github.com/Nano-Collective/.github/tree/main/.github/workflows) — each project calls them rather than carrying its own copy, so a repository's `.github/workflows/pr-checks.yml` is a thin caller and not an implementation to copy from. `release.yml` and `update-badges.yml` are still per-project, and Nanocoder's are the reference. See [Project Infrastructure](/collective/projects/project-infrastructure) for how to wire it up, and [Stack Suggestions](/collective/projects/stack-suggestions) for per-stack tooling.
 
 ## Issue and PR Templates
 
@@ -217,7 +219,10 @@ Before announcing a new project, run through this list:
 - [ ] Dead code detection wired up (e.g. Knip)
 - [ ] Package security audit wired up (e.g. `pnpm audit`)
 - [ ] Security scanning wired up (Semgrep, CodeQL, or equivalent)
-- [ ] CI workflows: `pr-checks.yml`, `release.yml`, `update-badges.yml`
+- [ ] CI workflows: `pr-checks.yml` (a caller for the shared workflow), `release.yml`, `update-badges.yml`
+- [ ] Both rulesets applied, and the six required checks reporting green — see [Project Infrastructure](/collective/projects/project-infrastructure)
+- [ ] `CODEOWNERS` naming `@Nano-Collective/core-team`
+- [ ] Changesets scaffolded, and `pre.json` committed if the project starts on a prerelease version
 - [ ] Issue templates (bug, feature) and PR template
 - [ ] `docs/` folder with at minimum an `index.md` and `getting-started/`
 - [ ] Badges in the README point to real endpoints
