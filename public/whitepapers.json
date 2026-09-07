@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-07T09:17:02.608Z",
-  "count": 8,
+  "generated_at": "2026-09-07T17:27:28.846Z",
+  "count": 9,
   "whitepapers": [
     {
       "slug": "nanobench",
@@ -87,6 +87,15 @@
       "review_opens": "2026-08-19",
       "review_closes": "2026-09-19",
       "sidebar_order": 8
+    },
+    {
+      "slug": "sentinel",
+      "title": "Sentinel",
+      "description": "A whitepaper for an installable, local-first workflow that runs continuous, configurable security and code audits across an organisation's repositories and files what it finds as issues.",
+      "proposer": "Will Lamerton",
+      "proposer_github": "will-lamerton",
+      "status": "Building",
+      "sidebar_order": 9
     }
   ]
 }
