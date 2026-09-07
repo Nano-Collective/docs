@@ -23,7 +23,7 @@ project is useful after the first:
 | [Pull request checks](#what-you-get) | Runs the tests | shared workflow + a caller |
 | [Rulesets](#the-rulesets) | Makes them mandatory | applied by script |
 | [Release automation](#release-automation) | Version PRs and publishing | shared workflows + a scaffold |
-| [Code review](#automated-code-review) | Reviews what tests cannot | shared workflow + a local rubric |
+| [Code review](#automated-code-review) | Reviews what tests cannot | shared workflow and method + a local rubric |
 
 **The gate is automated, not human.** That is the load-bearing decision behind
 all of this: a passing test suite is what stands between a change and `main`,
@@ -377,16 +377,33 @@ Adopting it is two files:
    [`templates/nc-review.caller.yml`](https://github.com/Nano-Collective/.github/blob/main/templates/nc-review.caller.yml).
 2. `.github/nc-review/rubric.md` — **yours**, not shared.
 
-The rubric stays local deliberately. It is where a project says what it cares
-about: its conventions, its test layout, the mistakes it keeps seeing. A shared
-rubric would produce reviews that read the same everywhere and land nowhere.
+### The rubric is two halves
+
+The reviewing **method** — how to read a diff against a base checkout, how to
+rate severity, what JSON to emit — is identical for every project, so it is
+shared and fetched at run time. Only the **judgement** is yours.
+
+| | |
+|---|---|
+| `nc-review/rubric-base.md` in `.github` | the method — shared |
+| `.github/nc-review/rubric.md` in your repo | what *this* project cares about |
+
+Your half should carry the things a reviewer new to the project would get wrong:
+its architecture conventions, which surfaces count as public contracts, the test
+conventions, and the mistakes that have actually shipped there. Keep it off
+anything the status checks already cover — they judge the code mechanically,
+`nc-review` judges what they cannot.
+
+Where the two disagree, yours wins.
+
+**Do not copy the base rubric into your repo.** It is fetched from `main` by
+default, so an improvement to the method reaches every project at once. Pin
+`base-rubric-url` to a tag or SHA if you need a project's reviews to stay fixed
+while the shared method changes.
 
 It also needs `MINIMAX_API_KEY`. Set it once as an **organisation** secret with
 visibility `all` rather than copying it into each repository — organisation
 Actions secrets are available to public repositories on the Free plan.
-
-Keep the rubric off anything the status checks already cover. The division is:
-the checks judge the code mechanically, `nc-review` judges what they cannot.
 
 ## Adopting this in an existing project
 
