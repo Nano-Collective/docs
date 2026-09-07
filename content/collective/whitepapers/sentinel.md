@@ -190,22 +190,39 @@ already cover — and it would never merge. Labelling and commentary only.
 
 Both are v1.1. Neither changes the commitments above.
 
-## Open questions
+## Resolved since publication
 
-**How incremental scanning detects change.** Re-auditing an entire repository
-when a handful of files moved is the dominant cost as this scales. Comparing
-against a recorded commit is cheapest but assumes git history is present, which
-a shallow clone or a `--no-clone` run does not guarantee. Content hashing works
-everywhere but reads every file. A hybrid is probably right, at the cost of the
-cache carrying two shapes of provenance.
+Both questions this paper originally left open have been settled and shipped.
+They are kept here because the reasoning is the interesting part.
 
-**And the trap underneath it.** Reconciliation cannot currently distinguish *the
-finding is gone* from *the file was not scanned*. Skipping unchanged files would
-therefore age out and auto-close real, unfixed findings — the tool quietly
-reporting a vulnerability as fixed because it stopped looking. The scanned scope
-has to reach the reconciler in the same change that introduces the cache, not
-after it. This is tracked as
-[sentinel#17](https://github.com/Nano-Collective/sentinel/issues/17).
+**The trap under incremental scanning.** Reconciliation could not distinguish
+*the finding is gone* from *the file was not scanned* — both arrive as an absent
+finding, and both aged the issue towards being auto-closed. Skipping unchanged
+files would therefore have closed real, unfixed findings: the tool quietly
+reporting a vulnerability as fixed because it stopped looking.
+
+A run now carries the scope it read, and an open issue whose file was not read
+is **held** — neither refreshed nor aged, its counter left where it was. Holding
+is recoverable; auto-closing a real finding is not. Scope is tracked per rule
+pack rather than per repository, because packs do not read the same files: one
+pack skipping `src/db.ts` while another reads it would otherwise count as
+"scanned" for both.
+
+**How incremental scanning detects change.** The hybrid this paper anticipated
+turned out to be unnecessary. Change is detected by diffing against the commit
+recorded at each pack's last successful pass, with no content-hashing fallback —
+because every case that cannot produce a trustworthy diff reads everything
+instead. An unreachable commit, a shallow clone, an edited pack, an edited
+dependency, a pack whose `applies_to` widened: all of them re-read in full.
+
+That asymmetry is deliberate and is the whole design. Being wrong about
+*needing* to re-read costs some model time; being wrong about *not* needing to
+costs a missed finding. The two are not close, so anything uncertain reads
+everything, and the cache carries one shape of provenance rather than two.
+
+Incremental scanning is off by default and opt-in per repository. It trades a
+complete re-read for speed, and that is a trade for the operator to make on a
+repository they know.
 
 ## Related
 
