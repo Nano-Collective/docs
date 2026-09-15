@@ -4,9 +4,10 @@ description: "A working whitepaper for an open source, local-first AI code edito
 sidebar_order: 7
 proposer: "Jason-Chiu"
 proposer_github: "jason1015-coder"
-status: "In public review"
+status: "Build approved"
 review_opens: "2026-07-15"
 review_closes: "2026-09-15"
+status_changed_on: "2026-09-15"
 ---
 
 # Scriptura
@@ -19,9 +20,32 @@ The document was published in working form so the collective could argue the sha
 
 > **Review window extended to 2026-09-15.** The window originally closed on 2026-08-24. A second review pass after that date raised new issues against the design, several of them about claims in this document that do not yet hold in the repository. Those belong inside a review window rather than after one, so the window is extended rather than the build decision being taken over them. The extension is not a reset: the proposal has not pivoted, and the questions settled in the first window stay settled.
 >
-> **Decision at window close.** When this window closes, the decision is recorded on this page as a short dated note with rationale — including for a no — per [How a Project Comes to Life](/collective/projects/how-a-project-comes-to-life). The decision has two substantive questions to weigh, both stated plainly in this document: whether the second-maintainer requirement (see People) is met or the solo-maintenance risk is accepted, and whether the P0 items that the second review showed to be unmet (the chokepoint, the AI-layer move, the streaming path) are committed to with dates. Rationale is mandatory either way; a window that closes without a recorded decision is a process failure, not a neutral state.
+> **The window closed on 2026-09-15 and the decision is recorded below.** See [Decision](#decision).
 
 The proposed editor base already exists at [Scriptura](https://github.com/jason1015-coder/scriptura).
+
+## Decision
+
+**Build approved. 15 September 2026.** Recorded by the founding core team at the close of the extended review window, per [How a Project Comes to Life](/collective/projects/how-a-project-comes-to-life). Rationale against the four Stage 3 criteria follows.
+
+**The whitepaper has held up.** Twenty-three issues were raised across two review rounds and all are closed. The second round was the harder one, and the document absorbed it rather than deflecting it. The Rust chokepoint and the egress log are now stated as design that does not exist yet rather than as shipped behaviour (#86). "Not a plugin" reads as a shape change carried on the P0 list rather than a description of the current tree (#87). The Rust to TypeScript seam is named as an ACP client against Nanocoder's existing ACP server, which turns the largest P0 item from protocol design into integration work (#88). The local-first defaults are labelled as written but disconnected rather than as running (#89). Provider ownership on the agent path became invariant 5 with conformance tests C5 and C6 behind it (#90). The lexical retrieval claim was narrowed from a strict superset to reachability (#95). A document that gets more honest under pressure is the thing this criterion is looking for, and the provider contract section is now the most rigorous piece of specification in the whitepapers folder.
+
+**Maintainer commitment is accepted at one.** The bar is at least one named maintainer ready to drive the project for roughly three months after v1.0. Scriptura has one: jason1015-coder, 285 commits since 20 June and still committing this week. This document says twice that one maintainer cannot carry the build, and that is a fair reading of the workload. The call is that one is sufficient to approve on, with velocity monitored rather than recruitment treated as a gate. Blocking a working editor with a serious design behind it on a hiring problem the collective is better placed to solve than the proposer is the wrong trade. Finding a second maintainer stays on the must-do list, and it is now a commitment on the collective's side as well as the proposer's.
+
+**Scope is buildable, schedule is not yet set.** P0 is nine items and none have started. At `8da4759` (13 September 2026) there is no egress log, the AI layer is still a plugin holding its own `QNetworkAccessManager`, `permission.rs` `request()` is still a stub, there is no ACP client, the completion request is still `stream = false` with `max_tokens: 64` and never calls `abort()`, and the local-first defaults are still commented out. That is a real amount of work. It is also nine well-specified items rather than nine unknowns, sitting on an editor shell that already carries LSP and DAP clients, git integration, a plugin SDK, and green CI on three platforms. Buildable, yes. The open variable is the schedule, which is the first thing to agree with the proposer.
+
+**Fit with the collective remains true.** Nothing in either review round conflicted with the positive shape. The stack is the one genuine departure, and the argument for it (a machine running a local completion model has no headroom for a browser engine) is sound and is made in Alternatives considered.
+
+### What travels with the approval
+
+Approval is unconditional in process and conditional in substance. Four things are carried rather than closed:
+
+1. **Dates on the three unmet P0 items.** The chokepoint, the AI layer move, and the streaming path are what the second review round showed to be claims rather than code. The approval assumes they land early and in that order. Dates are agreed with the proposer rather than set here.
+2. **Solo maintenance is accepted, not ignored.** If velocity drops the collective reopens the question rather than letting the project drift quietly.
+3. **Four review items were closed without a recorded answer.** They are build-time work, not blockers: macOS distribution and notarization, including who pays for the Apple Developer account (#72); the packaging consequence of the ACP route, since driving `nanocoder --acp` means a Node runtime that the installer either bundles or requires on `PATH` (#54); prompt-scrub's absence from the composition, which matters more than the document allows because Private Inference Proxy is `Paused` and prompt-scrub is the scrubbing path actually available today (#91); and the editorial pass (#96).
+4. **The repository transfer is now unblocked.** It is Stage 4 work that follows this decision rather than preceding it.
+
+The rest of this page is the design as it stood at the decision, and stays in place as the record of how it was argued.
 
 ## Architecture
 
@@ -231,7 +255,7 @@ These questions were open when the whitepaper was published and were settled dur
 
 ## Open questions
 
-All three questions raised during the first review window (naming, the default provider, and the plugin system policy) are resolved and recorded under "Resolved in review" above. A second round of feedback is open against the extended window and is tracked under the `whitepaper:scriptura` label on the docs repo. Anything fundamental that surfaces there gets added here and argued.
+None remain open against the design. All three questions raised during the first review window (naming, the default provider, and the plugin system policy) are resolved and recorded under "Resolved in review" above, and the second round of feedback raised against the extended window is closed. The four items carried past the decision are listed under [Decision](#decision) and are tracked under the `whitepaper:scriptura` label on the docs repo. Anything fundamental that surfaces from here is a build-time question for the project repository rather than a question about whether to build.
 
 ## Must-do(s)
 
@@ -265,7 +289,7 @@ Implemented in the tree but **inside a commented-out block** (`mainwindow.cpp:88
 
 ### People
 
-- **Find a second core maintainer.** jason1015-coder alone cannot carry the build; open the contributor issue in the transferred Nano Collective repo. Not a product requirement, but a prerequisite for the build to keep moving.
+- **Find a second core maintainer.** jason1015-coder alone cannot carry the build comfortably; open the contributor issue in the transferred Nano Collective repo. The build decision accepted solo maintenance rather than gating on this (see [Decision](#decision)), so it is a shared recruitment commitment between the proposer and the collective, with velocity monitored rather than a precondition.
 
 ## Could-do(s)
 
@@ -284,7 +308,8 @@ For this whitepaper to graduate into docs:
 - [x] Write the provider contract in enough detail that "model-agnostic" is a testable claim, not a slogan — answered by the "The provider contract" section above.
 - [x] Decide the out-of-the-box provider flow for a user with no local model. Settled: local by default, no remote fallback; unreachable-endpoint handling scoped into v1.
 - [x] Settle the plugin system policy (reframed from the extension-host question; the VS Code host premise does not exist). Settled: a could-do refinement for the build, not a v1 must-do. See "Resolved in review" item 3.
-- [ ] Transfer the repository from `jason1015-coder/scriptura` to `Nano-Collective`, after which the [Creating a New Project](/collective/projects/creating-a-new-project) playbook takes over.
+- [x] Reach a build decision at the close of the review window. Settled 15 September 2026: **build approved**, with rationale and carried items under [Decision](#decision).
+- [ ] Transfer the repository from `jason1015-coder/scriptura` to `Nano-Collective`, after which the [Creating a New Project](/collective/projects/creating-a-new-project) playbook takes over. Unblocked by the decision above.
 
 When those are settled, this document becomes the foundation of the project's README and design notes.
 
