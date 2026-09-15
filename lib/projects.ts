@@ -59,6 +59,17 @@ export const PROJECTS: ProjectConfig[] = [
     includePrereleases: true,
   },
   {
+    id: "nanolist",
+    name: "Nanolist",
+    description:
+      "A community-curated directory of AI tools with a bias toward open-source, local-first, privacy-respecting software.",
+    type: "project",
+    repo: {
+      owner: "Nano-Collective",
+      name: "nanolist",
+    },
+  },
+  {
     id: "get-md",
     name: "get-md",
     description:
