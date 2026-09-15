@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-15T09:22:36.488Z",
+  "generated_at": "2026-09-15T17:25:50.780Z",
   "count": 9,
   "whitepapers": [
     {
@@ -72,7 +72,7 @@
       "description": "A working whitepaper for an open source, local-first AI code editor that replaces the proprietary editing and agent experience of Cursor with a model-agnostic, privacy-respecting shell built on open tooling",
       "proposer": "Jason-Chiu",
       "proposer_github": "jason1015-coder",
-      "status": "In public review",
+      "status": "Build approved",
       "review_opens": "2026-07-15",
       "review_closes": "2026-09-15",
       "sidebar_order": 7
