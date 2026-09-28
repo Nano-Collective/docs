@@ -1,6 +1,25 @@
+import path from "node:path";
 import type { Folder, MdxFile, PageMapItem } from "nextra";
 import { fetchFileContent, getAllDocsFiles, type Repo } from "./github";
 import { type PageFrontmatter, parseFrontmatter } from "./remote-content";
+
+const INDEX_RE = /(^|\/)index\.mdx?$/;
+const README_RE = /(^|\/)README\.mdx?$/;
+
+/**
+ * Whether a doc file is its folder's landing page. A folder's README stands in
+ * for its index when it has none: GitHub renders the README as the folder's
+ * landing page, so projects that write their docs for GitHub first (Roster)
+ * ship docs/README.md and no docs/index.md.
+ */
+export function isIndexFile(file: string, files: readonly string[]): boolean {
+  if (INDEX_RE.test(file)) return true;
+  if (!README_RE.test(file)) return false;
+  const dir = path.posix.dirname(file);
+  return !files.some(
+    (other) => INDEX_RE.test(other) && path.posix.dirname(other) === dir,
+  );
+}
 
 // Cache for page maps to avoid repeated API calls during build
 // Map keyed by "projectId:version"
@@ -77,7 +96,7 @@ export async function buildPageMapForVersion(
   for (const file of files) {
     const relativePath = file.replace(/^docs\//, "").replace(/\.(md|mdx)$/, "");
     const parts = relativePath.split("/");
-    const isIndex = parts[parts.length - 1] === "index";
+    const isIndex = isIndexFile(file, files);
 
     // Track index files for folder default routes
     if (isIndex && parts.length > 1) {
@@ -99,7 +118,7 @@ export async function buildPageMapForVersion(
     // e.g., 'docs/guide/intro.md' -> 'guide/intro'
     const relativePath = file.replace(/^docs\//, "").replace(/\.(md|mdx)$/, "");
     const parts = relativePath.split("/");
-    const isIndex = parts[parts.length - 1] === "index";
+    const isIndex = isIndexFile(file, files);
     const title = fm.title || pathToDisplayName(file);
 
     if (isIndex && parts.length === 1) {
@@ -242,10 +261,9 @@ export async function getDocPathsForVersion(
     // Convert 'docs/guide/intro.md' -> ['guide', 'intro']
     const relativePath = file.replace(/^docs\//, "").replace(/\.(md|mdx)$/, "");
 
-    // Handle index files
-    if (relativePath === "index" || relativePath.endsWith("/index")) {
-      const parts = relativePath.replace(/\/?index$/, "").split("/");
-      return parts.filter(Boolean);
+    // Index files (and READMEs standing in for one) map to their folder
+    if (isIndexFile(file, files)) {
+      return relativePath.split("/").slice(0, -1);
     }
 
     return relativePath.split("/");
@@ -278,12 +296,17 @@ export async function findDocFile(
   const basePath = slug?.length ? slug.join("/") : "index";
 
   // Try different file extensions and index patterns
-  const variations = [
-    `docs/${basePath}.md`,
-    `docs/${basePath}.mdx`,
-    `docs/${basePath}/index.md`,
-    `docs/${basePath}/index.mdx`,
-  ];
+  // A folder with no index falls back to its README (see isIndexFile)
+  const variations = slug?.length
+    ? [
+        `docs/${basePath}.md`,
+        `docs/${basePath}.mdx`,
+        `docs/${basePath}/index.md`,
+        `docs/${basePath}/index.mdx`,
+        `docs/${basePath}/README.md`,
+        `docs/${basePath}/README.mdx`,
+      ]
+    : ["docs/index.md", "docs/index.mdx", "docs/README.md", "docs/README.mdx"];
 
   for (const filePath of variations) {
     try {

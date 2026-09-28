@@ -13,7 +13,7 @@ function ProjectCard({
   const tag = isProject ? "[ app ]" : "[ pkg ]";
 
   const exploreHref = isProject
-    ? `https://nanocollective.org/${project.id}`
+    ? (project.homepage ?? `https://nanocollective.org/${project.id}`)
     : `https://github.com/Nano-Collective/${project.id}`;
 
   const exploreText = isProject ? `Explore ${project.name}` : `View on GitHub`;

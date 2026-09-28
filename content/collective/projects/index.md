@@ -16,6 +16,7 @@ There are two routes in. You can propose something new, covered in [How a Projec
 
 - **[Nanocoder](https://github.com/Nano-Collective/nanocoder)**: a coding agent in your terminal that runs on any model you choose.
 - **[Nanotune](https://github.com/Nano-Collective/nanotune)**: tooling focused on fine-tuning and improving small, local models for practical use.
+- **[Roster](https://github.com/Nano-Collective/roster)** *(alpha)*: an agent-run organisation, powered by GitHub. Each AI staff member is a private repo holding its charter, memory and decision log, woken by a scheduled workflow that runs any coding agent (Nanocoder included) and hands finished work back as pull requests. Site: [roster.nanocollective.org](https://roster.nanocollective.org).
 - **[Sentinel](https://github.com/Nano-Collective/sentinel)** *(alpha)*: an installable, Nanocoder-driven workflow that runs continuous, configurable security and code audits across the repositories in a GitHub organisation and files what it finds as issues.
 - **[Nanolist](https://github.com/Nano-Collective/nanolist)**: a community-curated directory of AI tools, published at [list.nanocollective.org](https://list.nanocollective.org). Every listing is a single JSON file reviewed by humans before it goes live, and visitors make zero third-party requests.
 - **[get-md](https://github.com/Nano-Collective/get-md)**: a fast, lightweight HTML, PDF, DOCX, and Markdown to Markdown converter optimised for LLM consumption.

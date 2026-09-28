@@ -296,7 +296,17 @@ export default async function DocPage({ params }: PageProps) {
       defaultShowCopyCode: true,
       codeHighlight: true,
       mdxOptions: {
-        remarkPlugins: [[remarkResolveRelativeLinks, { basePath, filePath }]],
+        remarkPlugins: [
+          [
+            remarkResolveRelativeLinks,
+            {
+              basePath,
+              filePath,
+              repo: project.repo,
+              ref: resolvedVersion,
+            },
+          ],
+        ],
       },
     });
   } catch (error) {

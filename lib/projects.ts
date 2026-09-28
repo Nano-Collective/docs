@@ -9,6 +9,11 @@ export interface ProjectConfig {
   };
   docsPath?: string; // Default: "docs"
   /**
+   * Where "Explore <name>" links. Defaults to the project's page on
+   * nanocollective.org; set it for projects with their own site.
+   */
+  homepage?: string;
+  /**
    * Release maturity. Anything other than "stable" (the default) renders a
    * badge on the project card so readers know the docs describe a moving
    * target.
@@ -44,6 +49,20 @@ export const PROJECTS: ProjectConfig[] = [
       owner: "Nano-Collective",
       name: "nanotune",
     },
+  },
+  {
+    id: "roster",
+    name: "Roster",
+    description:
+      "An agent-run organisation, powered by GitHub. AI staff whose brain is a repo: a charter, a memory, and a scheduled session that does a day's work unattended and hands off.",
+    type: "project",
+    repo: {
+      owner: "Nano-Collective",
+      name: "roster",
+    },
+    homepage: "https://roster.nanocollective.org",
+    status: "alpha",
+    includePrereleases: true,
   },
   {
     id: "sentinel",
