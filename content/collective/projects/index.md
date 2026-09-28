@@ -17,6 +17,7 @@ There are two routes in. You can propose something new, covered in [How a Projec
 - **[Nanocoder](https://github.com/Nano-Collective/nanocoder)**: a coding agent in your terminal that runs on any model you choose.
 - **[Nanotune](https://github.com/Nano-Collective/nanotune)**: tooling focused on fine-tuning and improving small, local models for practical use.
 - **[Sentinel](https://github.com/Nano-Collective/sentinel)** *(alpha)*: an installable, Nanocoder-driven workflow that runs continuous, configurable security and code audits across the repositories in a GitHub organisation and files what it finds as issues.
+- **[Nanolist](https://github.com/Nano-Collective/nanolist)**: a community-curated directory of AI tools, published at [list.nanocollective.org](https://list.nanocollective.org). Every listing is a single JSON file reviewed by humans before it goes live, and visitors make zero third-party requests.
 - **[get-md](https://github.com/Nano-Collective/get-md)**: a fast, lightweight HTML, PDF, DOCX, and Markdown to Markdown converter optimised for LLM consumption.
 - **[json-up](https://github.com/Nano-Collective/json-up)**: a type-safe JSON migration tool with Zod schema validation.
 - **[prompt-scrub](https://github.com/Nano-Collective/prompt-scrubber)**: a local-first tool that strips identifying content out of your prompts before they reach a cloud LLM.

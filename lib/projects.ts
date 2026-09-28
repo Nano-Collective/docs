@@ -62,7 +62,7 @@ export const PROJECTS: ProjectConfig[] = [
     id: "nanolist",
     name: "Nanolist",
     description:
-      "A community-curated directory of AI tools with a bias toward open-source, local-first, privacy-respecting software.",
+      "A community-curated directory of AI tools, with a bias toward open source, local-first, privacy-respecting software.",
     type: "project",
     repo: {
       owner: "Nano-Collective",

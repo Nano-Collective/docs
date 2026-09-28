@@ -41,6 +41,7 @@ The collective builds a range of AI tools and developer utilities. Some projects
 - **[Nanocoder](https://github.com/Nano-Collective/nanocoder)**: a coding agent in your terminal that runs on any model you choose.
 - **[Nanotune](https://github.com/Nano-Collective/nanotune)**: tooling focused on fine-tuning and improving small, local models for practical use.
 - **[Sentinel](https://github.com/Nano-Collective/sentinel)** *(alpha)*: continuous, configurable security and code audits across the repositories in a GitHub organisation, filed as issues for a human to act on.
+- **[Nanolist](https://github.com/Nano-Collective/nanolist)**: a community-curated directory of AI tools, with a bias toward open source, local-first, privacy-respecting software, published at [list.nanocollective.org](https://list.nanocollective.org).
 - **[get-md](https://github.com/Nano-Collective/get-md)**: a fast, lightweight HTML, PDF, DOCX, and Markdown to Markdown converter optimised for LLM consumption.
 - **[json-up](https://github.com/Nano-Collective/json-up)**: a type-safe JSON migration tool with Zod schema validation.
 - **[prompt-scrub](https://github.com/Nano-Collective/prompt-scrubber)**: a local-first tool that strips identifying content out of your prompts before they reach a cloud LLM.
