@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-30T10:26:49.488Z",
-  "count": 9,
+  "generated_at": "2026-10-01T00:36:34.507Z",
+  "count": 10,
   "whitepapers": [
     {
       "slug": "nanobench",
@@ -96,6 +96,15 @@
       "proposer_github": "will-lamerton",
       "status": "Building",
       "sidebar_order": 9
+    },
+    {
+      "slug": "nanocoder-desktop",
+      "title": "Nanocoder Desktop",
+      "description": "A local-first desktop workspace for durable project chats, file browsing, Git review, terminal work, and an isolated agent-controlled browser around Nanocoder's existing agent.",
+      "proposer": "Aditya Kumar Puri",
+      "proposer_github": "puri-adityakumar",
+      "status": "Draft",
+      "sidebar_order": 10
     }
   ]
 }
