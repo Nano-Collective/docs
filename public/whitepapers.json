@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-02T10:27:43.949Z",
-  "count": 10,
+  "generated_at": "2026-10-02T19:01:11.955Z",
+  "count": 11,
   "whitepapers": [
     {
       "slug": "nanobench",
@@ -105,6 +105,17 @@
       "proposer_github": "puri-adityakumar",
       "status": "Draft",
       "sidebar_order": 10
+    },
+    {
+      "slug": "infrastructure",
+      "title": "Infrastructure as code",
+      "description": "A whitepaper for holding the Nano Collective's GitHub configuration as files in one repository, applied by CI, so that repositories, teams, access and rulesets stop being set by hand",
+      "proposer": "Matthew Spence",
+      "proposer_github": "mrspence",
+      "status": "In public review",
+      "review_opens": "2026-10-02",
+      "review_closes": "2026-11-01",
+      "sidebar_order": 11
     }
   ]
 }
