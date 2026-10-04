@@ -4,10 +4,13 @@ description: "A whitepaper for an installable, local-first workflow that runs co
 sidebar_order: 9
 proposer: "Will Lamerton"
 proposer_github: "will-lamerton"
-status: "Building"
+status: "Shipped"
+status_changed_on: "2026-10-04"
 ---
 
 # Sentinel
+
+> **Shipped, 4 October 2026.** Sentinel is built and live at [Nano-Collective/sentinel](https://github.com/Nano-Collective/sentinel). This page stays up as the historical record until the archive window lapses.
 
 Security review does not scale with the number of repositories an organisation
 has. A formal audit is expensive and periodic; static analysis catches the

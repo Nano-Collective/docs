@@ -6,10 +6,12 @@ proposer: "Sk Akram"
 proposer_github: "akramcodez"
 status: "In public review"
 review_opens: "2026-08-19"
-review_closes: "2026-09-19"
+review_closes: "2026-11-03"
 ---
 
 # Agentveil
+
+> **Review extended, 4 October 2026.** The public review window has been extended to 3 November 2026. Feedback is still welcome.
 
 Think of Agentveil like a security guard between an AI agent and your computer. As coding agents become more autonomous, they require increasingly broad permissions to be useful. However, giving an agent full access to your computer grants it much more access than it actually needs for any given task. This whitepaper proposes Agentveil, an open-source, local-first policy gateway that intercepts every sensitive action an AI agent attempts and evaluates it against a strict, user-authored allowlist.
 

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-04T10:32:33.542Z",
+  "generated_at": "2026-10-04T13:41:51.920Z",
   "count": 11,
   "whitepapers": [
     {
@@ -8,7 +8,7 @@
       "description": "A provider-neutral benchmark for evaluating AI coding agents on real-world software engineering tasks.",
       "proposer": "Ronak Raj",
       "proposer_github": "RONAK-AI647",
-      "status": "review closed",
+      "status": "Paused",
       "review_opens": "2026-07-05",
       "review_closes": "2026-08-04",
       "sidebar_order": 1
@@ -52,7 +52,7 @@
       "description": "A working whitepaper for a Nanocoder driven workflow that runs weekly across the collective's repositories, checks the documentation in each repo against the actual functionality, and raises an issue on the repo when the two have drifted",
       "proposer": "Will Lamerton",
       "proposer_github": "will-lamerton",
-      "status": "Build Approved",
+      "status": "Paused",
       "review_opens": "2026-05-22",
       "review_closes": "2026-06-21",
       "sidebar_order": 5
@@ -63,7 +63,7 @@
       "description": "A portable layer for publishing and installing agent assets across any harness — skills, tools, prompts, sub-agents — written once and installed everywhere the collective ships an adapter",
       "proposer": "Matt Spence",
       "proposer_github": "mrspence",
-      "status": "Building",
+      "status": "Declined",
       "sidebar_order": 6
     },
     {
@@ -85,7 +85,7 @@
       "proposer_github": "akramcodez",
       "status": "In public review",
       "review_opens": "2026-08-19",
-      "review_closes": "2026-09-19",
+      "review_closes": "2026-11-03",
       "sidebar_order": 8
     },
     {
@@ -94,7 +94,7 @@
       "description": "A whitepaper for an installable, local-first workflow that runs continuous, configurable security and code audits across an organisation's repositories and files what it finds as issues.",
       "proposer": "Will Lamerton",
       "proposer_github": "will-lamerton",
-      "status": "Building",
+      "status": "Shipped",
       "sidebar_order": 9
     },
     {
@@ -103,7 +103,9 @@
       "description": "A local-first desktop workspace for durable project chats, file browsing, Git review, terminal work, and an isolated agent-controlled browser around Nanocoder's existing agent.",
       "proposer": "Aditya Kumar Puri",
       "proposer_github": "puri-adityakumar",
-      "status": "Draft",
+      "status": "In public review",
+      "review_opens": "2026-10-04",
+      "review_closes": "2026-11-03",
       "sidebar_order": 10
     },
     {

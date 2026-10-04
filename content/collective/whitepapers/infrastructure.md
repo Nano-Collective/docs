@@ -298,5 +298,5 @@ trigger it is a question this does not answer.
   whose Stage 3 approval the whitepaper gate reads.
 - [Creating a new project](/collective/projects/creating-a-new-project), which
   stays the guide to what goes inside a repository.
-- [Sentinel](/collective/whitepapers/sentinel), for the other half of checking
+- [Sentinel](https://github.com/Nano-Collective/sentinel), for the other half of checking
   the collective's own infrastructure.

@@ -4,7 +4,9 @@ description: "A local-first desktop workspace for durable project chats, file br
 sidebar_order: 10
 proposer: "Aditya Kumar Puri"
 proposer_github: "puri-adityakumar"
-status: "Draft"
+status: "In public review"
+review_opens: "2026-10-04"
+review_closes: "2026-11-03"
 ---
 
 # Nanocoder Desktop

@@ -4,12 +4,16 @@ description: "A provider-neutral benchmark for evaluating AI coding agents on re
 sidebar_order: 1
 proposer: "Ronak Raj"
 proposer_github: "RONAK-AI647"
-status: "review closed"
+status: "Paused"
 review_opens: "2026-07-05"
 review_closes: "2026-08-04"
+status_changed_on: "2026-10-04"
 ---
 
 # NanoBench
+
+> **Paused, 4 October 2026.** NanoBench is on hold. It can be picked up again by anyone willing to drive it.
+
 > A provider-neutral benchmark for evaluating `AI coding agents` on real-world engineering tasks.
 
 NanoBench is a standalone, provider-neutral evaluation suite for Nanocoder — the open coding agent built by the Nano Collective. It measures whether Nanocoder, running on any supported model or provider, can solve real engineering problems in large, production-grade repositories, and it classifies exactly why it fails when it cannot.

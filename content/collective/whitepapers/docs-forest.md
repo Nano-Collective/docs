@@ -4,18 +4,21 @@ description: "A working whitepaper for a Nanocoder driven workflow that runs wee
 sidebar_order: 5
 proposer: "Will Lamerton"
 proposer_github: "will-lamerton"
-status: "Build Approved"
+status: "Paused"
 review_opens: "2026-05-22"
 review_closes: "2026-06-21"
+status_changed_on: "2026-10-04"
 ---
 
 # DocsForest
+
+> **Paused, 4 October 2026.** DocsForest is on hold. It can be picked up again by anyone willing to drive it.
 
 Every project the collective ships has documentation. Every project the collective ships also evolves. Between the two, documentation drifts. A flag gets renamed, a default changes, a feature is quietly retired, a new option is added with no doc, an installation step that worked six months ago no longer does. None of it is malicious; all of it is normal. The doc reads correctly when it was written, then it slowly stops reading correctly, and nobody notices until a user opens an issue saying "I followed your docs and it did not work."
 
 A careful reviewer would catch this if they read the docs alongside the code regularly. Nobody has time to do that for every repo every week. The work is real, the value is high, and it gets pushed to the bottom of the backlog forever.
 
-This whitepaper proposes a project that fills that gap with a Nanocoder driven workflow shaped like [ContentForest](https://github.com/Nano-Collective/contentforest): a weekly GitHub Actions run, a templated prompt fed with the current docs and the current source, a validator on the output, and an issue filed on the affected repository when the agent finds drift worth a human looking at. [Sentinel](/collective/whitepapers/sentinel) is the close sibling on the project side; the shape (scheduled Nanocoder run, structured findings, dedup'd issue filing) is shared. The difference is what the prompt is checking: not security patterns, but agreement between what the docs claim and what the code does.
+This whitepaper proposes a project that fills that gap with a Nanocoder driven workflow shaped like [ContentForest](https://github.com/Nano-Collective/contentforest): a weekly GitHub Actions run, a templated prompt fed with the current docs and the current source, a validator on the output, and an issue filed on the affected repository when the agent finds drift worth a human looking at. [Sentinel](https://github.com/Nano-Collective/sentinel) is the close sibling on the project side; the shape (scheduled Nanocoder run, structured findings, dedup'd issue filing) is shared. The difference is what the prompt is checking: not security patterns, but agreement between what the docs claim and what the code does.
 
 The document is published in working form so the collective can argue the shape of it before code lands. The naming and several design decisions have been settled during review (recorded below); the remaining scope and design decisions are still open.
 
@@ -213,7 +216,7 @@ What v1 ships is "a workflow, a prompt, a small set of NC repos to watch, a clea
 - **Not a link or spell checker.** Existing tools handle that better. DocsForest does not duplicate them.
 - **Not a replacement for human review of docs.** Drift is one failure mode among many. A doc that is technically correct but unclear, misleading, or organised badly still needs a human to fix it. DocsForest does not pretend to do that work.
 - **Not a hosted service.** No NC hosted instance, no SaaS shape. Every deployment, internal or installed, runs in the operator's own GitHub Actions workspace against their own configured model endpoint. Installable does not mean NC runs it for you.
-- **Not a security tool.** That is [Sentinel](/collective/whitepapers/sentinel)'s job. The two are siblings; running both on the same repo set is the natural posture.
+- **Not a security tool.** That is [Sentinel](https://github.com/Nano-Collective/sentinel)'s job. The two are siblings; running both on the same repo set is the natural posture.
 - **Not a model.** DocsForest uses whichever Nanocoder configured providers the operator points it at. The collective does not train or ship a docs tuned model.
 
 ## Composition with other collective projects
@@ -222,7 +225,7 @@ Most collective projects compose with DocsForest through plain configuration. A 
 
 - **[Nanocoder](https://github.com/Nano-Collective/nanocoder)** is the runtime under every audit pass. The workflow runs Nanocoder in non interactive mode against a templated prompt, the same shape ContentForest already uses.
 - **[ContentForest](https://github.com/Nano-Collective/contentforest)** is the closest sibling. The two share enough of their orchestration shape (cron driven Nanocoder run, prompt template substitution, validator with auto fix, structured output, dedup'd downstream action) that DocsForest takes from ContentForest's playbook freely. The two stay as independent projects on independent release cadences; the shared shape is a pattern, not a library.
-- **[Sentinel](/collective/whitepapers/sentinel)** is the other sibling. Both watch repos on a schedule and file issues against findings. Running both on the same repo set is the natural posture; the two will produce issues with different labels and the maintainer triages each on its own terms.
+- **[Sentinel](https://github.com/Nano-Collective/sentinel)** is the other sibling. Both watch repos on a schedule and file issues against findings. Running both on the same repo set is the natural posture; the two will produce issues with different labels and the maintainer triages each on its own terms.
 - **[NanoOS](/collective/whitepapers/nano-os)**, if and when it lands, is a natural place from which to invoke DocsForest runs as a sub agent on demand, alongside the scheduled passes.
 
 ## Alternatives considered

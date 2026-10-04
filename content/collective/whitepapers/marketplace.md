@@ -3,11 +3,14 @@ title: "Canopy"
 description: "A portable layer for publishing and installing agent assets across any harness — skills, tools, prompts, sub-agents — written once and installed everywhere the collective ships an adapter"
 proposer: "Matt Spence"
 proposer_github: "mrspence"
-status: "Building"
+status: "Declined"
 sidebar_order: 6
+status_changed_on: "2026-10-04"
 ---
 
 # Canopy
+
+> **Declined, 4 October 2026.** Canopy did not go ahead and is closed out. The thinking stays here as a record until the archive window lapses.
 
 > **Naming note.** *Canopy* is the recommended name for both the project and the CLI: one name, one thing to remember, `canopy` on the command line. It carries no buying/selling connotation and describes the cross-harness layer directly. All names are recommendations pending a short shortlist and a `canopy` CLI collision check.
 
