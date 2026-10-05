@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-05T11:23:56.940Z",
+  "generated_at": "2026-10-05T19:34:36.077Z",
   "count": 11,
   "whitepapers": [
     {
@@ -114,9 +114,9 @@
       "description": "A whitepaper for holding the Nano Collective's GitHub configuration as files in one repository, applied by CI, so that repositories, teams, access and rulesets stop being set by hand",
       "proposer": "Matthew Spence",
       "proposer_github": "mrspence",
-      "status": "In public review",
+      "status": "Build approved",
       "review_opens": "2026-10-02",
-      "review_closes": "2026-11-01",
+      "review_closes": "2026-10-05",
       "sidebar_order": 11
     }
   ]
