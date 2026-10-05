@@ -4,12 +4,18 @@ description: "A whitepaper for holding the Nano Collective's GitHub configuratio
 sidebar_order: 11
 proposer: "Matthew Spence"
 proposer_github: "mrspence"
-status: "In public review"
+status: "Build approved"
 review_opens: "2026-10-02"
-review_closes: "2026-11-01"
+review_closes: "2026-10-05"
 ---
 
 # Infrastructure as code
+
+> **Decision, 5 October 2026: build approved.** The core team approved this
+> proposal after discussion with the proposer, closing the review window early.
+> Issues [#112](https://github.com/Nano-Collective/docs/issues/112),
+> [#113](https://github.com/Nano-Collective/docs/issues/113) and
+> [#114](https://github.com/Nano-Collective/docs/issues/114) remain open.
 
 Adding a project to the collective means a sequence of GitHub administration.
 Create the repository. Create a team. Grant that team access. Set the
