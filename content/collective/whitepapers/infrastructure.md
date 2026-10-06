@@ -11,12 +11,6 @@ review_closes: "2026-10-05"
 
 # Infrastructure as code
 
-> **Decision, 5 October 2026: build approved.** The core team approved this
-> proposal after discussion with the proposer, closing the review window early.
-> Issues [#112](https://github.com/Nano-Collective/docs/issues/112),
-> [#113](https://github.com/Nano-Collective/docs/issues/113) and
-> [#114](https://github.com/Nano-Collective/docs/issues/114) remain open.
-
 Adding a project to the collective means a sequence of GitHub administration.
 Create the repository. Create a team. Grant that team access. Set the
 description, homepage and topics. Turn on Dependabot alerts. Apply two
