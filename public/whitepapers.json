@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-11T10:46:30.286Z",
+  "generated_at": "2026-10-12T08:17:59.461Z",
   "count": 11,
   "whitepapers": [
     {
@@ -103,9 +103,9 @@
       "description": "A local-first desktop workspace for durable project chats, file browsing, Git review, terminal work, and an isolated agent-controlled browser around Nanocoder's existing agent.",
       "proposer": "Aditya Kumar Puri",
       "proposer_github": "puri-adityakumar",
-      "status": "In public review",
+      "status": "Build approved",
       "review_opens": "2026-10-04",
-      "review_closes": "2026-11-03",
+      "review_closes": "2026-10-12",
       "sidebar_order": 10
     },
     {
