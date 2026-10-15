@@ -767,19 +767,92 @@ policy, skills, MCP, LSP, or semantic memory.
 9. Should the desktop begin as a separate repository or a Nanocoder workspace
     package?
 
+## Evidence and method
+
+The findings in this whitepaper come from research carried out on 17 September
+2026 against Nanocoder 1.30.0 at
+[commit `dc8e121`](https://github.com/Nano-Collective/nanocoder/tree/dc8e121a0c4e6963df7447b9ae68491ec993679b)
+on `main`. The research used:
+
+- a clean clone of Nanocoder, reading its source, tests, package metadata, and
+  lockfile directly;
+- a run of the focused ACP test suites, `acp-agent.spec.ts` and
+  `acp-capabilities.spec.ts`, which pass at that commit (69 tests);
+- OpenAI's official Codex product and developer documentation; and
+- the official Electron and Tauri documentation for the stack comparison.
+
+Reverse-engineered descriptions of the private Codex desktop app were not
+treated as evidence. OpenAI's open-source `codex app-server` serves as an
+architectural comparison, not as code Nanocoder must copy. The specific ACP
+findings are listed under [Why ACP](#why-acp).
+
+### What the Codex documentation establishes
+
+The lessons below come from the product model the Codex app documents, not from
+its private implementation.
+
+| Capability | Documented Codex behavior | Lesson for Nanocoder Desktop |
+|---|---|---|
+| Projects and threads | Agents run in separate threads organized by projects ([announcement](https://openai.com/index/introducing-the-codex-app/)). | Model projects and durable chats separately. |
+| History | Chats can be searched, renamed, and pinned ([commands](https://developers.openai.com/codex/app/commands)). | History must outlive the window and the agent process. |
+| Client protocol | `codex app-server` carries conversation history, approvals, and streamed agent events over bidirectional JSON-RPC ([app-server](https://developers.openai.com/codex/app-server)). | The protocol must carry lifecycle and events, not only final text. |
+| Files | The app has a file tree and file search ([commands](https://developers.openai.com/codex/app/commands)). | Build a read-oriented explorer, not an editor. |
+| Git review | The review pane shows the repository's Git state, including changes Codex did not make, with staged, unstaged, branch, and last-turn views ([troubleshooting](https://developers.openai.com/codex/app/troubleshooting)). | Git state, not agent-reported patches, is the source of truth for review. |
+| Terminal | The app includes an integrated terminal ([commands](https://developers.openai.com/codex/app/commands)). | One project terminal is worth having in v1. |
+| Browser | A built-in browser with its own profile gives the user and the agent a shared view of websites and local apps. The agent can open pages, click, type, take screenshots, and verify results ([browser](https://developers.openai.com/codex/app/browser)). | Build an isolated browser with a narrow control adapter, not OS-wide Computer Use. |
+| Browser feedback | Users can annotate a page and send that feedback to the chat ([browser](https://developers.openai.com/codex/app/browser)). | Keep user annotations and agent actions visibly separate. |
+| Worktrees | Codex can run work in separate Git worktrees ([troubleshooting](https://developers.openai.com/codex/app/troubleshooting)). | Useful later; not needed while v1 runs one root turn per project. |
+| Memory and computer use | A later update adds memory and computer use ([update](https://openai.com/index/codex-for-almost-everything/)). | v1 promises same-thread continuation and adds no second memory system. |
+
+### Nanocoder at the inspected commit
+
+- **Package.** Nanocoder 1.30.0 is a TypeScript ESM package that requires
+  Node.js 22 or newer and installs the `nanocoder` command from `dist/cli.js`
+  ([`package.json`](https://github.com/Nano-Collective/nanocoder/blob/dc8e121a0c4e6963df7447b9ae68491ec993679b/package.json)).
+  It declares `@agentclientprotocol/sdk` `^1.3.0`, and the lockfile resolves
+  1.4.0
+  ([`pnpm-lock.yaml`](https://github.com/Nano-Collective/nanocoder/blob/dc8e121a0c4e6963df7447b9ae68491ec993679b/pnpm-lock.yaml#L18-L20)).
+- **Modes.** The CLI offers the Ink terminal interface, headless `run` and
+  `--plain` runs, single `--json` results, `--acp` JSON-RPC over stdio, the
+  older `--vscode` WebSocket companion, and daemon commands
+  ([`cli.tsx`](https://github.com/Nano-Collective/nanocoder/blob/dc8e121a0c4e6963df7447b9ae68491ec993679b/source/cli.tsx)).
+  The desktop uses `--acp` only.
+- **Protocol stream.** The ACP server sends the NDJSON protocol stream over
+  stdout and reports startup failures on stderr
+  ([`acp-server.ts`](https://github.com/Nano-Collective/nanocoder/blob/dc8e121a0c4e6963df7447b9ae68491ec993679b/source/acp/acp-server.ts#L22-L62)).
+- **Session storage.** By default, sessions live under the platform data
+  directory as a `sessions.json` index plus one JSON file per session. Each
+  write goes to a temporary file and is then renamed into place
+  ([`atomicWriteFile`](https://github.com/Nano-Collective/nanocoder/blob/dc8e121a0c4e6963df7447b9ae68491ec993679b/source/session/session-manager.ts#L68-L87)).
+  The directory is created with mode `0700` and files with `0600`, where the
+  platform supports those modes
+  ([`SessionManager`](https://github.com/Nano-Collective/nanocoder/blob/dc8e121a0c4e6963df7447b9ae68491ec993679b/source/session/session-manager.ts#L134-L156)).
+- **One turn per session.**
+  [`prompt`](https://github.com/Nano-Collective/nanocoder/blob/dc8e121a0c4e6963df7447b9ae68491ec993679b/source/acp/acp-agent.ts#L197-L203)
+  rejects a new prompt while a turn is still running in the same session.
+
+Statements about Nanocoder describe the inspected commit and link to the source
+lines they rely on. Recheck them against each Nanocoder version the desktop
+supports.
+
 ## References
 
 - [Nanocoder source at the inspected commit](https://github.com/Nano-Collective/nanocoder/tree/dc8e121a0c4e6963df7447b9ae68491ec993679b)
 - [Nanocoder ACP agent and session implementation](https://github.com/Nano-Collective/nanocoder/blob/dc8e121a0c4e6963df7447b9ae68491ec993679b/source/acp/acp-agent.ts)
 - [Nanocoder session storage](https://github.com/Nano-Collective/nanocoder/blob/dc8e121a0c4e6963df7447b9ae68491ec993679b/source/session/session-manager.ts)
 - [Nanocoder ACP capabilities](https://github.com/Nano-Collective/nanocoder/blob/dc8e121a0c4e6963df7447b9ae68491ec993679b/source/acp/acp-capabilities.ts)
+- [Nanocoder package and runtime metadata](https://github.com/Nano-Collective/nanocoder/blob/dc8e121a0c4e6963df7447b9ae68491ec993679b/package.json)
+- [Nanocoder ACP server](https://github.com/Nano-Collective/nanocoder/blob/dc8e121a0c4e6963df7447b9ae68491ec993679b/source/acp/acp-server.ts)
+- [Nanocoder ACP tests](https://github.com/Nano-Collective/nanocoder/blob/dc8e121a0c4e6963df7447b9ae68491ec993679b/source/acp/acp-agent.spec.ts)
+- [Nanocoder ACP documentation](https://github.com/Nano-Collective/nanocoder/blob/dc8e121a0c4e6963df7447b9ae68491ec993679b/docs/features/acp.md)
 - [OpenAI: Introducing the Codex app](https://openai.com/index/introducing-the-codex-app/)
 - [OpenAI Codex app-server](https://developers.openai.com/codex/app-server)
 - [OpenAI in-app browser](https://developers.openai.com/codex/app/browser)
+- [OpenAI Codex app commands](https://developers.openai.com/codex/app/commands)
+- [OpenAI Codex app troubleshooting and review behavior](https://developers.openai.com/codex/app/troubleshooting)
+- [OpenAI: Codex for (almost) everything](https://openai.com/index/codex-for-almost-everything/)
 - [Electron `WebContentsView`](https://www.electronjs.org/docs/latest/api/web-contents-view)
 - [Electron security guidance](https://www.electronjs.org/docs/latest/tutorial/security)
+- [Electron sessions and persistent partitions](https://www.electronjs.org/docs/latest/api/session)
 - [Tauri webview API](https://v2.tauri.app/reference/javascript/api/namespacewebview/)
-
-Statements about Nanocoder describe the inspected commit and link to the source
-lines they rely on. Recheck them against each Nanocoder version the desktop
-supports.
+- [Tauri capabilities](https://v2.tauri.app/security/capabilities/)
