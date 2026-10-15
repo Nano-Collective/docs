@@ -268,8 +268,40 @@ desktop enough responsibility to be useful.
 
 ACP already carries durable sessions, streamed messages and tool activity,
 permissions, modes, models, commands, and file resources. The desktop must
-negotiate capabilities rather than infer them from version alone; known protocol
-quirks and extension methods are recorded in the supporting research.
+negotiate capabilities rather than infer them from version alone, because
+Nanocoder's declarations do not match its behavior exactly. At the
+[inspected commit](https://github.com/Nano-Collective/nanocoder/tree/dc8e121a0c4e6963df7447b9ae68491ec993679b):
+
+- **`session/close` is advertised but not handled.**
+  [`getAgentCapabilities`](https://github.com/Nano-Collective/nanocoder/blob/dc8e121a0c4e6963df7447b9ae68491ec993679b/source/acp/acp-capabilities.ts#L18-L29)
+  declares it, but `AcpAgent` has no close handler.
+- **Extension methods are not declared.**
+  [`extMethod`](https://github.com/Nano-Collective/nanocoder/blob/dc8e121a0c4e6963df7447b9ae68491ec993679b/source/acp/acp-agent.ts#L642-L758)
+  handles `renameSession`, `timeline/list`, `timeline/revert`, and `retryTurn`,
+  but
+  [`initialize`](https://github.com/Nano-Collective/nanocoder/blob/dc8e121a0c4e6963df7447b9ae68491ec993679b/source/acp/acp-agent.ts#L110-L128)
+  reports only the standard capabilities and `agentInfo.version`. The desktop
+  needs version checks plus safe feature probes.
+- **Vendor data travels in extension fields.** Generated titles arrive as the
+  [`_nanocoder/sessionTitleChanged`](https://github.com/Nano-Collective/nanocoder/blob/dc8e121a0c4e6963df7447b9ae68491ec993679b/source/acp/acp-agent.ts#L457-L462)
+  notification. Usage and artifacts use `_meta` keys such as
+  [`nanocoder/usage`](https://github.com/Nano-Collective/nanocoder/blob/dc8e121a0c4e6963df7447b9ae68491ec993679b/source/acp/acp-conversation.ts#L261-L263)
+  and
+  [`nanocoder/artifacts`](https://github.com/Nano-Collective/nanocoder/blob/dc8e121a0c4e6963df7447b9ae68491ec993679b/source/acp/acp-agent.ts#L182-L185).
+- **History survives a restart.**
+  [`loadSession`](https://github.com/Nano-Collective/nanocoder/blob/dc8e121a0c4e6963df7447b9ae68491ec993679b/source/acp/acp-agent.ts#L161-L189)
+  reads a saved session from disk and replays it, and a
+  [test](https://github.com/Nano-Collective/nanocoder/blob/dc8e121a0c4e6963df7447b9ae68491ec993679b/source/acp/acp-agent.spec.ts#L252-L309)
+  reloads a saved session in a fresh agent.
+- **Session listing matches exact paths.**
+  [`listSessions`](https://github.com/Nano-Collective/nanocoder/blob/dc8e121a0c4e6963df7447b9ae68491ec993679b/source/session/session-manager.ts#L345-L356)
+  keeps a session only when its normalized working directory equals the
+  requested one. It does not resolve symlinks, fold case, or include
+  subdirectories.
+- **Model selection is process-global.** Every session shares one LLM client,
+  so
+  [`setSessionConfigOption`](https://github.com/Nano-Collective/nanocoder/blob/dc8e121a0c4e6963df7447b9ae68491ec993679b/source/acp/acp-agent.ts#L551-L555)
+  changes the model for all of them.
 
 ACP is bidirectional. In v1 the desktop exposes only bounded, project-root
 validated file reads to Nanocoder—never filesystem writes or a terminal.
@@ -634,6 +666,9 @@ Required rules:
 
 ## Open risks
 
+The ACP rows below rest on the source findings listed under
+[Why ACP](#why-acp).
+
 | Risk | Why it remains open |
 |---|---|
 | Durable ACP replay | Current source and tests persist and replay sessions, while checked-in Nanocoder documentation still says history is memory-only. A packaged, provider-backed restart test is required. |
@@ -745,5 +780,6 @@ policy, skills, MCP, LSP, or semantic memory.
 - [Electron security guidance](https://www.electronjs.org/docs/latest/tutorial/security)
 - [Tauri webview API](https://v2.tauri.app/reference/javascript/api/namespacewebview/)
 
-The expanded evidence ledger and source analysis are retained alongside this
-working draft in `codex-inspired-nanocoder-desktop-research.md`.
+Statements about Nanocoder describe the inspected commit and link to the source
+lines they rely on. Recheck them against each Nanocoder version the desktop
+supports.
