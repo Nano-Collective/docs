@@ -260,11 +260,11 @@ None remain open against the design. All three questions raised during the first
 ## Must-do(s)
 
 Must exist in v1 and after. These are grouped by priority so it is clear what blocks a working v1 and what runs in parallel.
-
+(✅-done, ❕-partially done)
 ### P0 — blocks a working v1
 
 - **Create the Rust ⟷ TypeScript communication layer.** Must be implemented; it is the seam every backend call relies on. The expected shape is an ACP client in the Rust backend against Nanocoder's existing ACP server (see the agent loop above), with a build-time check that ACP exposes everything the seam needs.
-- **Move the AI layer out of the plugin system into the Qt shell.** Today it lives at `src/plugins/aiinlinecompletion` with a `network.access` manifest; the move decides what the plugin API has to expose and is the trust-surface work the risk section points at.
+- **Move the AI layer out of the plugin system into the Qt shell.** Today it lives at `src/plugins/aiinlinecompletion` with a `network.access` manifest; the move decides what the plugin API has to expose and is the trust-surface work the risk section points at.❕
 - **Put the permission manager on the network path and land the egress log there.** Today `aiinlinecompletion.cpp` constructs its own `QNetworkAccessManager` and posts directly; `permission.rs` is an advisory in-memory bitmask no network path consults (`request()` is a stub); and no egress log exists. All three must be true before the Architecture section's chokepoint claims hold: every outbound AI request authorised by the permission manager, every authorised request logged with its local/remote flag, in one place.
 - **Use Nanocoder as the backend AI layer** instead of the current, roughly sketched AI layer.
 - **Exclude Nanocoder's existing TUI.** Scriptura is its own surface; the terminal loop stays out.
@@ -285,11 +285,11 @@ Implemented in the tree but **inside a commented-out block** (`mainwindow.cpp:88
 ### P2 — release readiness
 
 - **Testing.** A full pass across the completion loop, the agent diff surface, and the permission chokepoint.
-- **Update the Scriptura docs** to match the Nano Collective brand guidelines.
+- **Update the Scriptura docs** to match the Nano Collective brand guidelines.❕
 
 ### People
 
-- **Find a second core maintainer.** jason1015-coder alone cannot carry the build comfortably; open the contributor issue in the transferred Nano Collective repo. The build decision accepted solo maintenance rather than gating on this (see [Decision](#decision)), so it is a shared recruitment commitment between the proposer and the collective, with velocity monitored rather than a precondition.
+- **Find a second core maintainer.** jason1015-coder alone cannot carry the build comfortably; open the contributor issue in the transferred Nano Collective repo. The build decision accepted solo maintenance rather than gating on this (see [Decision](#decision)), so it is a shared recruitment commitment between the proposer and the collective, with velocity monitored rather than a precondition. ❕
 
 ## Could-do(s)
 
