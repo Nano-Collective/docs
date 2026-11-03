@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-02T12:17:12.684Z",
-  "count": 11,
+  "generated_at": "2026-11-03T11:52:28.302Z",
+  "count": 10,
   "whitepapers": [
     {
       "slug": "nanobench",
@@ -56,15 +56,6 @@
       "review_opens": "2026-05-22",
       "review_closes": "2026-06-21",
       "sidebar_order": 5
-    },
-    {
-      "slug": "marketplace",
-      "title": "Canopy",
-      "description": "A portable layer for publishing and installing agent assets across any harness — skills, tools, prompts, sub-agents — written once and installed everywhere the collective ships an adapter",
-      "proposer": "Matt Spence",
-      "proposer_github": "mrspence",
-      "status": "Declined",
-      "sidebar_order": 6
     },
     {
       "slug": "scriptura",
