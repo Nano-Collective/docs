@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-04T14:47:23.206Z",
-  "count": 10,
+  "generated_at": "2026-11-04T14:49:59.735Z",
+  "count": 11,
   "whitepapers": [
     {
       "slug": "nanobench",
@@ -87,6 +87,17 @@
       "proposer_github": "will-lamerton",
       "status": "Shipped",
       "sidebar_order": 9
+    },
+    {
+      "slug": "agent-witness",
+      "title": "Agent Witness",
+      "description": "A local-first, model-agnostic verification protocol and runtime for AI coding agents.",
+      "proposer": "Sk Akram",
+      "proposer_github": "akramcodez",
+      "status": "Draft",
+      "review_opens": "2026-09-04",
+      "review_closes": "2026-10-04",
+      "sidebar_order": 10
     },
     {
       "slug": "nanocoder-desktop",
