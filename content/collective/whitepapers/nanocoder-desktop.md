@@ -671,8 +671,8 @@ The ACP rows below rest on the source findings listed under
 
 | Risk | Why it remains open |
 |---|---|
-| Durable ACP replay | Current source and tests persist and replay sessions, while checked-in Nanocoder documentation still says history is memory-only. A packaged, provider-backed restart test is required. |
-| ACP capability accuracy | Nanocoder advertises `session/close` without implementing it, and vendor extension methods are not declared as capabilities. |
+| Durable ACP replay | Nanocoder's source, tests and [ACP documentation](https://github.com/Nano-Collective/nanocoder/blob/main/docs/features/acp.md) all say sessions are saved to disk and replayed after a restart. No packaged, provider-backed restart test has been run yet; that is the technical gate. |
+| ACP capability accuracy | Nanocoder advertises `session/close` without implementing it ([fix proposed](https://github.com/Nano-Collective/nanocoder/pull/1709)), and vendor extension methods are not declared as capabilities. |
 | Browser-tool integration | ACP has no standard browser-control capability at the inspected snapshot. The desktop must validate a supported MCP/custom-tool adapter before promising agent control. |
 | Subagent event integration | Nanocoder's subagent tools and child-session events need a versioned desktop projection; the UI must degrade to ordinary tool cards when detailed child events are unavailable. |
 | Session discovery | Current `session/list` filtering uses exact normalized cwd strings, so subdirectories, symlinks, case differences, and moved projects need explicit handling. |
@@ -684,13 +684,20 @@ The ACP rows below rest on the source findings listed under
 
 ## Next steps
 
-### Collective Stage 0 — raise the proposal
+### Before the repository is created
 
-- Open a docs or organisation issue titled `Feedback for “Nanocoder Desktop”`.
-- Confirm the proposer identity, intended repository, and v1 scope with the
-  collective before opening the whitepaper PR.
-- Copy the approved draft to
-  `content/collective/whitepapers/nanocoder-desktop.md` in the docs repository.
+The whitepaper was approved for build on 12 October 2026. Two things are
+settled before the repository is created:
+
+- a named maintainer ([#115](https://github.com/Nano-Collective/docs/issues/115));
+  and
+- whether the desktop is a separate repository or a Nanocoder workspace
+  package, and whether it bundles Nanocoder
+  ([#117](https://github.com/Nano-Collective/docs/issues/117)).
+
+Open review feedback is tracked under the
+[`whitepaper:nanocoder-desktop`](https://github.com/Nano-Collective/docs/issues?q=label%3Awhitepaper%3Ananocoder-desktop)
+label.
 
 ### Technical gate — prove the boundary
 
@@ -856,3 +863,6 @@ supports.
 - [Electron sessions and persistent partitions](https://www.electronjs.org/docs/latest/api/session)
 - [Tauri webview API](https://v2.tauri.app/reference/javascript/api/namespacewebview/)
 - [Tauri capabilities](https://v2.tauri.app/security/capabilities/)
+
+The expanded evidence ledger and source analysis are retained alongside this
+whitepaper in `codex-inspired-nanocoder-desktop-research.md`.
